@@ -1257,10 +1257,39 @@ function svg(iconKey, size){
 const CALLOUT_ICON = { info: 'info', warning: 'alert-triangle', danger: 'alert-triangle' };
 
 /* ============== STATE ============== */
+const LAST_ROUTE_KEY = 'dejatech-docs-last-route';
 let DATA = null;
 let activeTabId = null;
 let activeModuleId = null;
 let openTabId = null;
+
+function saveLastRoute(tabId, moduleId){
+  if (!tabId || !moduleId) return;
+  try {
+    localStorage.setItem(LAST_ROUTE_KEY, JSON.stringify({ tabId, moduleId }));
+  } catch (_) {}
+}
+
+function clearLastRoute(){
+  try {
+    localStorage.removeItem(LAST_ROUTE_KEY);
+  } catch (_) {}
+}
+
+function getSavedRoute(){
+  try {
+    const raw = localStorage.getItem(LAST_ROUTE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    const tab = DATA.tabs.find(t => t.id === parsed.tabId);
+    if (!tab) return null;
+    const mod = (tab.modules || []).find(m => m.id === parsed.moduleId);
+    if (!mod) return null;
+    return { tabId: tab.id, moduleId: mod.id };
+  } catch (_) {
+    return null;
+  }
+}
 
 /* ============== RENDER: SECTIONS ============== */
 function renderSection(section){
@@ -1362,10 +1391,41 @@ function renderNav(){
   });
 }
 
+/* ============== RENDER: HOME (logo only) ============== */
+function renderHome(){
+  activeTabId = null;
+  activeModuleId = null;
+  document.body.classList.add('is-home');
+
+  document.getElementById('breadcrumbTab').textContent = 'Documentation';
+  document.getElementById('breadcrumbActive').textContent = 'Home';
+  document.getElementById('moduleTitle').textContent = 'Dejatech';
+  document.getElementById('moduleSummary').textContent = '';
+  document.getElementById('titleIcon').innerHTML = '';
+  document.title = 'Dejatech Documentation';
+  document.getElementById('searchInput').value = '';
+
+  document.getElementById('contentBody').innerHTML = `
+    <div class="home-logo-page">
+      <div class="home-logo-circle">
+        <img class="home-logo" src="logos/dejatech-logo-white-stacked.png" alt="Dejatech">
+        <p class="home-tagline">Product documentation</p>
+        <p class="home-hint">Select a module from the sidebar</p>
+      </div>
+    </div>`;
+
+  renderNav();
+}
+
 /* ============== RENDER: PAGE (a module inside a tab) ============== */
 function renderPage(tabId, moduleId){
-  const tab = DATA.tabs.find(t => t.id === tabId) || DATA.tabs[0];
-  if (!tab) return;
+  const tab = DATA.tabs.find(t => t.id === tabId);
+  if (!tab) {
+    renderHome();
+    return;
+  }
+
+  document.body.classList.remove('is-home');
   activeTabId = tab.id;
   openTabId = tab.id;
 
@@ -1380,6 +1440,7 @@ function renderPage(tabId, moduleId){
 
   const mod = tab.modules.find(m => m.id === moduleId) || tab.modules[0];
   activeModuleId = mod.id;
+  saveLastRoute(tab.id, mod.id);
 
   document.getElementById('breadcrumbActive').textContent = mod.title;
   document.getElementById('moduleTitle').textContent = mod.title;
@@ -1446,20 +1507,22 @@ document.getElementById('burgerBtn').addEventListener('click', () => {
 document.getElementById('overlay').addEventListener('click', closeSidebarMobile);
 
 /* ============== ROUTING ============== */
-function getDefaultRoute(){
-  const withDocs = DATA.tabs.find(t => t.modules && t.modules.length);
-  if (withDocs) return { tabId: withDocs.id, moduleId: withDocs.modules[0].id };
-  return { tabId: DATA.tabs[0].id, moduleId: null };
+function goHome(){
+  clearLastRoute();
+  if (location.hash) {
+    location.hash = '';
+  } else {
+    renderHome();
+  }
 }
 
 function handleHashChange(){
-  const raw = location.hash.replace('#', '');
-  let [tabId, moduleId] = raw.split('/');
-  if (!tabId) {
-    const def = getDefaultRoute();
-    tabId = def.tabId;
-    moduleId = def.moduleId;
+  const raw = location.hash.replace(/^#\/?/, '');
+  if (!raw) {
+    renderHome();
+    return;
   }
+  const [tabId, moduleId] = raw.split('/');
   renderPage(tabId, moduleId);
 }
 window.addEventListener('hashchange', handleHashChange);
@@ -1497,6 +1560,21 @@ try {
   DATA = json;
   document.getElementById('appTitle').textContent = json.appTitle || 'Business Logic Docs';
   document.getElementById('appSubtitle').textContent = json.appSubtitle || '';
+
+  document.querySelectorAll('.brand, .mobile-brand').forEach(el => {
+    el.style.cursor = 'pointer';
+    el.setAttribute('role', 'button');
+    el.setAttribute('aria-label', 'Go to home');
+    el.addEventListener('click', goHome);
+  });
+
+  // Restore the last module the user opened, otherwise start on the logo page.
+  if (!location.hash.replace(/^#\/?/, '')) {
+    const saved = getSavedRoute();
+    if (saved) {
+      history.replaceState(null, '', `#${saved.tabId}/${saved.moduleId}`);
+    }
+  }
   handleHashChange();
 } catch (err) {
   console.error(err);
