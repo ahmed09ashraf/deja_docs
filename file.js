@@ -1407,12 +1407,31 @@ function renderHome(){
 
   document.getElementById('contentBody').innerHTML = `
     <div class="home-logo-page">
-      <div class="home-logo-circle">
-        <img class="home-logo" src="logos/dejatech-logo-white-stacked.png" alt="Dejatech">
-        <p class="home-tagline">Product documentation</p>
-        <p class="home-hint">Select a module from the sidebar</p>
+      <div class="home-logo-circle is-loading" id="homeLogoCircle">
+        <div class="home-loader" aria-hidden="true"></div>
+        <div class="home-content">
+          <img class="home-logo" id="homeLogoImg" src="logos/dejatech-logo-white-stacked.png" alt="Dejatech">
+          <p class="home-tagline">Product documentation</p>
+          <p class="home-hint">Select a module from the sidebar</p>
+        </div>
       </div>
     </div>`;
+
+  const circle = document.getElementById('homeLogoCircle');
+  const img = document.getElementById('homeLogoImg');
+
+  function revealHome(){
+    if (!circle || circle.classList.contains('is-ready')) return;
+    circle.classList.remove('is-loading');
+    circle.classList.add('is-ready');
+  }
+
+  if (img.complete && img.naturalWidth > 0) {
+    revealHome();
+  } else {
+    img.addEventListener('load', revealHome, { once: true });
+    img.addEventListener('error', revealHome, { once: true });
+  }
 
   renderNav();
 }

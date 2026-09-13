@@ -392,6 +392,7 @@ ol.steps-list li .step-num{
   box-sizing:border-box;
 }
 .home-logo-circle{
+  position:relative;
   width:100%;
   height:100%;
   max-width:none;
@@ -416,11 +417,43 @@ ol.steps-list li .step-num{
   width:min(300px, 36vw);
   height:auto;
   object-fit:contain;
-  margin:0 0 26px;
+  margin:0 0 14px;
   filter:drop-shadow(0 14px 28px rgba(0,0,0,.35));
 }
+.home-content{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  opacity:0;
+  transform:translateY(8px);
+  transition:opacity .4s ease, transform .4s ease;
+  pointer-events:none;
+}
+.home-logo-circle.is-ready .home-content{
+  opacity:1;
+  transform:none;
+  pointer-events:auto;
+}
+.home-loader{
+  position:absolute;
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  border:2px solid rgba(37,213,228,.18);
+  border-top-color:var(--accent);
+  animation:homeSpin .7s linear infinite;
+}
+.home-logo-circle.is-ready .home-loader{
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .2s ease, visibility .2s ease;
+}
+@keyframes homeSpin{
+  to{ transform:rotate(360deg); }
+}
 .home-tagline{
-  margin:0 0 10px;
+  margin:0 0 6px;
   font-size:11px;
   font-weight:600;
   letter-spacing:.16em;
@@ -430,7 +463,7 @@ ol.steps-list li .step-num{
 .home-hint{
   margin:0;
   font-size:13px;
-  line-height:1.5;
+  line-height:1.4;
   color:var(--text-dim);
   max-width:280px;
 }
@@ -487,7 +520,7 @@ body.is-home .content-body{
     border-radius:18px;
     padding:32px 24px;
   }
-  .home-logo{ width:min(200px, 48vw); margin-bottom:18px; }
+  .home-logo{ width:min(200px, 48vw); margin-bottom:12px; }
 }
 
 /* ===================== DEJATECH DESIGN SYSTEM ===================== */
