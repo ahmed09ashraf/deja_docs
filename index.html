@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dejatech Documentation</title>
+<meta name="description" content="Dejatech product and business logic documentation">
+<link rel="icon" type="image/png" href="logos/dejatech-icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="app">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">
+        <img class="brand-logo" src="logos/dejatech-logo-white.png" alt="Dejatech">
+      </div>
+      <div class="brand-text">
+        <h1 id="appTitle">Documentation</h1>
+        <p id="appSubtitle">Product knowledge base</p>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <div class="nav-label">Modules</div>
+      <div id="navList"></div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <span class="status-dot"></span>
+      <span>Product documentation</span>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="mobile-brand">
+        <img class="brand-logo brand-logo--sm" src="logos/dejatech-logo-white.png" alt="Dejatech">
+        <span>Documentation</span>
+      </div>
+      <button class="burger" id="burgerBtn" aria-label="Toggle menu">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <header class="content-header">
+      <div class="breadcrumb">
+        <span id="breadcrumbTab">Business Logic Docs</span>
+        <span>/</span>
+        <span class="accent" id="breadcrumbActive">—</span>
+      </div>
+      <div class="title-row">
+        <div class="title-block">
+          <div class="title-icon" id="titleIcon"></div>
+          <div>
+            <h2 id="moduleTitle">Loading…</h2>
+            <p id="moduleSummary"></p>
+          </div>
+        </div>
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="searchInput" placeholder="Filter sections in this module…">
+          <span class="search-shortcut">/</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="content-body" id="contentBody">
+      <div class="empty-state">Loading documentation…</div>
+    </main>
+  </div>
+
+</div>
+
+<script src="file.js"></script>
+
+</body>
+</html>
