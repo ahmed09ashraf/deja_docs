@@ -1258,10 +1258,56 @@ const CALLOUT_ICON = { info: 'info', warning: 'alert-triangle', danger: 'alert-t
 
 /* ============== STATE ============== */
 const LAST_ROUTE_KEY = 'dejatech-docs-last-route';
+const THEME_KEY = 'dejatech-docs-theme';
 let DATA = null;
 let activeTabId = null;
 let activeModuleId = null;
 let openTabId = null;
+let themeTransitionTimer = null;
+
+function currentTheme(){
+  return document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
+}
+
+function themeLogo(stacked){
+  return `logos/dejatech-logo-white${stacked ? '-stacked' : ''}.png`;
+}
+
+function applyTheme(theme, animate = true){
+  const nextTheme = theme === 'light' ? 'light' : 'dark';
+
+  clearTimeout(themeTransitionTimer);
+  if (animate) {
+    document.documentElement.classList.add('theme-transitioning');
+  } else {
+    document.documentElement.classList.remove('theme-transitioning');
+  }
+
+  if (nextTheme === 'light') {
+    document.documentElement.dataset.theme = 'light';
+  } else {
+    delete document.documentElement.dataset.theme;
+  }
+
+  try {
+    localStorage.setItem(THEME_KEY, nextTheme);
+  } catch (_) {}
+
+  const toggle = document.getElementById('themeToggle');
+  if (toggle) {
+    const label = nextTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+    toggle.title = label;
+    toggle.setAttribute('aria-label', label);
+    const text = toggle.querySelector('.sr-only');
+    if (text) text.textContent = label;
+  }
+
+  if (animate) {
+    themeTransitionTimer = window.setTimeout(() => {
+      document.documentElement.classList.remove('theme-transitioning');
+    }, 450);
+  }
+}
 
 function saveLastRoute(tabId, moduleId){
   if (!tabId || !moduleId) return;
@@ -1410,9 +1456,9 @@ function renderHome(){
       <div class="home-logo-circle is-loading" id="homeLogoCircle">
         <div class="home-loader" aria-hidden="true"></div>
         <div class="home-content">
-          <img class="home-logo" id="homeLogoImg" src="logos/dejatech-logo-white-stacked.png" alt="Dejatech">
+          <img class="home-logo" id="homeLogoImg" src="${themeLogo(true)}" alt="Dejatech">
           <p class="home-tagline">Product documentation</p>
-          <p class="home-hint">Select a module from the sidebar</p>
+          <p class="home-hint">Choose a module from the sidebar to explore the documentation.</p>
         </div>
       </div>
     </div>`;
@@ -1526,13 +1572,16 @@ document.getElementById('burgerBtn').addEventListener('click', () => {
 document.getElementById('overlay').addEventListener('click', closeSidebarMobile);
 
 /* ============== ROUTING ============== */
+function pageUrl(hash){
+  const base = location.href.split('#')[0];
+  return hash ? `${base}#${String(hash).replace(/^#/, '')}` : base;
+}
+
 function goHome(){
   clearLastRoute();
-  if (location.hash) {
-    location.hash = '';
-  } else {
-    renderHome();
-  }
+  // Avoid location.hash = '' on file:// — Chrome treats it as an unsafe frame navigation.
+  history.replaceState(null, '', pageUrl(''));
+  renderHome();
 }
 
 function handleHashChange(){
@@ -1580,6 +1629,11 @@ try {
   document.getElementById('appTitle').textContent = json.appTitle || 'Business Logic Docs';
   document.getElementById('appSubtitle').textContent = json.appSubtitle || '';
 
+  applyTheme(currentTheme(), false);
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    applyTheme(currentTheme() === 'dark' ? 'light' : 'dark');
+  });
+
   document.querySelectorAll('.brand, .mobile-brand').forEach(el => {
     el.style.cursor = 'pointer';
     el.setAttribute('role', 'button');
@@ -1591,7 +1645,7 @@ try {
   if (!location.hash.replace(/^#\/?/, '')) {
     const saved = getSavedRoute();
     if (saved) {
-      history.replaceState(null, '', `#${saved.tabId}/${saved.moduleId}`);
+      history.replaceState(null, '', pageUrl(`${saved.tabId}/${saved.moduleId}`));
     }
   }
   handleHashChange();
