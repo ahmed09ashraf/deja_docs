@@ -6,7 +6,1006 @@
       "id": "administration",
       "title": "Administration",
       "icon": "user",
-      "modules": []
+      "modules": [
+        {
+          "id": "users",
+          "title": "Users",
+          "icon": "user",
+          "summary": "Central identity registry — accounts, roles, company-line access, and login credentials that every document and audit trail links back to.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "The master registry of every system user — the login identity, role assignment, and company-line access behind every document, invoice, booking, and container movement created in the system. Every operational record stores a user_id, so this screen is the anchor for accountability and audit trails."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Administration → Users"
+                ],
+                [
+                  "Route",
+                  "users.index"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Users",
+                  "desc": "Sidebar → Administration → Users.",
+                  "icon": "users"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Search & Locate",
+                  "desc": "Filter by name, email, role, company, or active status.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose an Action",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Create User",
+                    "Edit User",
+                    "Bulk Update",
+                    "Delete"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Enter Details & Save",
+                  "desc": "Set credentials, role, company-line access, and active flag.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Validates",
+                  "tone": "system",
+                  "desc": "Checks unique email/login, role assignment, and company access.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "User Ready in System",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Can sign in with assigned role permissions",
+                    "Linked to documents and audit trails"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Fields stored",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Full Name",
+                  "Required, max 128 characters"
+                ],
+                [
+                  "User Name",
+                  "Required and unique system-wide; 4-30 chars, letters/numbers/dot/underscore/dash only; used to log in"
+                ],
+                [
+                  "Email",
+                  "Required and unique system-wide; used for notifications and password resets"
+                ],
+                [
+                  "Password",
+                  "Required on create (min 6, confirmed); optional on edit — leaving it blank keeps the existing password"
+                ],
+                [
+                  "Employee Number",
+                  "Optional unique integer; internal HR/staff ID"
+                ],
+                [
+                  "Role",
+                  "Dropdown of configured Roles; grants the account its permissions"
+                ],
+                [
+                  "Assigned Companies",
+                  "Multi-select of company codes/branches the user may switch between"
+                ],
+                [
+                  "Primary Company",
+                  "Default active company context for the account"
+                ],
+                [
+                  "Avatar",
+                  "Optional image (JPG/PNG up to 5MB)"
+                ],
+                [
+                  "Status",
+                  "Active / Inactive; inactive users cannot log in"
+                ]
+              ]
+            },
+            {
+              "heading": "Auto-inactive rule",
+              "type": "callout",
+              "style": "warning",
+              "content": "Saving a user with no Role selected automatically forces the account to Inactive (is_active = 0), preventing an unprivileged account from being left active."
+            },
+            {
+              "heading": "Listing & search",
+              "type": "text",
+              "content": "Paginated 30 per page, ordered alphabetically by username. Filters: Username, Full Name, Status, Role, Company Code, and Country."
+            },
+            {
+              "heading": "Bulk actions",
+              "type": "rules",
+              "items": [
+                "Bulk Assign Company Code — attach one or more company codes to every selected user at once.",
+                "Bulk Toggle Status — flip active/inactive for the selected users; an administrator cannot toggle their own status.",
+                "Reset Assigned Lines — refresh assigned company-line mappings for all users after new company branches are added."
+              ]
+            },
+            {
+              "heading": "Create & edit rules",
+              "type": "rules",
+              "items": [
+                "Username, Email, and Employee Number (when provided) must each be unique system-wide; edit checks exclude the user being updated.",
+                "Password is required on create and optional on edit.",
+                "Assigned company codes resolve into the assigned_lines relation, which is what lets a user switch company context from their own Profile screen."
+              ]
+            },
+            {
+              "heading": "Profile & activity metrics",
+              "type": "text",
+              "content": "Each user has a personal Profile screen showing account details plus live counters: total Quotations, Export BLs, Import Bookings, and Invoices created by that user. Users can update their own avatar and default company line there."
+            },
+            {
+              "heading": "Delete rules",
+              "type": "callout",
+              "style": "danger",
+              "content": "Deleting a user permanently removes the account. Historical documents (quotations, BLs, invoices, activity logs) keep their stored user_id, but the deleted user disappears from staff dropdowns — prefer Inactive over Delete for departed staff when audit continuity matters."
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Users are the identity layer everything else hangs off. Role and Assigned Company misconfiguration is the most common reason staff can't see the branch data they need, and forgetting to deactivate departed employees is a real security exposure."
+            }
+          ]
+        },
+        {
+          "id": "roles",
+          "title": "Roles",
+          "icon": "hash",
+          "summary": "Named permission bundles (job positions) attached to Users — the authorization backbone behind menus, buttons, and controller access checks.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "Defines job-position Roles (e.g. Documentation Manager, Accountant, Sales Agent) and the exact system permissions bundled into each. Rather than granting permissions per user, a Role is attached to a User and every permission enabled on that Role is inherited automatically."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Administration → Roles"
+                ],
+                [
+                  "Route",
+                  "roles.index"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Roles",
+                  "desc": "Sidebar → Administration → Roles.",
+                  "icon": "users"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Search & Locate",
+                  "desc": "Find a job-position role by name or description.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose an Action",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Create Role",
+                    "Edit Role",
+                    "View Permissions"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Set Permissions & Save",
+                  "desc": "Bundle screen/action permissions for the role.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Applies Access",
+                  "tone": "system",
+                  "desc": "Users with this role inherit the permission set immediately.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Role Controls Access",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Users inherit the bundled permissions",
+                    "No need to grant permissions per user"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Fields stored",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Role Name",
+                  "Required, unique across all roles"
+                ],
+                [
+                  "Company ID",
+                  "Auto-linked to the active company context at creation"
+                ],
+                [
+                  "Attached Permissions",
+                  "Checklist of permission IDs grouped by module (Booking, Quotations, Invoices, Container Control, Vessel & Voyage, Master Data, etc.)"
+                ]
+              ]
+            },
+            {
+              "heading": "Listing & search",
+              "type": "text",
+              "content": "Paginated 30 per page, ordered alphabetically by role name. Columns show the role name, a permission summary, and the users currently assigned to it."
+            },
+            {
+              "heading": "Create & edit rules",
+              "type": "rules",
+              "items": [
+                "Role Name is required and must be unique; the edit check excludes the role being edited.",
+                "Permissions can be checked individually or by whole module group.",
+                "Saving an edit re-syncs the full permission set and flushes the permission cache immediately, so active sessions pick up the change without needing to log out."
+              ]
+            },
+            {
+              "heading": "Viewing role details",
+              "type": "text",
+              "content": "The Show page renders a read-only, module-grouped breakdown of a role's exact permissions, so an admin can audit what a role can do without risking an accidental edit."
+            },
+            {
+              "heading": "How roles govern access",
+              "type": "steps",
+              "items": [
+                "Sidebar menu items only render if the user's role holds the matching module-list permission.",
+                "Create/Edit/Delete/Export/Approve buttons on a screen check role permissions before they render.",
+                "Controllers re-check the same permissions server-side through authorization guards, independent of what the UI shows."
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Over-permissioning a role risks unauthorized financial actions or data changes; under-permissioning blocks routine work like issuing invoices or delivery orders. Because the permission cache is flushed on every save, role edits take effect immediately for users already logged in."
+            }
+          ]
+        },
+        {
+          "id": "feature-flag",
+          "title": "Feature Flags",
+          "icon": "activity",
+          "summary": "Per-user/company toggles that show or hide entire modules and sub-features without touching data or role permissions.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "An admin control panel that turns whole sub-systems on or off — CRM, Custody, EDI, Trucking Guarantees, Storage/Detention calculations, QuickBooks accounts, and more. Disabling a flag hides the module from the UI (sidebar, buttons, routes) without deleting data or changing role permissions."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Administration → Feature Flags"
+                ],
+                [
+                  "Route",
+                  "feature-flag.index"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Feature Flags",
+                  "desc": "Sidebar → Administration → Feature Flags.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Pick Scope",
+                  "desc": "Choose Global or a specific user, then review flag groups.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Toggle Modules",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Enable Flag",
+                    "Disable Flag",
+                    "Apply Per User"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Save Configuration",
+                  "desc": "Confirm which CRM, EDI, Custody, Trucking, or QB flags apply.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Rebuilds Menus",
+                  "tone": "system",
+                  "desc": "Sidebar and routes hide/show based on the saved flags.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Modules Reflect Flags",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Disabled modules disappear from the UI",
+                    "Enabled modules become reachable immediately"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Fields stored",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "User ID",
+                  "The account the flag setting applies to; left unselected edits the company default/global scope"
+                ],
+                [
+                  "Flag Key",
+                  "Internal string identifier, e.g. custody, demurrage, crm, edi"
+                ],
+                [
+                  "Enabled",
+                  "Boolean — 1 = enabled, 0 = disabled"
+                ]
+              ]
+            },
+            {
+              "heading": "Flag groups",
+              "type": "table",
+              "columns": [
+                "Module group",
+                "Example keys"
+              ],
+              "rows": [
+                [
+                  "Master Data",
+                  "ports_terminals, settings, agents_list, customers_list, suppliers_list, banks, exchange_rates, excel_templates"
+                ],
+                [
+                  "Tariff",
+                  "local_port_tariff, charges, demurrage, storage_tariff"
+                ],
+                [
+                  "Vessel & Voyage",
+                  "lines, routes, vessels, voyage_list, voyageTDR_list"
+                ],
+                [
+                  "Container Control",
+                  "equipment_types, containers, repairs, movement_codes, movement_control"
+                ],
+                [
+                  "Storage/Detention/Power",
+                  "dentention, storage, calculation_dentention, calculation_storage, power"
+                ],
+                [
+                  "Quotations",
+                  "import_quotation, export_quotation, slot_quotation"
+                ],
+                [
+                  "Documentation",
+                  "summary_booking, import_booking, export_booking, do_print_counter, bl_gates, manifest_xml, service_bl"
+                ],
+                [
+                  "EDI",
+                  "upload_edi, generate_edi"
+                ],
+                [
+                  "Trucking",
+                  "truckers_list, trucker_gates, trucker_guarantees, trucking_tariffs, trucking_orders"
+                ],
+                [
+                  "Accounting",
+                  "invoice_gates, receipt_gates, credit_note, refund_gates, customer_statements, costs, qb_accounts"
+                ],
+                [
+                  "CRM",
+                  "crm"
+                ],
+                [
+                  "Custody",
+                  "custody"
+                ]
+              ]
+            },
+            {
+              "heading": "User selection & global scope",
+              "type": "text",
+              "content": "A Super Admin dropdown lets an admin pick any non-super-admin user to view and edit that user's specific flags. Leaving no user selected edits the company's default/global flag state instead."
+            },
+            {
+              "heading": "Save rules",
+              "type": "rules",
+              "items": [
+                "Submitting the form only sends the flag keys that are currently checked.",
+                "Every checked key gets an updateOrCreate to enabled = true for the target scope.",
+                "Every key left unchecked is updated to enabled = false for that same scope."
+              ]
+            },
+            {
+              "heading": "How flags govern the app",
+              "type": "steps",
+              "items": [
+                "Every check runs through the global featureFlagHelper('flag_key') helper.",
+                "Sidebar sections and sub-menu links only render when their flag evaluates true.",
+                "Screen-level controls (calculators, export buttons, whole action groups) check the same helper before rendering."
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Different agencies run different business models — one company may not use Custody or EDI at all. Feature Flags let each deployment be tailored without touching code, keeping unused modules out of operational staff's way."
+            }
+          ]
+        },
+        {
+          "id": "journal",
+          "title": "Journal",
+          "icon": "file-text",
+          "summary": "In-app release-notes / changelog bulletin with per-user read tracking, keeping staff informed of business-logic and workflow changes.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "An internal changelog and release-notes bulletin. Admins publish entries categorized by module; every user can browse, search, and filter historical updates, and the system tracks per-user read/unread state so nothing important gets missed."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Navbar/Sidebar → Journal (user view); Admin → Journals (publishing)"
+                ],
+                [
+                  "Route (user view)",
+                  "journal"
+                ],
+                [
+                  "Route (admin management)",
+                  "journals.index"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Journal",
+                  "desc": "Navbar/Sidebar → Journal (users) or Admin → Journals.",
+                  "icon": "file-text"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Browse Updates",
+                  "desc": "Search and filter release notes by module or date.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose a Path",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Mark Read/Unread",
+                    "Publish Entry (Admin)",
+                    "Edit Entry (Admin)"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Complete the Action",
+                  "desc": "Users update read state; admins write categorized changelog entries.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Tracks State",
+                  "tone": "system",
+                  "desc": "Per-user read/unread is stored so important notes stay visible.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Changelog Stays Current",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Users see what is still unread",
+                    "Published notes are searchable historically"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Fields stored",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Title",
+                  "Required, max 255 characters"
+                ],
+                [
+                  "Module",
+                  "Required classification (Booking, Quotations, Invoices, Containers, Voyages, EDI, Trucking, General, etc.)"
+                ],
+                [
+                  "Description",
+                  "Required detailed change/feature/bug-fix text"
+                ],
+                [
+                  "Publication Date",
+                  "published_at — drives sort order and the month filter"
+                ],
+                [
+                  "Read Status",
+                  "Per-user record in user_journal tracking who has read which entry"
+                ]
+              ]
+            },
+            {
+              "heading": "User view",
+              "type": "text",
+              "content": "All users see header counters for Unread and Read entries, a free-text search over title/description, a Month filter, and a Module filter."
+            },
+            {
+              "heading": "Read / unread controls",
+              "type": "rules",
+              "items": [
+                "Clicking an unread card marks it read via AJAX and updates the navbar badge live.",
+                "A read entry can be flipped back to unread.",
+                "'Mark Visible Page as Read' marks the current page's 15 entries at once.",
+                "'Mark All as Read' / 'Mark All as Unread' apply to every historical entry for that user."
+              ]
+            },
+            {
+              "heading": "Admin publishing",
+              "type": "rules",
+              "items": [
+                "Super Admins create/edit entries with Title, Module, Publication Date, and Description.",
+                "Deleting an entry also purges every per-user read-tracking row for it from user_journal."
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "As calculation formulas, export formats, and validation rules evolve, the Journal reliably notifies operational staff inside the tool they already work in — closing the gap that a hallway announcement or a missed email would leave."
+            }
+          ]
+        },
+        {
+          "id": "logs",
+          "title": "System Logs",
+          "icon": "alert-triangle",
+          "summary": "Super-admin-only exception/error monitoring dashboard that aggregates runtime failures across every module.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "An exception-monitoring dashboard for Super Administrators. It captures runtime errors, unhandled exceptions, database failures, and EDI transmission errors from every module and presents them as a searchable, aggregated feed instead of raw server log files."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Administration → System Logs"
+                ],
+                [
+                  "Route",
+                  "logs.index"
+                ],
+                [
+                  "Access",
+                  "Super Administrators only"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open System Logs",
+                  "desc": "Sidebar → Administration → System Logs (Super Admin only).",
+                  "icon": "activity"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Filter Exceptions",
+                  "desc": "Narrow by date, module, message, or EDI/runtime error type.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose an Action",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Open Detail",
+                    "Export",
+                    "Clear Logs"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Inspect Grouped Hits",
+                  "desc": "Review aggregated exceptions and drill into a single occurrence.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Aggregates Errors",
+                  "tone": "system",
+                  "desc": "Repeated exceptions are grouped so patterns are easy to spot.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Ops Can Act Fast",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Root causes are easier to isolate",
+                    "Exports support incident follow-up"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Fields stored",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Level",
+                  "error/critical/alert/emergency (errors), warning, or info/debug"
+                ],
+                [
+                  "Message",
+                  "Primary exception message summary"
+                ],
+                [
+                  "Context",
+                  "JSON payload: file path, line number, exception class, stack trace"
+                ],
+                [
+                  "Route Name",
+                  "Named route executing when the failure occurred"
+                ],
+                [
+                  "URL & Method",
+                  "Full request URL and HTTP method"
+                ],
+                [
+                  "User ID / Company ID",
+                  "Who and which company context triggered it"
+                ],
+                [
+                  "Created At",
+                  "Exact failure timestamp"
+                ]
+              ]
+            },
+            {
+              "heading": "Grouped aggregation",
+              "type": "callout",
+              "style": "info",
+              "content": "To avoid drowning in duplicate rows, the listing groups logs by (level + message + route_name) and shows an Occurrence Count plus First Seen / Last Seen timestamps instead of one row per hit."
+            },
+            {
+              "heading": "Listing & filters",
+              "type": "text",
+              "content": "Paginated 50 grouped entries per page, ordered by Last Seen descending. Header cards total Errors and Warnings for the selected period. Filters: date preset (Today / Last 7 Days / Last 30 Days) or a custom date range, Level, User (only users who triggered a logged error in range), and free-text search over message/URL/route."
+            },
+            {
+              "heading": "Detail view & export",
+              "type": "text",
+              "content": "Opening a grouped entry shows the latest occurrence with user/role/company context, full request details, and the complete, un-truncated stack trace. A Download action exports a plain-text diagnostic file (system-log-{id}.txt) formatted for developer or AI-assisted troubleshooting."
+            },
+            {
+              "heading": "Clear logs",
+              "type": "callout",
+              "style": "danger",
+              "content": "Clearing logs deletes every record matching the currently applied filters. It is blocked entirely unless a date filter (preset or explicit range) is active, preventing an accidental full-table wipe."
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Failed invoice calculations, broken import routines, or EDI generation errors often fail silently in the background. This screen is how they surface — letting an admin trace the exact user, request, and payload involved before it causes a financial or operational problem."
+            }
+          ]
+        },
+        {
+          "id": "activity-logs",
+          "title": "Activity Logs",
+          "icon": "clipboard",
+          "summary": "System-wide data audit trail recording every create/update/delete on core business records with full before/after field diffs.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "The application's central audit trail. Every time a user creates, edits, or deletes a tracked business object — Bookings, Quotations, Invoices, Container Control records, Customers, Master Data — an Activity Log entry is written automatically recording who did it, when, and a full field-by-field before/after comparison."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Administration → Activity Logs"
+                ],
+                [
+                  "Route",
+                  "activity-logs.index"
+                ],
+                [
+                  "Related route",
+                  "activity-logs.booking (booking-specific timeline)"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Activity Logs",
+                  "desc": "Sidebar → Administration → Activity Logs.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Search the Audit Trail",
+                  "desc": "Filter by user, model, action, or date range.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose a View",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "General Timeline",
+                    "Booking Timeline",
+                    "Field Diff Detail"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Inspect the Change",
+                  "desc": "Open the entry to see who changed what, and which fields moved.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Auto-Logs Events",
+                  "tone": "system",
+                  "desc": "Create/edit/delete of tracked objects writes an audit row automatically.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Full Accountability",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Every tracked change has a user + timestamp",
+                    "Field-level diffs support investigations"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Fields stored",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Log Name",
+                  "Model category (Booking, Quotation, Container, Invoice, Customer, etc.)"
+                ],
+                [
+                  "Description",
+                  "Human-readable summary with reference numbers, e.g. 'updated Booking BK-202609-001'"
+                ],
+                [
+                  "Event",
+                  "created / updated / deleted"
+                ],
+                [
+                  "Subject",
+                  "Polymorphic link (subject_type + subject_id) to the exact record changed"
+                ],
+                [
+                  "User (Causer)",
+                  "The employee who performed the action"
+                ],
+                [
+                  "Properties (Diffs)",
+                  "JSON of old values vs. new values"
+                ],
+                [
+                  "Created At",
+                  "Exact action timestamp"
+                ]
+              ]
+            },
+            {
+              "heading": "Listing & search",
+              "type": "text",
+              "content": "Paginated 50 per page, newest first. Filters: Event type, Model Type, a reference-number search (BL, booking, container, invoice, or customer code), a free-text description search, and a start/end date range."
+            },
+            {
+              "heading": "Field-by-field diffs",
+              "type": "text",
+              "content": "Clicking a row opens an AJAX change-summary modal listing each changed field name with its Old Value and New Value side by side — e.g. spotting that a container's tare weight moved from 2,200 kg to 2,400 kg, and who did it and when."
+            },
+            {
+              "heading": "Model-specific audit views",
+              "type": "text",
+              "content": "Some screens expose their own scoped timeline on top of the central list — e.g. a Booking's action menu opens activity-logs.booking, a full chronological history of every change made to that one booking since creation."
+            },
+            {
+              "heading": "Automatic logging mechanism",
+              "type": "callout",
+              "style": "info",
+              "content": "Logging is automatic via the LogsActivity model trait: any model using it observes its own created/updated/deleted events and records only the fields that actually changed. No controller ever writes a log entry manually."
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Unauthorized or mistaken edits to BL descriptions, freight rates, release statuses, or invoice lines carry real legal and financial weight. Activity Logs make every change traceable to an exact user, timestamp, and field — the difference between an accountable correction and an unexplained discrepancy."
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "master-data",
@@ -27,26 +1026,124 @@
             {
               "heading": "Access",
               "type": "table",
-              "columns": ["Item", "Value"],
+              "columns": [
+                "Item",
+                "Value"
+              ],
               "rows": [
-                ["Menu path", "Master Data → Charge Codes"],
-                ["Route", "chargesDesc.index"],
-                ["Permission", "Charge Codes (List / Create / Edit / Delete)"],
-                ["Feature flag", "charges"]
+                [
+                  "Menu path",
+                  "Master Data → Charge Codes"
+                ],
+                [
+                  "Route",
+                  "chargesDesc.index"
+                ],
+                [
+                  "Permission",
+                  "Charge Codes (List / Create / Edit / Delete)"
+                ],
+                [
+                  "Feature flag",
+                  "charges"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Charge Codes",
+                  "desc": "Sidebar → Master Data → Charge Codes (requires 'charges' flag).",
+                  "icon": "file-text"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Search & Locate",
+                  "desc": "Filter by Name, Tax Code, Type, or Category.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose an Action",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Add New",
+                    "Edit Row",
+                    "Delete",
+                    "Sync"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Enter Details & Save",
+                  "desc": "Fill Name, Tax Portal Code, Type, and optional QB Account.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Validates",
+                  "tone": "system",
+                  "desc": "Checks required fields, unique name, and usage locks.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Ready in System",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Active for Invoices, Costs & Tariffs",
+                    "Static seeded codes stay protected"
+                  ]
+                }
               ]
             },
             {
               "heading": "Fields stored",
               "type": "table",
-              "columns": ["Field", "Meaning"],
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
               "rows": [
-                ["Name", "Required display name; unique within the company"],
-                ["Tax Portal Code", "Required free-text tax/e-invoicing code, stored in the code column"],
-                ["Type", "Invoice (customer charge) or Debit (supplier cost)"],
-                ["Category", "Invoice: THC / Admin / Cleaning; Debit: fixed Owner Account option"],
-                ["Related Account (QB)", "QuickBooks chart-of-accounts link, shown only when integration is enabled"],
-                ["QB Item Name", "Optional name override used in QuickBooks"],
-                ["Static Code", "System-only identity used by automatic calculations; not editable on the form"]
+                [
+                  "Name",
+                  "Required display name; unique within the company"
+                ],
+                [
+                  "Tax Portal Code",
+                  "Required free-text tax/e-invoicing code, stored in the code column"
+                ],
+                [
+                  "Type",
+                  "Invoice (customer charge) or Debit (supplier cost)"
+                ],
+                [
+                  "Category",
+                  "Invoice: THC / Admin / Cleaning; Debit: fixed Owner Account option"
+                ],
+                [
+                  "Related Account (QB)",
+                  "QuickBooks chart-of-accounts link, shown only when integration is enabled"
+                ],
+                [
+                  "QB Item Name",
+                  "Optional name override used in QuickBooks"
+                ],
+                [
+                  "Static Code",
+                  "System-only identity used by automatic calculations; not editable on the form"
+                ]
               ]
             },
             {
@@ -103,22 +1200,108 @@
             {
               "heading": "Access",
               "type": "table",
-              "columns": ["Item", "Value"],
+              "columns": [
+                "Item",
+                "Value"
+              ],
               "rows": [
-                ["Menu path", "Master Data → Port & Terminal"],
-                ["Sub-screens", "Port & Terminal List / Terminal Mappings"],
-                ["Permissions", "Ports-List; Terminals-List additionally for Terminal Mappings"],
-                ["Feature flag", "ports_terminals"]
+                [
+                  "Menu path",
+                  "Master Data → Port & Terminal"
+                ],
+                [
+                  "Sub-screens",
+                  "Port & Terminal List / Terminal Mappings"
+                ],
+                [
+                  "Permissions",
+                  "Ports-List; Terminals-List additionally for Terminal Mappings"
+                ],
+                [
+                  "Feature flag",
+                  "ports_terminals"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Port & Terminal",
+                  "desc": "Sidebar → Master Data → Port & Terminal (ports_terminals flag).",
+                  "icon": "anchor"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Search Locations",
+                  "desc": "Filter ports/terminals by code, name, or country.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose an Action",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Add Port/Terminal",
+                    "Edit",
+                    "Delete",
+                    "Map Terminal"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Enter Details & Save",
+                  "desc": "Set code, name, country, and terminal-in-port relationships.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Protects Identity",
+                  "tone": "system",
+                  "desc": "Static Code stays locked; used ports/terminals cannot be removed.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Ready for Operations",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Movements and bookings can reference the location",
+                    "Terminal mappings feed depot-specific screens"
+                  ]
+                }
               ]
             },
             {
               "heading": "Fields stored",
               "type": "table",
-              "columns": ["Record", "Fields"],
+              "columns": [
+                "Record",
+                "Fields"
+              ],
               "rows": [
-                ["Port", "Name, globally unique Code, and Country"],
-                ["Terminal / Depot", "Code, Type (Terminal id 3 or Depot id 4), and immutable Static Code"],
-                ["Terminal Mapping", "old_code, per-company editable code, terminal_id, port_id, type_id, company_id"]
+                [
+                  "Port",
+                  "Name, globally unique Code, and Country"
+                ],
+                [
+                  "Terminal / Depot",
+                  "Code, Type (Terminal id 3 or Depot id 4), and immutable Static Code"
+                ],
+                [
+                  "Terminal Mapping",
+                  "old_code, per-company editable code, terminal_id, port_id, type_id, company_id"
+                ]
               ]
             },
             {
@@ -174,6 +1357,168 @@
           ]
         },
         {
+          "id": "agents-list",
+          "title": "Agents List",
+          "icon": "users",
+          "summary": "Company-scoped registry of shipping agents/representatives linked to Principal Lines, referenced by Quotations.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "The catalogue of shipping agents and representatives who act on behalf of the company's vessel lines/principals at various ports and countries — handling local port calls, documentation, and customs clearance. Each Agent links to one or more Principal Lines and is referenced by Quotations when issuing freight offers."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Master Data → Agents"
+                ],
+                [
+                  "Route",
+                  "agents.index"
+                ],
+                [
+                  "Feature flag",
+                  "agents_list"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Agents",
+                  "desc": "Sidebar → Master Data → Agents (agents_list flag).",
+                  "icon": "users"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Search Agents",
+                  "desc": "Filter by name, country, or related principal/line.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose an Action",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Add Agent",
+                    "Edit Agent",
+                    "Delete"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Enter Details & Save",
+                  "desc": "Capture agent identity and representation details for the line.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Validates Record",
+                  "tone": "system",
+                  "desc": "Required fields and uniqueness rules are checked before save.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Agent Available Downstream",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Voyages and documentation can pick the agent",
+                    "Local handling parties stay consistent"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Fields stored",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Name",
+                  "Required; unique within the company"
+                ],
+                [
+                  "Country",
+                  "Required dropdown"
+                ],
+                [
+                  "City",
+                  "Optional"
+                ],
+                [
+                  "Address / Phone / Email",
+                  "Required contact details"
+                ],
+                [
+                  "Principal (Lines)",
+                  "Required multi-select of Lines with type 9 or 2 under the current company; stored in the agent_principals pivot table"
+                ],
+                [
+                  "Status (is_active)",
+                  "Active / Inactive; inactive agents are hidden from operational dropdowns"
+                ],
+                [
+                  "Company ID",
+                  "Multi-company data isolation"
+                ]
+              ]
+            },
+            {
+              "heading": "Listing & search",
+              "type": "text",
+              "content": "Paginated 30 per page, ordered by ID. Filters — Name, Country, and Principal (line name) — are combinable. Columns show name, country, city, a bulleted list of linked Principal Lines, and an Active/Inactive badge."
+            },
+            {
+              "heading": "Create & edit rules",
+              "type": "rules",
+              "items": [
+                "Name, Country, Address, Phone, Email, and at least one Principal Line are required.",
+                "Name must be unique within the current company; the check excludes the record itself on edit — a duplicate submission shows 'Agent Name Already Exists'.",
+                "Selecting Principal Lines writes agent_principals pivot rows; on edit the existing links are deleted and re-inserted with the new selection."
+              ]
+            },
+            {
+              "heading": "Delete rules",
+              "type": "callout",
+              "style": "danger",
+              "content": "Before showing the delete confirmation, an AJAX check looks for any Quotation referencing the agent. If one exists, deletion is blocked with 'Sorry, you can't delete this agent. There are quotations related to it.' Only an agent with zero linked quotations can be deleted."
+            },
+            {
+              "heading": "How this feeds other modules",
+              "type": "text",
+              "content": "Quotations select an Agent to record which office is representing the freight quote. Vessel & Principal Lines use the agent_principals link to filter which agents are valid for a given line when building voyage itineraries and booking documents."
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Accurate agent contact details and Principal Line links keep quotations and freight documents reflecting the correct local representation, and the quotation-linked delete guard prevents breaking historical commercial offers."
+            }
+          ]
+        },
+        {
           "id": "suppliers-list",
           "title": "Suppliers List",
           "icon": "users",
@@ -187,38 +1532,154 @@
             {
               "heading": "Access",
               "type": "table",
-              "columns": ["Item", "Value"],
+              "columns": [
+                "Item",
+                "Value"
+              ],
               "rows": [
-                ["Menu path", "Master Data → Suppliers List"],
-                ["Route", "suppliers.index"],
-                ["Permission", "Suppliers (List / Create / Edit / Show / Delete)"],
-                ["Feature flag", "suppliers_list"]
+                [
+                  "Menu path",
+                  "Master Data → Suppliers List"
+                ],
+                [
+                  "Route",
+                  "suppliers.index"
+                ],
+                [
+                  "Permission",
+                  "Suppliers (List / Create / Edit / Show / Delete)"
+                ],
+                [
+                  "Feature flag",
+                  "suppliers_list"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Suppliers",
+                  "desc": "Sidebar → Master Data → Suppliers List (suppliers_list flag).",
+                  "icon": "briefcase"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Search Suppliers",
+                  "desc": "Locate a depot, trucker, terminal, or service provider.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose an Action",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Add Supplier",
+                    "Edit Profile",
+                    "Manage Charge Items",
+                    "Export"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Set Profile & Rates",
+                  "desc": "Maintain supplier data and repeatable Charge Item price rows.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Links Cost Rates",
+                  "tone": "system",
+                  "desc": "Cost invoices look up supplier charge items for selectable rates.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Supplier Ready for Costing",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Cost documents can pull negotiated rates",
+                    "Export supports offline review"
+                  ]
+                }
               ]
             },
             {
               "heading": "Supplier profile",
               "type": "table",
-              "columns": ["Field", "Meaning"],
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
               "rows": [
-                ["Name", "Required and unique"],
-                ["Country / Address / Phone / Email", "Required supplier and contact information"],
-                ["City / Tax Card", "Optional profile information"],
-                ["Primary / Secondary Currency", "Currencies normally used by the supplier"],
-                ["Contact People", "Repeatable named-contact list"],
-                ["Supplier Types", "Any combination of Depot, Services Provider, Seller, Trucker, Lessor, Haulage, Terminal"]
+                [
+                  "Name",
+                  "Required and unique"
+                ],
+                [
+                  "Country / Address / Phone / Email",
+                  "Required supplier and contact information"
+                ],
+                [
+                  "City / Tax Card",
+                  "Optional profile information"
+                ],
+                [
+                  "Primary / Secondary Currency",
+                  "Currencies normally used by the supplier"
+                ],
+                [
+                  "Contact People",
+                  "Repeatable named-contact list"
+                ],
+                [
+                  "Supplier Types",
+                  "Any combination of Depot, Services Provider, Seller, Trucker, Lessor, Haulage, Terminal"
+                ]
               ]
             },
             {
               "heading": "Charge Item fields",
               "type": "table",
-              "columns": ["Field group", "Meaning"],
+              "columns": [
+                "Field group",
+                "Meaning"
+              ],
               "rows": [
-                ["Applicability", "Optional Terminal, Full/Empty status, Shipment Type, Equipment Type, and Cargo Type"],
-                ["Classification", "Category, Sub Category, Code, Payer, and optional Equivalent Item"],
-                ["Description", "Required service description"],
-                ["Price", "Currency and Amount"],
-                ["Invoice Type", "Storage / General / THC / Ocean Freight"],
-                ["Validity", "Valid From / Valid To date range"]
+                [
+                  "Applicability",
+                  "Optional Terminal, Full/Empty status, Shipment Type, Equipment Type, and Cargo Type"
+                ],
+                [
+                  "Classification",
+                  "Category, Sub Category, Code, Payer, and optional Equivalent Item"
+                ],
+                [
+                  "Description",
+                  "Required service description"
+                ],
+                [
+                  "Price",
+                  "Currency and Amount"
+                ],
+                [
+                  "Invoice Type",
+                  "Storage / General / THC / Ocean Freight"
+                ],
+                [
+                  "Validity",
+                  "Valid From / Valid To date range"
+                ]
               ]
             },
             {
@@ -286,25 +1747,120 @@
             {
               "heading": "Access",
               "type": "table",
-              "columns": ["Item", "Value"],
+              "columns": [
+                "Item",
+                "Value"
+              ],
               "rows": [
-                ["Menu path", "Master Data → Banks"],
-                ["Route", "banks.index"],
-                ["Permission", "Suppliers permission group (Create / Edit / Show / Delete)"],
-                ["Feature flag", "banks"]
+                [
+                  "Menu path",
+                  "Master Data → Banks"
+                ],
+                [
+                  "Route",
+                  "banks.index"
+                ],
+                [
+                  "Permission",
+                  "Suppliers permission group (Create / Edit / Show / Delete)"
+                ],
+                [
+                  "Feature flag",
+                  "banks"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Banks",
+                  "desc": "Sidebar → Master Data → Banks (banks flag).",
+                  "icon": "database"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Search Accounts",
+                  "desc": "Filter company bank accounts by name, currency, or status.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose an Action",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Add Bank",
+                    "Edit Bank",
+                    "Activate/Deactivate",
+                    "Sync"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Enter Details & Save",
+                  "desc": "Set account identity, currency, and active status.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Validates Account",
+                  "tone": "system",
+                  "desc": "Required fields and delete protection rules are enforced.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Ready for Receipts",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Receipts can deposit to this company bank",
+                    "Sync copies setup to sister companies"
+                  ]
+                }
               ]
             },
             {
               "heading": "Fields stored",
               "type": "table",
-              "columns": ["Field", "Rule"],
+              "columns": [
+                "Field",
+                "Rule"
+              ],
               "rows": [
-                ["Name", "Required bank name"],
-                ["Branch", "Optional"],
-                ["Currency", "Required fixed option: EGP / USD / EUR"],
-                ["Account Number", "Required numeric value"],
-                ["IBAN / SWIFT Code", "Optional"],
-                ["Status", "Active / Inactive; new accounts start Active"]
+                [
+                  "Name",
+                  "Required bank name"
+                ],
+                [
+                  "Branch",
+                  "Optional"
+                ],
+                [
+                  "Currency",
+                  "Required fixed option: EGP / USD / EUR"
+                ],
+                [
+                  "Account Number",
+                  "Required numeric value"
+                ],
+                [
+                  "IBAN / SWIFT Code",
+                  "Optional"
+                ],
+                [
+                  "Status",
+                  "Active / Inactive; new accounts start Active"
+                ]
               ]
             },
             {
@@ -361,22 +1917,107 @@
             {
               "heading": "Access",
               "type": "table",
-              "columns": ["Item", "Value"],
+              "columns": [
+                "Item",
+                "Value"
+              ],
               "rows": [
-                ["Menu path", "Master Data → Exchange Rates"],
-                ["Route", "exchange-rates.index"],
-                ["Permission", "ExchangeRate (List / Create / Edit / Delete)"],
-                ["Feature flag", "exchange_rates"]
+                [
+                  "Menu path",
+                  "Master Data → Exchange Rates"
+                ],
+                [
+                  "Route",
+                  "exchange-rates.index"
+                ],
+                [
+                  "Permission",
+                  "ExchangeRate (List / Create / Edit / Delete)"
+                ],
+                [
+                  "Feature flag",
+                  "exchange_rates"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Exchange Rates",
+                  "desc": "Sidebar → Master Data → Exchange Rates (exchange_rates flag).",
+                  "icon": "calculator"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Find a Period",
+                  "desc": "Locate currency rows by date-from / date-to window.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose an Action",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Add Rate Period",
+                    "Edit Rate",
+                    "Delete Period"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Enter Rate & Dates",
+                  "desc": "Set foreign currency, rate value, and inclusive date range (EGP excluded).",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Shares Globally",
+                  "tone": "system",
+                  "desc": "Rates are global (no company_id) and apply across all companies.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Conversion Ready",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Documents convert using the active period rate",
+                    "Overlapping/invalid periods are blocked"
+                  ]
+                }
               ]
             },
             {
               "heading": "Fields stored",
               "type": "table",
-              "columns": ["Field", "Meaning"],
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
               "rows": [
-                ["Currency", "Foreign currency; EGP excluded"],
-                ["Rate", "Numeric conversion rate to the base currency"],
-                ["Date From / Date To", "Inclusive validity window, non-overlapping for the same currency"]
+                [
+                  "Currency",
+                  "Foreign currency; EGP excluded"
+                ],
+                [
+                  "Rate",
+                  "Numeric conversion rate to the base currency"
+                ],
+                [
+                  "Date From / Date To",
+                  "Inclusive validity window, non-overlapping for the same currency"
+                ]
               ]
             },
             {
@@ -475,6 +2116,64 @@
                   "Feature flag",
                   "equipment_types"
                 ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Equipment Types",
+                  "desc": "Sidebar → Container Control → Equipment Types.",
+                  "icon": "box"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Search Types",
+                  "desc": "Filter by code/size such as 20 DV, 40 HC, or 20 RF.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose an Action",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Create Type",
+                    "Edit Type",
+                    "Delete"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Enter Type Details",
+                  "desc": "Define type/size category used by physical containers and tariffs.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Applies Locks",
+                  "tone": "system",
+                  "desc": "Price Lock and usage rules protect types already referenced.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Type Feeds Operations",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Container List and Radar group by this type",
+                    "Tariffs and bookings reuse the catalogue"
+                  ]
+                }
               ]
             },
             {
@@ -628,6 +2327,66 @@
               ]
             },
             {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Container List",
+                  "desc": "Sidebar → Container Control → Container List (containers flag).",
+                  "icon": "box"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Search Containers",
+                  "desc": "Filter by code, type, operator, stock badge, or depot.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose an Action",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Create",
+                    "Edit",
+                    "Bulk Import",
+                    "Export",
+                    "Delete"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Enter / Upload Details",
+                  "desc": "Set container number, type, operator; or import via template.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Derives Stock",
+                  "tone": "system",
+                  "desc": "Live stock badges come from movements; codes stay globally unique.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Container in Fleet Registry",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "In Stock / Out / Damaged badges update live",
+                    "Import/export supports mass maintenance"
+                  ]
+                }
+              ]
+            },
+            {
               "heading": "Fields stored",
               "type": "table",
               "columns": [
@@ -681,7 +2440,7 @@
             },
             {
               "heading": "Search filters",
-              "type": "rules",
+              "type": "filters",
               "items": [
                 "Container Number (single or many, pasted)",
                 "Equipment Type / SOC-COC / Created By",
@@ -847,6 +2606,64 @@
               ]
             },
             {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Equipment Status",
+                  "desc": "Sidebar → Container Control → Equipment Status (Radar).",
+                  "icon": "activity"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Scan Type Buckets",
+                  "desc": "Review live counts per Equipment Type across stock states.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Read the Radar",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Check In Stock",
+                    "Check Out / On Hire",
+                    "Check Damaged / Other"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Interpret Priority Buckets",
+                  "desc": "Use the bucket priority order to understand the dominant state.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Counts Live",
+                  "tone": "system",
+                  "desc": "Read-only dashboard aggregates Container List rows with caching.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Fleet Snapshot Ready",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Ops see stock health per type at a glance",
+                    "No edit path — numbers always reflect live data"
+                  ]
+                }
+              ]
+            },
+            {
               "heading": "Table columns",
               "type": "table",
               "columns": [
@@ -937,6 +2754,65 @@
                   "Permission",
                   "Containers (reuses the Containers permission group — no dedicated 'Operator Code' permission)"
                 ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Operator Codes",
+                  "desc": "Sidebar → Container Control → Operator Codes.",
+                  "icon": "hash"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Search Codes",
+                  "desc": "Locate a shipping-line operator code in the global list.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose an Action",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Create Code",
+                    "Edit Code",
+                    "Delete",
+                    "Refresh Sync"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Enter Code & Save",
+                  "desc": "Add/update the short operator identity used on containers.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Soft-Protects",
+                  "tone": "system",
+                  "desc": "Delete is blocked when codes are in use; Refresh syncs shared list.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Codes Validate Elsewhere",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Container operator fields accept only valid codes",
+                    "One global list shared by every company"
+                  ]
+                }
               ]
             },
             {
@@ -1070,6 +2946,65 @@
               ]
             },
             {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Damage List",
+                  "desc": "Sidebar → Container Control → Damage List.",
+                  "icon": "alert-triangle"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Search Catalogue",
+                  "desc": "Filter General or depot-specific damage price rows.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose an Action",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Add Damage",
+                    "Edit",
+                    "Delete",
+                    "Bulk Import"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Enter Price Details",
+                  "desc": "Set damage description, depot scope, and chargeable amount.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Separates Concepts",
+                  "tone": "system",
+                  "desc": "This is a price catalogue — not the live Damaged stock badge.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Repair Pricing Ready",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Repairs/quotations can pick priced damage items",
+                    "Import keeps depot catalogues consistent"
+                  ]
+                }
+              ]
+            },
+            {
               "heading": "General vs Depot-specific damages",
               "type": "table",
               "columns": [
@@ -1176,6 +3111,443 @@
               "type": "callout",
               "style": "info",
               "content": "Think of it as the 'price book' for container damages — so anyone logging a real repair can pick from a standardised, pre-approved description and rate instead of re-typing free text every time. Get the General list right for damage that can happen anywhere; only add Depot-Specific entries where cost/description genuinely differs by location."
+            }
+          ]
+        },
+        {
+          "id": "movement-control",
+          "title": "Movement Control",
+          "icon": "truck",
+          "summary": "Dated operational history per container — gate-in/out, load, discharge, on/off hire, repair — that drives stock, booking assignment, guarantees and draft BL dates.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "Movement Control records the dated operational history of every container: gate-in/out, loading, discharge, on/off hire, repair and other configured activities. Each movement says what happened, when and where it happened, and which booking/vessel/voyage it belongs to. This is not just a tracking log — the latest movement controls the container's stock position and condition, valid next movements, booking-container assignment, trucker guarantee balance and, for a Load Full movement, the draft BL shipment date."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Container Control → Movement Control"
+                ],
+                [
+                  "Route (list)",
+                  "movements.index"
+                ],
+                [
+                  "Feature flag",
+                  "movement_control"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Movement Control",
+                  "desc": "Sidebar → Container Control → Movement Control (movement_control flag).",
+                  "icon": "truck"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Filter & Review Latest Move",
+                  "desc": "Filter containers and review each box's latest non-deleted movement.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose an Action",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Add Movement",
+                    "Bulk Submit",
+                    "Excel Import",
+                    "Correct / Delete"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Submit the Movement",
+                  "desc": "Pick container, valid next activity, date, location, terminal and booking.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Validates Sequence",
+                  "tone": "system",
+                  "desc": "Checks next-activity rules, ETA/ETD window, and booking capacity.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "History Recorded & Propagated",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Stock, operator code and guarantee balances recalculate",
+                    "Export All / Last / Summary Movement for reporting"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Fields stored per movement",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Company",
+                  "The line/company that recorded the movement — matters when sister lines handle the same global container."
+                ],
+                [
+                  "Container Number",
+                  "The physical container being moved. Required. Points to the one global Container List record for that code."
+                ],
+                [
+                  "Movement Type",
+                  "The global activity performed (e.g. ONHI, GIFU, LOFU, DCHF, SNTR, WTOR). Required. Choices come from the company's configured Next Possible Activities."
+                ],
+                [
+                  "Line Code",
+                  "The company's own code for that activity, displayed beside the global movement code."
+                ],
+                [
+                  "Movement Date",
+                  "Event date and time. Required and cannot be in the future."
+                ],
+                [
+                  "Container Status",
+                  "Full or Empty. Not chosen directly — copied from the company's Movement Activity Code configuration."
+                ],
+                [
+                  "Activity Location",
+                  "Port where the event occurred. Normally required."
+                ],
+                [
+                  "Terminal",
+                  "Depot/terminal at the activity location. Normally required."
+                ],
+                [
+                  "Booking No",
+                  "The linked booking. The database stores the booking record ID; the screen displays the booking reference number."
+                ],
+                [
+                  "Vessel / Voyage",
+                  "Vessel and voyage connected to the movement."
+                ],
+                [
+                  "POL / POD",
+                  "Displayed from the linked booking, not typed directly on the normal movement form."
+                ],
+                [
+                  "Operator Code",
+                  "Copied onto the movement from the container. ON HIRE restores the last operator that actually held the box and also updates Container List."
+                ],
+                [
+                  "Container Condition",
+                  "MLH companies can mark the movement as damaged. The displayed AV/DM flag is DM for SNTR, otherwise the Repair module's current flag wins, then this checkbox is the fallback."
+                ],
+                [
+                  "Remarks",
+                  "Optional free text. Shown as a list column for the Sobek agency and included in exports."
+                ],
+                [
+                  "Created By",
+                  "User who recorded the movement."
+                ]
+              ]
+            },
+            {
+              "heading": "What the list shows",
+              "type": "text",
+              "content": "The main grid shows ONE row per container: its latest non-deleted movement, decided by full movement date/time and then movement ID when two records share the same time. It is ordered newest first and paginated 30 rows at a time. The row shows Container Number and Operator Code, Type/Size, global Movement Code, company Line Code, Movement Date, Full/Empty status, Booking, Vessel/Voyage, Activity Location, POL, POD, Terminal/Depot, Trucker and Created By. WTOR rows are greyed for easy recognition. Opening a row's details shows that container's FULL movement history, also newest first — editing and deleting individual history records happens from this history view, not directly in the main latest-row grid."
+            },
+            {
+              "heading": "Search filters",
+              "type": "filters",
+              "items": [
+                "Container Number (one or many, including pasted codes)",
+                "Type/Size",
+                "Activity Location",
+                "Terminal",
+                "Vessel/Voyage",
+                "Shipment: Import / Export (after selecting a voyage)",
+                "Movement Activity",
+                "Booking Number",
+                "From Date / To Date",
+                "Created By",
+                "Trucker",
+                "Operator Code (MLH companies)"
+              ]
+            },
+            {
+              "heading": "Movement filter vs. \"Last Movement\" switch",
+              "type": "callout",
+              "style": "info",
+              "content": "Without the switch, the movement filter helps find relevant records before the latest row per container is selected. With \"Last Movement\" enabled, the screen shows only containers whose CURRENT latest movement matches the selected activity — use it when the question is \"Which containers are currently at WTOR?\" rather than \"Which containers have matching movement history?\""
+            },
+            {
+              "heading": "Default company scope & Cross-line",
+              "type": "callout",
+              "style": "info",
+              "content": "The list normally shows movements recorded by the logged-in user's company. For MLH/sister-line operation, Cross widens results to companies sharing the same company-code group. Cross-line scope also activates when filtering by Operator Code, and a Booking Number search can widen to sister companies where company codes are enabled. A Container Number filter alone does NOT widen the movement-company scope — the row still belongs to whichever company recorded that movement."
+            },
+            {
+              "heading": "Adding a single movement — normal flow",
+              "type": "steps",
+              "items": [
+                "Select the container.",
+                "The screen loads valid next movement activities from that container's previous movement and the company's Movement Activity Codes setup.",
+                "Select the activity and movement date.",
+                "Select Activity Location and Terminal.",
+                "Select Booking, Vessel and Voyage when the activity requires shipment references.",
+                "Add optional Remarks / damaged condition and save."
+              ]
+            },
+            {
+              "heading": "Single movement rules",
+              "type": "rules",
+              "items": [
+                "Required by default: Container, Movement Type, Movement Date, Activity Location, Terminal, Booking, Vessel and Voyage.",
+                "Booking, Vessel and Voyage are optional for: Receive Empty, Transfer Full, Receive Full, On Hire, Off Hire, Transfer Empty, Load Empty and Discharge Empty.",
+                "The movement date cannot be later than today.",
+                "Manually creating Load Full or Discharge Full requires the date to fall between the selected voyage-port ETA and ETD; no matching schedule rejects with \"No ETA and ETD found for the selected voyage and port.\"",
+                "Editing recalculates Full/Empty status from the selected activity. If an assigning activity, container or booking changes, the old booking assignment is reversed and the new valid assignment is made."
+              ]
+            },
+            {
+              "heading": "Known inconsistency — ETA/ETD check on Edit",
+              "type": "callout",
+              "style": "warning",
+              "content": "The ETA/ETD date-window check runs on CREATE but is currently disabled on the EDIT path. Editing can therefore save a load/discharge date that the create form would reject."
+            },
+            {
+              "heading": "Movement-sequence rules",
+              "type": "rules",
+              "items": [
+                "Single movement: after the container is selected, the form offers its valid next activities — the server save mainly relies on that controlled dropdown.",
+                "Bulk movements: every selected row is checked against the container's previous and next history. If any row is invalid, the whole batch is rejected and no movement is created.",
+                "Excel import/overwrite: the activity is checked against the movement immediately before AND immediately after it, preventing a dated event from breaking either side of history.",
+                "The same activity twice in a row is normally rejected — import raises \"Invalid movement sequence ... Expected: <allowed codes>\".",
+                "If an activity has no per-company configuration/next-move rule, the system can behave as unrestricted in some paths — correct Movement Activity Code setup is essential before entering movements."
+              ]
+            },
+            {
+              "heading": "Cross-company Load → Discharge exception",
+              "type": "callout",
+              "style": "info",
+              "content": "A cross-company exception allows a physical Load → Discharge handoff between sister companies even when that transition is not configured in the previous company's normal sequence. The bypass does NOT apply to a same-company Load → Discharge."
+            },
+            {
+              "heading": "Bulk Movements — Voyage mode",
+              "type": "steps",
+              "items": [
+                "Shipment Type → Vessel/Voyage → Movement Date → Load Containers",
+                "Select rows",
+                "Choose each valid Next Movement",
+                "Submit"
+              ]
+            },
+            {
+              "heading": "Bulk Movements — Containers mode (MLH)",
+              "type": "steps",
+              "items": [
+                "Paste Container Numbers → Choose Port/Terminal and Movement Date",
+                "Load Containers",
+                "Choose valid Next Movements",
+                "Submit"
+              ]
+            },
+            {
+              "heading": "Bulk movement rules",
+              "type": "rules",
+              "items": [
+                "Voyage mode loads containers from confirmed bookings on the selected voyage; imports add the correct discharge choice, exports add the appropriate gate-out or transhipment-load choice.",
+                "Containers already ending in a load move can be disabled, and a draft BL can block further load movements after gate-in.",
+                "Containers mode (MLH): unknown container codes are reported; containers with no movement history, or whose latest movement ends a cycle that must be handled via Voyage mode, are not accepted.",
+                "Bulk validation is ALL-OR-NOTHING — the service validates every selected row (date, references, sequence, booking capacity/type, duplicate movement rules) first. If one or more rows fail, zero rows are created. Only a fully valid batch is saved in one transaction.",
+                "For multi-port voyages, Port/Terminal may need to be selected per row. One Remarks value can be applied to the whole batch."
+              ]
+            },
+            {
+              "heading": "Excel template & Import",
+              "type": "rules",
+              "items": [
+                "Template columns: container_no, movement_type, date, port_location, terminal, booking_no, vessel, voyage_no, remarkes, operator_code.",
+                "Upload accepts one worksheet only, up to 50 MB.",
+                "Container Number must already exist globally; Movement Type must match a global Movement Activity code; Port and Terminal must match existing codes.",
+                "Booking is matched by reference across the sister-company group; Vessel/Voyage is matched within the relevant company/sister group.",
+                "A supplied Operator Code must already exist in Operator Codes.",
+                "The movement is recorded under the booking's company when a sibling company booking is found; otherwise it uses the uploading company."
+              ]
+            },
+            {
+              "heading": "Import date & reference rules",
+              "type": "rules",
+              "items": [
+                "The date accepts supported Excel/date formats but cannot be in the future.",
+                "Booking/Vessel/Voyage can be inherited from the booking or previous movement for valid mid-cycle activities; new-cycle activities do not inherit old booking/voyage data.",
+                "Mid-cycle movements must stay on the previous movement's booking, except where a summary booking relaxes that continuity rule.",
+                "Some reference-only activities allow Terminal to be blank. ON HIRE, OFF HIRE and Receive From Consignee have a broader import relaxation for Port/Terminal and shipment references — the relaxed set is not identical to every other entry path, so the template should not be used to bypass proper operational data."
+              ]
+            },
+            {
+              "heading": "Import is partial-success, not all-or-nothing",
+              "type": "callout",
+              "style": "warning",
+              "content": "Each row has its own transaction: valid rows are saved immediately, while invalid rows are skipped and collected into an error report. At the end, stock is recalculated for every affected container and the user sees the success count plus a download link for errors. When unresolved import errors exist, the list replaces the Import/Overwrite actions with \"Show Errors\" until those errors are handled."
+            },
+            {
+              "heading": "Overwrite behaviour",
+              "type": "rules",
+              "items": [
+                "Overwrite updates existing movements and matches each row by movement ID, not Container Number.",
+                "It only accepts movement IDs belonging to the uploader's sister-company group.",
+                "If the movement code is changed, the new code is validated against both the previous and next movement.",
+                "Successful rows update immediately; failed rows are reported — an overwrite can also finish with partial success.",
+                "Overwrite refreshes the linked booking-container terminal where that assignment already exists, then recalculates container stock."
+              ]
+            },
+            {
+              "heading": "Booking assignment & part-load rules",
+              "type": "rules",
+              "items": [
+                "Assignment applies to: COC gate-out on an export booking, SOC Gate In Full / Receive From Shipper / Gate In Empty, Stuffing Full, and RXPF on an export booking.",
+                "For a regular export booking, the system must find an unassigned booking slot of the SAME equipment type; quantity, weight and package values are split from that slot onto the assigned container. No matching free slot rejects the movement instead of creating an invalid booking link.",
+                "Import and summary bookings can create the booking-container link without the same free-slot requirement.",
+                "Receive Empty releases the booking-container assignment. Deleting or changing an assigning movement reverses its old assignment so the booking quantity is available again.",
+                "Part-load bookings let one physical movement represent related parent/child bookings — import can reuse/collapse matching gate-out rows and collect child booking references in Remarks; matching Discharge Full rows are collapsed too rather than creating duplicate physical events."
+              ]
+            },
+            {
+              "heading": "Bulk vs. single/import assignment gap",
+              "type": "callout",
+              "style": "warning",
+              "content": "Single entry/import and Bulk Movements do not assign exactly the same set of activity types. Bulk currently auto-assigns export SNTS and STFU paths, while the single/import logic also covers COC GOMT, SOC gate-ins and RXPF. If booking assignment is the goal, confirm the Booking container details after a bulk move."
+            },
+            {
+              "heading": "Automatic effects on other modules",
+              "type": "table",
+              "columns": [
+                "Effect",
+                "What happens"
+              ],
+              "rows": [
+                [
+                  "Container Stock",
+                  "After create, edit, delete, bulk entry, import or overwrite, the container's latest non-deleted movement recalculates Container List In Stock. Stock-in activities set Available; other activities normally set Not Available. For OVP and OSL line codes, OFF Hire is a special stock-in event."
+                ],
+                [
+                  "Operator Ownership",
+                  "Each movement normally copies the Container List operator code. ON HIRE uses the operator from the latest prior movement when available, then writes that restored code back to Container List."
+                ],
+                [
+                  "Draft BL Shipment Date",
+                  "Creating Load Full (LOFU/LODF) recalculates the linked draft BL's shipment date from the latest Load Full date for its containers."
+                ],
+                [
+                  "Trucker Guarantee",
+                  "Movement create, update and delete trigger a guarantee-balance recalculation. Events such as WTOR/Gate Out can place a hold; Gate In, Stripping or Receive Empty can release it. SOC containers do not hold a trucker guarantee."
+                ],
+                [
+                  "WTOR Cleanup",
+                  "Recording a qualifying gate-out removes the earlier WTOR movement for the same container/booking where applicable, since the box is no longer waiting to be released."
+                ]
+              ]
+            },
+            {
+              "heading": "Deleting movements",
+              "type": "rules",
+              "items": [
+                "Deleting a movement is a soft delete — it disappears from normal history without physically erasing the database row.",
+                "Container stock is recalculated from the remaining latest movement and booking assignment effects are reversed where applicable.",
+                "A movement that assigned a container to a booking cannot be deleted when that booking already has a draft BL — the user is warned the movement cannot be deleted because the booking has a BL.",
+                "Bulk delete can partially succeed: protected rows are skipped while allowed rows are deleted, and the result reports both counts.",
+                "Repair workflow movements (SNTR / RCVR) and WTOR are protected in the history UI — they cannot be selected, edited or deleted there; they must be corrected through the workflow that created them."
+              ]
+            },
+            {
+              "heading": "Exports",
+              "type": "table",
+              "columns": [
+                "Export",
+                "What it produces"
+              ],
+              "rows": [
+                [
+                  "All Movement",
+                  "Exports all matching movement rows, newest first, using the current search/cross-line scope. Includes Container/Type, SOC/COC, global and line movement codes, F/E, event date, port/depot, AV/DM, agency, booking, trucker, vessel/voyage, Remarks, POL and POD."
+                ],
+                [
+                  "Last Movement",
+                  "Exports only the newest matching row per container, using movement date and ID as the tie-breaker."
+                ],
+                [
+                  "Summary Movement",
+                  "Driven by selected equipment types."
+                ],
+                [
+                  "Equipment Tracking",
+                  "Uses the current filters and can optionally request the container's last cycle."
+                ]
+              ]
+            },
+            {
+              "heading": "Export naming note",
+              "type": "callout",
+              "style": "info",
+              "content": "Despite the internal route/class names, the visible menu behavior is as described above: \"All Movement\" exports all matching history, while \"Last Movement\" exports one latest row per container. The separate MovementsExportAll implementation is a legacy/unwired exporter and is not the source of the current menu's Last Movement output."
+            },
+            {
+              "heading": "Company-specific behaviour",
+              "type": "table",
+              "columns": [
+                "Company",
+                "Behaviour"
+              ],
+              "rows": [
+                [
+                  "MLH",
+                  "Shows Cross/Operator Code filters, Container Condition and the pasted-container Bulk Mode. Cross works within the sister-company code group, not across unrelated companies."
+                ],
+                [
+                  "SIDRA_EG",
+                  "RCVC has special reference inheritance/relaxed handling in import and bulk processing."
+                ],
+                [
+                  "OVP / OSL",
+                  "OFF Hire counts as In Stock."
+                ],
+                [
+                  "Sobek",
+                  "Remarks are displayed directly in the main movement grid."
+                ]
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Movement Control is the operational source of truth for where each container is, what happened to it and what may happen next. A wrong date, booking or activity can change stock availability, block the next move, misassign booking capacity, alter guarantee balances or set the wrong draft BL shipment date. When a container status looks wrong, inspect its full chronological history first — correct the movement sequence rather than manually changing In Stock on the Container List."
             }
           ]
         }

@@ -362,6 +362,38 @@ ul.rules-list li::before{
   transform:rotate(45deg);
 }
 
+/* search filters — compact field grid, 4 per row */
+.filter-fields{
+  display:grid;
+  grid-template-columns:repeat(4, minmax(0, 1fr));
+  gap:10px;
+}
+.filter-field{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:9px 11px;
+  border:1px solid rgba(151,169,210,.16);
+  border-radius:8px;
+  background:rgba(255,255,255,.03);
+  color:#d7ddf5;
+  font-size:12px;
+  font-weight:600;
+  line-height:1.35;
+  transition:border-color .15s ease, background .15s ease;
+}
+.filter-field:hover{
+  border-color:rgba(37,213,228,.4);
+  background:rgba(37,213,228,.05);
+}
+.filter-field-icon{
+  display:flex;
+  flex-shrink:0;
+  color:var(--accent);
+  opacity:.85;
+}
+.filter-field-icon svg{ width:12px; height:12px; stroke:currentColor; }
+
 /* steps */
 ol.steps-list{ margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:12px; }
 ol.steps-list li{
@@ -382,6 +414,174 @@ ol.steps-list li .step-num{
   font-weight:700;
   display:flex; align-items:center; justify-content:center;
   margin-top:1px;
+}
+
+/* ===================== USER FLOW (2-LINE DEVELOPER DIAGRAM) ===================== */
+.flow-diagram{
+  margin:4px 0 2px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.flow-line{
+  display:flex;
+  align-items:stretch;
+  gap:10px;
+  width:100%;
+}
+.flow-card{
+  --tone:#38bdf8;
+  --tone-soft:rgba(56,189,248,0.11);
+  --tone-border:rgba(56,189,248,0.28);
+  flex:1;
+  min-width:0;
+  position:relative;
+  padding:10px 12px 11px;
+  border:1px solid var(--tone-border);
+  border-radius:9px;
+  background:
+    linear-gradient(135deg, var(--tone-soft) 0%, transparent 70%),
+    rgba(14,24,44,0.85);
+  box-shadow:0 3px 12px rgba(0,0,0,0.10);
+  display:flex;
+  flex-direction:column;
+  transition:transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.flow-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 7px 20px rgba(0,0,0,0.18);
+  border-color:var(--tone);
+}
+.flow-card--decision{
+  --tone:#f59e0b;
+  --tone-soft:rgba(245,158,11,0.12);
+  --tone-border:rgba(245,158,11,0.34);
+}
+.flow-card--system{
+  --tone:#a855f7;
+  --tone-soft:rgba(168,85,247,0.12);
+  --tone-border:rgba(168,85,247,0.34);
+}
+.flow-card--result{
+  --tone:#10b981;
+  --tone-soft:rgba(16,185,129,0.13);
+  --tone-border:rgba(16,185,129,0.36);
+}
+.flow-card-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:5px;
+}
+.flow-badge{
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:0.07em;
+  text-transform:uppercase;
+  color:var(--tone);
+}
+.flow-icon{
+  display:grid;
+  place-items:center;
+  width:19px;
+  height:19px;
+  border-radius:5px;
+  background:var(--tone-soft);
+  color:var(--tone);
+}
+.flow-icon svg{
+  width:11px;
+  height:11px;
+  stroke:currentColor;
+}
+.flow-title{
+  margin:0 0 3px;
+  font-size:12px;
+  font-weight:700;
+  color:#f1f5f9;
+  line-height:1.3;
+}
+.flow-desc{
+  margin:0;
+  font-size:10.5px;
+  line-height:1.42;
+  color:#94a3b8;
+}
+.flow-chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:3px;
+  margin-top:5px;
+}
+.flow-chip{
+  font-size:9px;
+  font-weight:700;
+  padding:2px 5px;
+  border-radius:4px;
+  background:var(--tone-soft);
+  color:#fde68a;
+  border:1px solid rgba(245,158,11,0.25);
+}
+.flow-outcomes{
+  margin:3px 0 0;
+  padding:0 0 0 12px;
+  list-style:none;
+}
+.flow-outcomes li{
+  position:relative;
+  font-size:10px;
+  line-height:1.38;
+  color:#a7f3d0;
+}
+.flow-outcomes li::before{
+  content:'';
+  position:absolute;
+  left:-9px;
+  top:0.42em;
+  width:3.5px;
+  height:3.5px;
+  border-radius:50%;
+  background:var(--tone);
+}
+.flow-arrow{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  width:18px;
+  color:#64748b;
+}
+.flow-arrow svg{
+  stroke:currentColor;
+  opacity:0.85;
+}
+.flow-connector{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:0;
+}
+.flow-connector-line{
+  flex:1;
+  height:1px;
+  background:linear-gradient(90deg, transparent, rgba(148,163,184,0.22), transparent);
+}
+.flow-connector-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  color:#94a3b8;
+  padding:2px 9px;
+  border-radius:999px;
+  background:rgba(148,163,184,0.08);
+  border:1px solid rgba(148,163,184,0.18);
+}
+.flow-connector-badge svg{
+  stroke:currentColor;
 }
 
 /* callout */
@@ -986,6 +1186,18 @@ body.is-home .main{
   .content-body{ padding:22px 20px 55px; }
   .section-card{ padding:20px; }
   .brand{ min-height:82px; }
+  .flow-line{
+    flex-direction:column;
+    gap:6px;
+  }
+  .flow-arrow{
+    width:100%;
+    height:14px;
+    transform:rotate(90deg);
+  }
+  .filter-fields{
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 520px){
@@ -993,6 +1205,9 @@ body.is-home .main{
   .title-block h2{ font-size:21px; }
   .section-card{ padding:18px 16px; }
   table.doc-table{ display:block; overflow-x:auto; }
+  .filter-fields{
+    grid-template-columns:1fr;
+  }
 }
 
 @media (prefers-reduced-motion: reduce){
@@ -1158,6 +1373,15 @@ html[data-theme="light"] .section-card p.text,
 html[data-theme="light"] table.doc-table td,
 html[data-theme="light"] ul.rules-list li,
 html[data-theme="light"] ol.steps-list li{ color:#4b5d77; }
+html[data-theme="light"] .filter-field{
+  border-color:rgba(30,48,78,.12);
+  background:#f8fafc;
+  color:#344863;
+}
+html[data-theme="light"] .filter-field:hover{
+  border-color:rgba(7,152,173,.35);
+  background:rgba(7,152,173,.05);
+}
 html[data-theme="light"] table.doc-table{
   border-color:rgba(30,48,78,.10);
 }
@@ -1173,6 +1397,33 @@ html[data-theme="light"] table.doc-table tr:hover td{ background:rgba(7,152,173,
 html[data-theme="light"] .callout.info{ color:#244b85; }
 html[data-theme="light"] .callout.warning{ color:#7a4b00; }
 html[data-theme="light"] .callout.danger{ color:#8f2435; }
+html[data-theme="light"] .flow-card{
+  background:
+    linear-gradient(135deg, var(--tone-soft) 0%, transparent 70%),
+    #ffffff;
+  box-shadow:0 2px 10px rgba(30,48,78,0.06);
+}
+html[data-theme="light"] .flow-card:hover{
+  box-shadow:0 6px 18px rgba(30,48,78,0.11);
+}
+html[data-theme="light"] .flow-title{ color:#1e293b; }
+html[data-theme="light"] .flow-desc{ color:#64748b; }
+html[data-theme="light"] .flow-arrow{ color:#94a3b8; }
+html[data-theme="light"] .flow-connector-badge{
+  color:#64748b;
+  background:#f1f5f9;
+  border-color:#cbd5e1;
+}
+html[data-theme="light"] .flow-connector-line{
+  background:linear-gradient(90deg, transparent, rgba(203,213,225,0.7), transparent);
+}
+html[data-theme="light"] .flow-chip{
+  background:rgba(245,158,11,0.12);
+  color:#b45309;
+}
+html[data-theme="light"] .flow-outcomes li{
+  color:#047857;
+}
 html[data-theme="light"] .home-logo-circle{
   background:
     radial-gradient(circle at 50% 38%, rgba(7,152,173,.10), transparent 58%),
