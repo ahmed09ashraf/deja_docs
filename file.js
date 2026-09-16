@@ -2072,7 +2072,284 @@ window.DOCS_DATA = {
       "id": "tariff",
       "title": "Tariff",
       "icon": "file-text",
-      "modules": []
+      "modules": [
+        {
+          "id": "local-port-tariff",
+          "title": "Local Port Tariff",
+          "icon": "calculator",
+          "summary": "Master rate card for local-port charges by port, terminal, customer and validity period, consumed by Quotations and Invoices.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "A Local Port Tariff is the master rate card used to price local-port charges such as THC, storage and documentation for a specific Port + Terminal and validity period. Quotations and Invoices resolve their rates from its Charge Items rather than accepting freely typed standard prices. A tariff is either Standard (company-wide) or Customized for one Customer."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Tariffs → Local Port Tariff"
+                ],
+                [
+                  "Route (list)",
+                  "localporttriff.index"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Local Port Tariff",
+                  "desc": "Sidebar → Tariffs → Local Port Tariff.",
+                  "icon": "calculator"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Choose Scope & Validity",
+                  "desc": "Select Port, Terminal, Standard/Customer and Validity From/To.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose an Action",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Create",
+                    "Edit",
+                    "Clone",
+                    "Export"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Add Charge Items",
+                  "desc": "Set charge, equipment, unit, currency, direction, payer and rates.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Validates Tariff",
+                  "tone": "system",
+                  "desc": "Checks duplicate rows, validity and Standard tariff overlap.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Rates Ready Downstream",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Quotations can select valid tariff charges",
+                    "Invoices resolve automatic and additional charges"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Tariff header fields",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Tariff No",
+                  "Auto-generated as <PortCode>-<TerminalCode>-<CustomerName or Standard>[-Suffix]-<ValidityFrom>.To.<ValidityTo>. Overlapping customized tariffs receive suffixes such as -B or -C."
+                ],
+                [
+                  "Country / Port / Terminal",
+                  "Required. The tariff applies to one exact Port + Terminal combination."
+                ],
+                [
+                  "Standard or Customer",
+                  "Standard is company-wide; Customer ties the tariff to one specific Customer."
+                ],
+                [
+                  "Validity From / To",
+                  "Required. Valid To must be after Valid From; this window controls when the whole tariff is usable."
+                ]
+              ]
+            },
+            {
+              "heading": "Charge Item fields",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Charge Name",
+                  "Selected from Master Data → Charge Codes. MSL companies only see Invoice-type Charge Codes."
+                ],
+                [
+                  "Equipment Type",
+                  "A specific type, All (ID 100), or the 20/40 bulk shortcuts expanded into real equipment-type rows when saved."
+                ],
+                [
+                  "Unit",
+                  "Container or Document."
+                ],
+                [
+                  "Selling / IMO / OOG Price",
+                  "Base selling rate plus optional higher IMO and OOG rates."
+                ],
+                [
+                  "THC / IMO / OOG Cost",
+                  "Reference/margin costs; not used directly in invoice calculation."
+                ],
+                [
+                  "Payer",
+                  "Liner, Shipper, Consignee (Conee), or Else."
+                ],
+                [
+                  "Currency",
+                  "Currency of the rate."
+                ],
+                [
+                  "Shipment Type",
+                  "Import or Export."
+                ],
+                [
+                  "Standard / Customize",
+                  "Per-row flag. Customized rows are only offered as additional/manual invoice charges."
+                ],
+                [
+                  "No BL",
+                  "Allows the row to be used without a BL/Booking reference."
+                ],
+                [
+                  "Transhipment",
+                  "Makes the row exclusive to transhipment bookings; separate from Standard/Customize."
+                ]
+              ]
+            },
+            {
+              "heading": "20/40 bulk equipment expansion",
+              "type": "callout",
+              "style": "info",
+              "content": "The 20 (All 20ft Types) and 40 (All 40ft Types) shortcuts expand at save time into one row per matching Equipment Type. Explicit rows in the same submission win, preventing silent duplicates."
+            },
+            {
+              "heading": "Duplicate Charge Item guard",
+              "type": "callout",
+              "style": "danger",
+              "content": "Within one tariff, Charge Name + Equipment Type + Currency + Standard/Customize + Shipment Type must be unique. A duplicate blocks the entire Create or Edit save before anything is written."
+            },
+            {
+              "heading": "Standard tariff overlap protection",
+              "type": "rules",
+              "items": [
+                "A Standard tariff cannot overlap another Standard tariff for the same Port + Terminal in any way.",
+                "The save is rejected and identifies every conflicting Tariff No.",
+                "Customized tariffs are exempt and may overlap for the same customer; the generated suffix keeps them distinguishable."
+              ]
+            },
+            {
+              "heading": "Cloning a tariff",
+              "type": "table",
+              "columns": [
+                "Clone path",
+                "Behaviour"
+              ],
+              "rows": [
+                [
+                  "Standard → Customized",
+                  "Copies all Charge Items into a new Customer tariff with the same Port, Terminal and validity dates."
+                ],
+                [
+                  "Expired tariff renewal",
+                  "Copies all Charge Items into a new validity period, optionally changing the Standard/Customer target. Standard overlap rules still apply."
+                ]
+              ]
+            },
+            {
+              "heading": "Quotation consumption",
+              "type": "rules",
+              "items": [
+                "For a destination Port and quotation reference date, Standard tariffs are offered plus the selected Customer’s valid Customized tariff.",
+                "Charge Items are filtered by Import/Export direction and Equipment Type (exact type or All/100).",
+                "The selected tariff is stored as triff_id and later reused by an Invoice created from that Quotation."
+              ]
+            },
+            {
+              "heading": "Automatic Invoice tariff resolution",
+              "type": "steps",
+              "items": [
+                "Use a Customer-specific tariff for the booking receiver/consignee at the exact Port + Terminal.",
+                "Otherwise use the Standard tariff at that exact Port + Terminal.",
+                "If no exact terminal match exists, repeat the lookup at the Port while ignoring Terminal.",
+                "Filter Charge Items by Equipment Type, currency and Import/Export direction."
+              ]
+            },
+            {
+              "heading": "Transhipment tariff isolation",
+              "type": "callout",
+              "style": "warning",
+              "content": "Transhipment bookings ignore Terminal and use only Charge Items with is_transhipment = 1. Standard/customized non-transhipment rows and transhipment rows are completely separate charge pools."
+            },
+            {
+              "heading": "Quotation and additional Invoice charges",
+              "type": "rules",
+              "items": [
+                "An Invoice linked to a confirmed Quotation reuses that Quotation’s triff_id.",
+                "Additional/manual Invoice charges only offer Customize rows (standard_or_customise = 0) from the same resolved tariff.",
+                "Each saved invoice charge stores the exact quotation_triff_details.id as charge_id for traceability."
+              ]
+            },
+            {
+              "heading": "THC minimum-rate rule",
+              "type": "callout",
+              "style": "danger",
+              "content": "A THC charge cannot be billed below the tariff rate: OOG rate if set, otherwise IMO rate if set, otherwise the plain Selling Price for that equipment row."
+            },
+            {
+              "heading": "Edit & delete protection",
+              "type": "rules",
+              "items": [
+                "A tariff used by a Quotation or Invoice is marked non-deletable.",
+                "Charge Item rows already referenced by Quotations or Invoices cannot be removed during Edit.",
+                "Deleting an allowed tariff removes its Charge Items before removing the tariff header.",
+                "Expired tariffs are flagged separately for visibility."
+              ]
+            },
+            {
+              "heading": "MSL Agency THC Rebate integration",
+              "type": "callout",
+              "style": "warning",
+              "content": "If linked to a confirmed Agency THC Rebate, Edit and Delete are blocked and changes must go through the Rebate workflow. For MSL companies, Create/Update/Clone attempts a reverse sync to Agency Rebate. Sync failures are logged but do not roll back the tariff save; unlinked tariffs expose Sync Status and manual re-sync."
+            },
+            {
+              "heading": "Export",
+              "type": "text",
+              "content": "The list Export downloads all matching tariffs as a flattened Excel sheet with one row per Charge Item. The Show screen also offers a separate export for one tariff only."
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Local Port Tariff is the pricing engine behind Quotations and Invoices. A missing Charge Item, wrong validity date or wrong Terminal scope is a common reason an expected charge does not appear downstream."
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "vessel-voyage",
@@ -3575,7 +3852,234 @@ window.DOCS_DATA = {
       "id": "edi",
       "title": "EDI",
       "icon": "file-text",
-      "modules": []
+      "modules": [
+        {
+          "id": "import-cuscar",
+          "title": "Import CUSCAR",
+          "icon": "file-text",
+          "summary": "Generates the EDIFACT CUSCAR D.95B customs manifest required by NAFEZA for cargo arriving in Egypt.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "Import CUSCAR generates an EDIFACT customs-manifest file required by NAFEZA for cargo arriving in Egypt. One file is generated per Voyage + Egyptian Port + optional Booking selection from live Booking, Voyage, Vessel, Container and Customer data. Only Import, Load Transshipment or All-leg voyages touching an Egyptian port are offered. Export CUSCAR is a separate screen."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "EDI → Cuscar List"
+                ],
+                [
+                  "Route (list)",
+                  "cuscar.index → /edi/cuscar"
+                ],
+                [
+                  "Route (generate)",
+                  "cuscar.generate"
+                ],
+                [
+                  "Route (submit/download)",
+                  "cuscar.create"
+                ],
+                [
+                  "Feature flags",
+                  "edi, generate_edi"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Cuscar List",
+                  "desc": "Sidebar → EDI → Cuscar List (edi + generate_edi flags).",
+                  "icon": "file-text"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Select Voyage & Port",
+                  "desc": "Pick an eligible Import voyage and the Egyptian manifest port.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose Booking Scope",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "All Bookings",
+                    "Selected Bookings",
+                    "Cross Companies"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Generate CUSCAR",
+                  "desc": "Confirmed bookings load for the voyage/port; press Generate.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Validates All Data",
+                  "tone": "system",
+                  "desc": "Checks containers, vessel, ETA, ACID/tax IDs, exporter country and tare weight.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Manifest Saved & Downloaded",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Valid selection produces a saved .edi file",
+                    "Any validation failure produces an Excel error report instead"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "List screen",
+              "type": "text",
+              "content": "Shows generated CUSCAR records visible when the user generated them or their company appears in line_id. Columns: Ref No, Voyage/Vessel, Port, Shipment Type, BL Count and Created At. BL Count opens bookings grouped by carrier line when cross-company. Actions: Show and Download."
+            },
+            {
+              "heading": "Search filters",
+              "type": "filters",
+              "items": [
+                "Voyage / Vessel"
+              ]
+            },
+            {
+              "heading": "Generate form",
+              "type": "steps",
+              "items": [
+                "Pick an Import / Load-Transshipment voyage that touches Egypt.",
+                "Pick the Egyptian Port for the manifest.",
+                "Optionally filter by a specific destination port.",
+                "Select confirmed bookings (booking_confirm = 1 or 4). Selecting none includes every matching booking.",
+                "Leave Cross enabled (default) to include sibling voyages with the same voyage_no + serial across the company-code group."
+              ]
+            },
+            {
+              "heading": "Duplicate-generation guard",
+              "type": "callout",
+              "style": "warning",
+              "content": "Generation is blocked when the same sibling-voyage pool, port, is_load_port and booking selection already exists. The user is directed to re-download the existing Ref No from the list."
+            },
+            {
+              "heading": "Request-level container checks",
+              "type": "rules",
+              "items": [
+                "Every Booking container-detail row must have a selected Container.",
+                "Every selected Container must have an Equipment Type.",
+                "A failure rejects the whole request before CUSCAR building begins."
+              ]
+            },
+            {
+              "heading": "Parent / child Booking merge",
+              "type": "callout",
+              "style": "info",
+              "content": "Booking references differing only by leading slashes are treated as one logical shipment. The row with the fewest slashes is the parent; child containers are merged into it so the file contains one CNI consignment per real shipment."
+            },
+            {
+              "heading": "Per-booking validation",
+              "type": "rules",
+              "items": [
+                "Vessel Call Sign and IMO Number are required; missing either rejects every booking on that voyage.",
+                "An ETA must exist for the relevant Egyptian or leg-arrival port.",
+                "Egypt-bound full-container bookings require a 19-digit ACID.",
+                "Egypt-bound full-container bookings require a 9-digit Egyptian Importer Tax ID.",
+                "Exporter ID is required, alphanumeric and up to 35 characters.",
+                "Exporter Country must have a valid ISO 3166-1 alpha-2 code.",
+                "Every Container requires Tare Weight, including empty/transhipment bookings."
+              ]
+            },
+            {
+              "heading": "Validation failure behaviour",
+              "type": "callout",
+              "style": "danger",
+              "content": "If any booking fails per-booking validation, no .edi file is saved. The request returns a CuscarErrorsExport Excel report containing booking reference, vessel/voyage and the exact reason. Generation succeeds only when every selected booking passes."
+            },
+            {
+              "heading": "Cross-company sharing",
+              "type": "rules",
+              "items": [
+                "Cross is enabled by default and loads confirmed bookings from sibling voyages sharing voyage_no + serial across companies in the same company-code group.",
+                "Every involved company ID is stored in line_id.",
+                "Users from any involved sister company can see and re-download the same saved CUSCAR.",
+                "List and Show group bookings by carrier line when multiple companies are involved."
+              ]
+            },
+            {
+              "heading": "What the .edi file contains",
+              "type": "rules",
+              "items": [
+                "One EDIFACT CUSCAR D.95B message inside a UNB/UNH…UNT/UNZ envelope.",
+                "Header includes sender/receiver, Egypt-time creation timestamp, vessel IMO, call sign, vessel name and voyage transport details.",
+                "Direct, transhipment and transit shipments use different transport-stage handling.",
+                "FCL containers are declared at message-header level; each booking receives a CNI consignment block with ports, parties and goods.",
+                "Goods include container weight, description and detected IMO dangerous-goods classification.",
+                "Free text is sanitized to plain ASCII, including conversion of look-alike Cyrillic characters."
+              ]
+            },
+            {
+              "heading": "CUSCAR record & filename",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Behaviour"
+              ],
+              "rows": [
+                [
+                  "Ref No",
+                  "CUSC + company booking_code + voyage number + per-company running serial from Settings.cuscar_ref_no."
+                ],
+                [
+                  "Stored selection",
+                  "Voyage, port, is_load_port, sorted booking_ids (or null for all), and all involved company IDs in line_id."
+                ],
+                [
+                  "Filename",
+                  "cuscar_<ref_no>_<Egypt-time timestamp>.edi"
+                ]
+              ]
+            },
+            {
+              "heading": "Show & re-download",
+              "type": "callout",
+              "style": "info",
+              "content": "Show opens bookings grouped by carrier line and lazy-loads Container details. Download does not replay a stored file: it regenerates the .edi content from current master data using the saved booking selection, so corrections appear in the re-download."
+            },
+            {
+              "heading": "Inbound CUSCAR is a separate workflow",
+              "type": "callout",
+              "style": "warning",
+              "content": "A separate implemented but currently unlinked Upload EDI workflow consumes a CUSCAR received from another party and can create Bookings, Containers and an EdiUpload audit record. It validates UNB sender/receiver against the current company. It is not the Generate CUSCAR screen documented here."
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Import CUSCAR is a regulatory-compliance generator for Egyptian customs. Its validation report is often the earliest precise signal of missing ACID/tax IDs, vessel IMO/call sign, ETA, customer country or Container tare weight."
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "trucking",
