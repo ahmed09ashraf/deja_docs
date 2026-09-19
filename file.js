@@ -9752,7 +9752,7 @@ function renderNav(){
 
     return `
     <div class="nav-group ${isOpen ? 'open' : ''} ${isActiveTab ? 'active' : ''}" data-id="${tab.id}">
-      <div class="nav-group-header" data-id="${tab.id}">
+      <div class="nav-group-header" data-id="${tab.id}" role="button" tabindex="0" aria-expanded="${isOpen}">
         ${svg(tab.icon, 18)}
         <span class="nav-group-title">${tab.title}</span>
         <span class="nav-chevron">${svg('chevron-right', 14)}</span>
@@ -9764,10 +9764,22 @@ function renderNav(){
   }).join('');
 
   navList.querySelectorAll('.nav-group-header').forEach(header => {
-    header.addEventListener('click', () => {
+    const toggleGroup = () => {
       const id = header.getAttribute('data-id');
       openTabId = (openTabId === id) ? null : id;
-      renderNav();
+      navList.querySelectorAll('.nav-group').forEach(group => {
+        const isOpen = group.getAttribute('data-id') === openTabId;
+        group.classList.toggle('open', isOpen);
+        group.querySelector('.nav-group-header')?.setAttribute('aria-expanded', String(isOpen));
+      });
+    };
+
+    header.addEventListener('click', toggleGroup);
+    header.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        toggleGroup();
+      }
     });
   });
 
