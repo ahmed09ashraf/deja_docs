@@ -1,6 +1,6 @@
 window.DOCS_DATA = {
-  "appTitle": "Documentation",
-  "appSubtitle": "Product knowledge base",
+  "appTitle": "Dejatech Docs",
+  "appSubtitle": "Shipping agency documentation",
   "tabs": [
     {
       "id": "administration",
@@ -16,7 +16,7 @@ window.DOCS_DATA = {
             {
               "heading": "What is this screen?",
               "type": "text",
-              "content": "The master registry of every system user — the login identity, role assignment, and company-line access behind every document, invoice, booking, and container movement created in the system. Every operational record stores a user_id, so this screen is the anchor for accountability and audit trails."
+              "content": "The master registry of every system user — the login identity, role assignment, and company-line access behind every document, invoice, booking, and container movement created in the system. Every operational record stores who created it, so this screen is the anchor for accountability and audit trails."
             },
             {
               "heading": "Access",
@@ -183,7 +183,7 @@ window.DOCS_DATA = {
               "heading": "Delete rules",
               "type": "callout",
               "style": "danger",
-              "content": "Deleting a user permanently removes the account. Historical documents (quotations, BLs, invoices, activity logs) keep their stored user_id, but the deleted user disappears from staff dropdowns — prefer Inactive over Delete for departed staff when audit continuity matters."
+              "content": "Deleting a user permanently removes the account. Historical documents (quotations, BLs, invoices, activity logs) keep the original creator’s name on file, but the deleted user disappears from staff dropdowns — prefer Inactive over Delete for departed staff when audit continuity matters."
             },
             {
               "heading": "Why it matters",
@@ -797,7 +797,7 @@ window.DOCS_DATA = {
                 ],
                 [
                   "Context",
-                  "JSON payload: file path, line number, exception class, stack trace"
+                  "Technical detail of the failure: which file, which line, what kind of error, and the full error trail"
                 ],
                 [
                   "Route Name",
@@ -831,7 +831,7 @@ window.DOCS_DATA = {
             {
               "heading": "Detail view & export",
               "type": "text",
-              "content": "Opening a grouped entry shows the latest occurrence with user/role/company context, full request details, and the complete, un-truncated stack trace. A Download action exports a plain-text diagnostic file (system-log-{id}.txt) formatted for developer or AI-assisted troubleshooting."
+              "content": "Opening a grouped entry shows the latest occurrence with user/role/company context, full request details, and the complete error trail. A Download action exports a plain-text diagnostic file (system-log-{id}.txt) that support can use to investigate."
             },
             {
               "heading": "Clear logs",
@@ -1021,7 +1021,7 @@ window.DOCS_DATA = {
             {
               "heading": "What is this screen?",
               "type": "text",
-              "content": "The master catalogue of every billable line item the company can place on an Invoice or Debit (Cost) document, such as Ocean Freight, THC, Storage, or Administration Fee. Documents reference a row from this list rather than accepting a free-typed charge name. The catalogue is scoped by company_id, so each company maintains its own list."
+              "content": "The master catalogue of every billable line item the company can place on an Invoice or Debit (Cost) document, such as Ocean Freight, THC, Storage, or Administration Fee. Documents reference a row from this list rather than accepting a free-typed charge name. Each company maintains its own list."
             },
             {
               "heading": "Access",
@@ -1300,7 +1300,7 @@ window.DOCS_DATA = {
                 ],
                 [
                   "Terminal Mapping",
-                  "old_code, per-company editable code, terminal_id, port_id, type_id, company_id"
+                  "Previous code, the company’s own editable code, and which terminal, port, type and company the row belongs to."
                 ]
               ]
             },
@@ -1912,7 +1912,7 @@ window.DOCS_DATA = {
             {
               "heading": "What is this screen?",
               "type": "text",
-              "content": "Defines the conversion rate for each foreign Currency during an inclusive Date From / Date To period. Rates are global—there is no company_id—so every company shares the same periods. EGP is excluded because no EGP-to-EGP rate is needed."
+              "content": "Defines the conversion rate for each foreign Currency during an inclusive Date From / Date To period. Rates are global — every company shares the same periods. EGP is excluded because no EGP-to-EGP rate is needed."
             },
             {
               "heading": "Access",
@@ -1982,7 +1982,7 @@ window.DOCS_DATA = {
                   "badge": "STEP 5 · SYSTEM CHECK",
                   "title": "System Shares Globally",
                   "tone": "system",
-                  "desc": "Rates are global (no company_id) and apply across all companies.",
+                  "desc": "Rates are global and apply across all companies.",
                   "icon": "activity"
                 },
                 {
@@ -2059,6 +2059,242 @@ window.DOCS_DATA = {
               "content": "Foreign-currency conversion depends on continuous, non-overlapping coverage. A gap between periods means no rate can be found for calculations on those dates."
             }
           ]
+        },
+        {
+          "id": "excel-templates",
+          "title": "Excel Templates",
+          "icon": "file-text",
+          "summary": "Company layout book for standard Excel exports — which columns appear, in what order, and under what heading. Missing templates fall back to built-in defaults.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "This is the company’s layout book for a small set of Excel exports. It does not create new spreadsheet types and does not hold operational data. Each row is one named export layout for this company: which columns appear, in what order, and under what heading. When a user later clicks Export on Movement Control, Booking, BL Draft or Agency THC Rebate, the matching export reads this layout. If no matching layout exists, that export falls back to its built-in default columns — a missing template is silent, not an error."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Master Data → Excel Templates"
+                ],
+                [
+                  "Route (list)",
+                  "excel.templates.index"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Excel Templates",
+                  "desc": "One row per export type for this company. There is no Create and no Delete.",
+                  "icon": "file-text"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Edit a Template",
+                  "desc": "Drag columns into the wanted order. Switch non-Required columns on/off. Optionally rename a heading.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Container Tracking only",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Save Changes",
+                    "Reorder movement-activity columns"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4 · SYSTEM CHECK",
+                  "title": "Save Applies Immediately",
+                  "tone": "system",
+                  "desc": "The next export for that type uses the new layout. No publish step and no cache to clear.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 5,
+                  "badge": "RESULT",
+                  "title": "Exports Use This Layout",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "On columns are written in the saved order with the saved headings",
+                    "Off columns are omitted entirely, not left blank"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Header (not edited here)",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Name",
+                  "Display name on the list, e.g. Load List Export. Set when the template is first created. Not editable here."
+                ],
+                [
+                  "Description",
+                  "Short purpose text shown on the list. Created with the template, not edited here."
+                ],
+                [
+                  "Type",
+                  "Hidden technical key that ties this row to one export class. The list does not show this column."
+                ],
+                [
+                  "Company",
+                  "Always the logged-in company. Two companies never share a template row."
+                ]
+              ]
+            },
+            {
+              "heading": "Column rows (what Edit changes)",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Heading",
+                  "Text printed in the Excel header row. Renaming only changes the label, not the data underneath."
+                ],
+                [
+                  "On / Off",
+                  "Whether the column is written into the file. Off columns are omitted entirely."
+                ],
+                [
+                  "Order",
+                  "Left-to-right position. Dragging a row updates this; it is saved only on Save Changes."
+                ],
+                [
+                  "Required",
+                  "Cannot be switched off. Toggle is locked and a red Required badge is shown."
+                ],
+                [
+                  "Read Only",
+                  "Heading cannot be renamed and the on/off toggle is hidden. The row can still be dragged."
+                ],
+                [
+                  "Internal key",
+                  "Never shown. This is what the export uses to pick the actual value. Renaming the heading does not change it."
+                ]
+              ]
+            },
+            {
+              "heading": "The seven layouts created for every company",
+              "type": "table",
+              "columns": [
+                "List name",
+                "Used by"
+              ],
+              "rows": [
+                [
+                  "All Movments Export",
+                  "Movement Control → Export → All Movement. File: AllMovements.xlsx. The spelling Movments is how it is stored."
+                ],
+                [
+                  "Last Movements Export",
+                  "Movement Control → Export → Last Movement. File: Filtered_Movements.xlsx. Only the latest movement per container."
+                ],
+                [
+                  "Container Tracking Report Export",
+                  "Movement Control → Export → Equipment Tracking. Static columns plus one dynamic column per movement activity."
+                ],
+                [
+                  "Load List Export",
+                  "Documentation → Export Booking → Load List. File: Loadlist.xlsx"
+                ],
+                [
+                  "Discharge List Export",
+                  "Documentation → Import Booking → Discharge List. File: Dishargelist.xlsx"
+                ],
+                [
+                  "BL Load List Export",
+                  "Documentation → BL Draft → BL Loadlist. File: BLloadList.xlsx"
+                ],
+                [
+                  "SOA Export",
+                  "Tariffs → Agency THC Rebate → Download → SOA. File: SOA_Report.xlsx"
+                ]
+              ]
+            },
+            {
+              "heading": "Other Excel buttons are not on this list",
+              "type": "callout",
+              "style": "info",
+              "content": "BL Freight List, Quotation Summary, Summary Movement and similar buttons do not appear here. Those exports use their own built-in columns unless a matching template of that type has been created behind the scenes. This screen has no path to add an eighth template type."
+            },
+            {
+              "heading": "Editing rules",
+              "type": "rules",
+              "items": [
+                "You cannot add a column the export does not already know, or delete a column from the template.",
+                "You cannot change Name, Description or Type of the template header.",
+                "Empty column name is blocked: Please enter a column name.",
+                "Save success: Excel template updated successfully. Failure rolls back the whole save.",
+                "There is no Create and no Delete. Templates are born when a company is created and stay for the life of the company.",
+                "Empty list text: No templates found. Every matching template loads at once, ordered by Name A–Z."
+              ]
+            },
+            {
+              "heading": "Reorder on Container Tracking",
+              "type": "rules",
+              "items": [
+                "Only the Container Tracking template has a movements column. That row is Read Only and shows a Reorder button.",
+                "Reorder does not edit the template. It edits this company’s Movement Activity Code list — the same master used by Movement Control.",
+                "Drag to set the left-to-right order of activity columns on the Equipment Tracking Excel.",
+                "Toggle Off sets that activity’s order to empty — it is then excluded from the tracking Excel and from any other export that uses the same enabled-movement-types list.",
+                "Save Order is a separate save from Save Changes on the template."
+              ]
+            },
+            {
+              "heading": "How a template gets onto the list",
+              "type": "callout",
+              "style": "warning",
+              "content": "A user never creates these rows by hand. A new company automatically gets the seven templates with default columns. An administrator rebuild reuses an existing header but adds newly introduced columns, removes obsolete ones, and resets heading/order/on-off back to factory defaults — so a rebuild wipes custom layouts. Day-to-day users should only use Edit."
+            },
+            {
+              "heading": "How this feeds the exports",
+              "type": "steps",
+              "items": [
+                "Look up one template for the logged-in company whose Type matches that export.",
+                "If a template exists: use only On columns, in the saved Order, with the saved Headings. Required columns are always On.",
+                "If no template exists: use the export’s built-in default column list. The export still succeeds.",
+                "The file then fills each enabled heading from the live Movement / Booking / BL / SOA data of that run."
+              ]
+            },
+            {
+              "heading": "All Movement vs Last Movement",
+              "type": "callout",
+              "style": "warning",
+              "content": "The button All Movement uses the template named All Movments Export. The button Last Movement uses Last Movements Export. Those two names look similar; they are different files and different row sets. Editing the wrong one is the usual reason an export did not pick up a column change."
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "This is the only place operations can change what a standard export looks like without a system change. The two mistakes that actually break a downstream file are editing Last Movements when the user always clicks All Movement (or the other way around), and switching a movement activity off under Reorder, which drops that activity from Equipment Tracking for the whole company."
+            }
+          ]
         }
       ]
     },
@@ -2066,7 +2302,243 @@ window.DOCS_DATA = {
       "id": "crm",
       "title": "CRM",
       "icon": "users",
-      "modules": []
+      "modules": [
+        {
+          "id": "crm-list",
+          "title": "CRM List",
+          "icon": "users",
+          "summary": "Sales pipeline of opportunities — customer or prospect, routes, volume, stage, and follow-up dates. Does not create quotations or bookings; it can create Customers.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "The sales pipeline. Each CRM record is one sales opportunity with a customer (or a prospect that is not a customer yet): what they ship, on which routes, in which containers, where the deal stands (Stage), when they were last contacted and when to follow up, and which team member owns it. It is a sales-tracking screen: it does not create quotations or bookings. Its only effect on other modules is that it can create Customers."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "CRM → CRM List"
+                ],
+                [
+                  "Route (list)",
+                  "crm.index"
+                ],
+                [
+                  "Feature flag",
+                  "crm — only visible when enabled for the company"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open CRM List",
+                  "desc": "Sidebar → CRM → CRM List. Admins see every agency record; other users see only their own.",
+                  "icon": "users"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2 · DECISION",
+                  "title": "Choose the Customer",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Existing customer",
+                    "New — create Customer now",
+                    "Create in CRM — prospect only"
+                  ]
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3",
+                  "title": "Fill the Opportunity",
+                  "desc": "Shipment type, volume, container types, routes (country / POL / POD / transhipment) and commodities. Set Stage, Customer Existence, Last Contact, Next Follow Up and Assigned To.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Follow Up from the List",
+                  "desc": "After each call, click Last Contact / Next Follow Up on the row. Profile → Notifications lists records whose Next Follow Up is today.",
+                  "icon": "search"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "Sync a Prospect",
+                  "tone": "system",
+                  "desc": "When a prospect becomes real, Sync creates a Customer (Primary, not validated) and links this CRM record to it.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Close as Won or Lost",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Lost requires a reason",
+                    "Only one open opportunity (No Respond / Negotiation) is allowed per customer — close the old one before opening a new one"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Fields",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Customer",
+                  "Required. An existing customer from any line of the same agency, “new” (creates a Customer immediately), or “create in CRM” (prospect kept only here: Company Name, Contact Person, Phone)."
+                ],
+                [
+                  "Contact Person",
+                  "For an existing customer: the main account or one of that customer’s contact people."
+                ],
+                [
+                  "Shipment Type",
+                  "Optional: Import or Export."
+                ],
+                [
+                  "Volume",
+                  "Optional free text."
+                ],
+                [
+                  "Container Types",
+                  "Optional, multiple."
+                ],
+                [
+                  "Routes",
+                  "Optional, one or more rows: Loading Country, POL, Discharge Country, POD, Transhipment. A row is saved only if it has a loading country or a POL."
+                ],
+                [
+                  "Commodity Categories",
+                  "Optional, multiple, from a fixed list (Agricultural & Food, Energy & Petroleum, Chemicals, Reefer, Dangerous Goods (IMO), and others)."
+                ],
+                [
+                  "Commodity Description",
+                  "Optional free text."
+                ],
+                [
+                  "Stage",
+                  "Required: No Respond, Negotiation, Won, Lost."
+                ],
+                [
+                  "Reason for Lost",
+                  "Shown and required on the form when Stage is Lost."
+                ],
+                [
+                  "Customer Existence",
+                  "Required: No (New Prospect) / Yes (Active Client)."
+                ],
+                [
+                  "Last Contact Date",
+                  "Required."
+                ],
+                [
+                  "Next Follow Up",
+                  "Optional. Must be after Last Contact Date."
+                ],
+                [
+                  "Assigned To",
+                  "Required. Normal users can only assign to themselves; Admins can pick any user of their company."
+                ],
+                [
+                  "Lead Status",
+                  "Optional free text (e.g. In Progress, On Hold)."
+                ]
+              ]
+            },
+            {
+              "heading": "Listing, search & export",
+              "type": "rules",
+              "items": [
+                "Records of all lines (companies) of the same agency are listed together. 20 per page, newest first.",
+                "Admins and super admins see every record; other users see only the records assigned to them.",
+                "Sortable by Customer Name, Last Contact Date and Next Follow Up.",
+                "Search: customer / company name, Shipment Type, Stage, Commodity, POL, POD, Assigned Team Member, Last Contact Date, Next Follow Up, Customer Existence, Container Type.",
+                "Stage is coloured green for Won and red for Lost. Last Contact and Next Follow Up can be changed by clicking the date on the row.",
+                "Download exports the filtered list to Excel.",
+                "Profile menu → Notifications lists records (of the user’s company, and only the user’s own unless Admin) whose Next Follow Up is today."
+              ]
+            },
+            {
+              "heading": "Create / edit / delete rules",
+              "type": "table",
+              "columns": [
+                "Rule",
+                "Message shown"
+              ],
+              "rows": [
+                [
+                  "Customer already has an open record (stage No Respond or Negotiation)",
+                  "Cannot create new CRM: This customer already has an active record (Contacted, Negotiation, or No Respond). On edit: Cannot update CRM: … another active record …"
+                ],
+                [
+                  "“New” customer without a name",
+                  "Standard required message."
+                ],
+                [
+                  "Company / customer name already used (prospect name unique in CRM; “new” / prospect name must not already exist as a Customer)",
+                  "Standard already-been-taken message."
+                ],
+                [
+                  "Next Follow Up not after Last Contact",
+                  "Standard must-be-a-date-after message."
+                ]
+              ]
+            },
+            {
+              "heading": "Quick date changes from the list",
+              "type": "rules",
+              "items": [
+                "Last Contact Date: any valid date.",
+                "Next Follow Up: must be after the record’s Last Contact Date (or after today if there is none).",
+                "On edit, routes, container types and commodities are replaced by the new selection.",
+                "Success messages: CRM record created / updated / deleted successfully.",
+                "Deleting asks for confirmation and removes the record with no other checks."
+              ]
+            },
+            {
+              "heading": "How this feeds Customers",
+              "type": "rules",
+              "items": [
+                "New from the form: a Customer is created at once in the user’s company, status Primary (not validated), the user as sales person, with the chosen roles. The CRM record is linked to it.",
+                "Prospect Sync: the list shows Sync for prospects not synced yet. The user picks at least one customer role; the system creates the Customer (name, phone, contact person, status Primary, sales person = the assigned team member), links the CRM record and marks it synced. Messages: Customer synced successfully / Customer already synced.",
+                "The Customer’s related-data view lists and counts its CRM records. CRM records do not block deleting the customer.",
+                "Merging two customers moves their CRM records to the kept customer. Customers created from CRM are marked in the customer audit log."
+              ]
+            },
+            {
+              "heading": "One open opportunity at a time",
+              "type": "callout",
+              "style": "warning",
+              "content": "A customer can have only one open opportunity at a time (No Respond or Negotiation). Close old records as Won or Lost before opening a new one. Use “create in CRM” for cold prospects so the Customer list is not filled with companies that never ship."
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "CRM is where the sales team tracks every lead, and its dates drive the daily follow-up list. The only operational side-effect is Customer creation — quotations and bookings are still opened separately once the deal is real."
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "tariff",
@@ -2171,7 +2643,7 @@ window.DOCS_DATA = {
               "rows": [
                 [
                   "Tariff No",
-                  "Auto-generated as <PortCode>-<TerminalCode>-<CustomerName or Standard>[-Suffix]-<ValidityFrom>.To.<ValidityTo>. Overlapping customized tariffs receive suffixes such as -B or -C."
+                  "Auto-generated as [PortCode]-[TerminalCode]-[CustomerName or Standard][-Suffix]-[ValidityFrom].To.[ValidityTo]. Overlapping customized tariffs receive suffixes such as -B or -C."
                 ],
                 [
                   "Country / Port / Terminal",
@@ -2286,7 +2758,7 @@ window.DOCS_DATA = {
               "items": [
                 "For a destination Port and quotation reference date, Standard tariffs are offered plus the selected Customer’s valid Customized tariff.",
                 "Charge Items are filtered by Import/Export direction and Equipment Type (exact type or All/100).",
-                "The selected tariff is stored as triff_id and later reused by an Invoice created from that Quotation."
+                "The selected tariff is stored on the Quotation and later reused by an Invoice created from that Quotation."
               ]
             },
             {
@@ -2309,7 +2781,7 @@ window.DOCS_DATA = {
               "heading": "Quotation and additional Invoice charges",
               "type": "rules",
               "items": [
-                "An Invoice linked to a confirmed Quotation reuses that Quotation’s triff_id.",
+                "An Invoice linked to a confirmed Quotation reuses that Quotation’s chosen tariff.",
                 "Additional/manual Invoice charges only offer Customize rows (standard_or_customise = 0) from the same resolved tariff.",
                 "Each saved invoice charge stores the exact quotation_triff_details.id as charge_id for traceability."
               ]
@@ -2348,6 +2820,579 @@ window.DOCS_DATA = {
               "content": "Local Port Tariff is the pricing engine behind Quotations and Invoices. A missing Charge Item, wrong validity date or wrong Terminal scope is a common reason an expected charge does not appear downstream."
             }
           ]
+        },
+        {
+          "id": "agency-rebate",
+          "title": "Agency THC Rebate",
+          "icon": "calculator",
+          "summary": "Records how THC-style charges are split between liner and agency, then mirrors the confirmed sheet into the Local Port Tariff that Quotations and Invoices actually price from.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "An Agency THC Rebate records how much of a THC-style charge is kept by the local agent versus passed on or shared, plus the commission the agency earns, for a given Port + Terminal + Standard-or-Customer scope and validity window. It is not itself the tariff a customer is billed from. Once confirmed, it is automatically mirrored into a real Local Port Tariff, and that tariff is what Quotations and Invoices price from. The rebate’s own Liner Revenue, Agency Revenue and Commission figures are later read by the Statement of Account (SOA) export."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Tariffs → Agency THC Rebate"
+                ],
+                [
+                  "Route (list)",
+                  "agency_rebate.index"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Agency THC Rebate",
+                  "desc": "Sidebar → Tariffs → Agency THC Rebate.",
+                  "icon": "calculator"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Set Scope & Validity",
+                  "desc": "Pick Country, Port, Terminal, Standard or Customer, validity dates and optional Agency Commission.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose an Action",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Create",
+                    "Edit",
+                    "Clone",
+                    "Import",
+                    "Export",
+                    "Delete"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Add Charge Rows",
+                  "desc": "One THC-style line per Charge, Equipment, Cargo Type, rates, payer, direction, Local/Shared and commission figures.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "Save Draft, then Confirm",
+                  "tone": "system",
+                  "desc": "Draft saves the sheet only. Switching Status to Confirmed and saving again creates or updates the matching Local Port Tariff.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Tariff & SOA Ready",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Linked Local Port Tariff prices Quotations and Invoices",
+                    "Confirmed Shared rows feed SOA liner/agency revenue"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Header fields",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Agency No",
+                  "Auto-generated as [PortCode]-[TerminalCode]-[CustomerName or Standard]-[ValidityFrom].To.[ValidityTo] (dd-mm-yyyy). Regenerates on Edit only if Port, Terminal, Customer or a validity date changes. No auto -B/-C suffix."
+                ],
+                [
+                  "Country / Port / Terminal",
+                  "All required. Port is not re-checked as belonging to the chosen Country, nor Terminal to the Port — pick carefully."
+                ],
+                [
+                  "Standard or Customer",
+                  "Required. Customer is only required and shown when that choice is selected."
+                ],
+                [
+                  "Validity From / To",
+                  "Both required. To must be strictly after From."
+                ],
+                [
+                  "Agency Commission",
+                  "Optional header-level percentage/amount, separate from per-row Commission."
+                ],
+                [
+                  "Status",
+                  "Draft or Confirmed. There is no Confirm button — switch the field and Save."
+                ]
+              ]
+            },
+            {
+              "heading": "Charge detail rows",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Charge Description",
+                  "Charge Codes master row this line is for."
+                ],
+                [
+                  "Local or Shared",
+                  "Whether the agency keeps the charge locally or shares it. SOA only totals Liner/Agency Revenue from Shared rows."
+                ],
+                [
+                  "Cargo Type",
+                  "All / Dry / IMO / OOG."
+                ],
+                [
+                  "Equipment Type",
+                  "A real container type, or All."
+                ],
+                [
+                  "Unit",
+                  "Container or Document."
+                ],
+                [
+                  "Currency",
+                  "Free-text code — not checked against the Currency master."
+                ],
+                [
+                  "Selling Rate / Payer",
+                  "Sold rate. Payer is Liner, Shipper, Consignee or Else."
+                ],
+                [
+                  "Shipment Type",
+                  "Import / Export / Empty / Transshipment."
+                ],
+                [
+                  "Full or Empty",
+                  "Independent of Shipment Type."
+                ],
+                [
+                  "Revenue / Cost figures",
+                  "Base rate and multiply factors feed Liner/Agency Revenue and cost/margin reference."
+                ],
+                [
+                  "Margin / Income Tax / Net",
+                  "Typed in directly — not recalculated if you later change Selling Rate or Cost."
+                ],
+                [
+                  "Liner / Agency Revenue",
+                  "What SOA sums on each confirmed Shared row."
+                ],
+                [
+                  "Commission",
+                  "This row’s own commission, separate from the header Agency Commission."
+                ],
+                [
+                  "Standard or Customise",
+                  "Per-row S/C flag, same idea as Local Port Tariff."
+                ]
+              ]
+            },
+            {
+              "heading": "Duplicate-row guard",
+              "type": "callout",
+              "style": "danger",
+              "content": "A row is rejected if Charge + Equipment Type + Cargo Type already exists on the same rebate. Currency, Shipment Type and Local/Shared are not part of the check — you cannot enter the same Charge+Equipment+Cargo twice even as Import vs Export."
+            },
+            {
+              "heading": "Editing an existing row",
+              "type": "callout",
+              "style": "warning",
+              "content": "Once a Charge row exists, Charge, Cargo Type, Equipment, Unit, Currency, Selling Rate, Payer, Shipment Type and Standard/Customise become fixed. Only Local/Shared, Full/Empty and the rate/cost/revenue/commission figures stay editable. To change a locked field, remove the row and add a new one."
+            },
+            {
+              "heading": "Listing & search",
+              "type": "text",
+              "content": "Scoped to your company, newest first, 30 per page. Filters: Agency No (partial), Validity From (on-or-after), Validity To (on-or-before), and Status. The date filters are not an overlap search — they filter the record’s own start/end dates, not whether it covers a chosen reference date."
+            },
+            {
+              "heading": "Overlap protection",
+              "type": "callout",
+              "style": "danger",
+              "content": "Save is blocked if another rebate for the same Company + Port + Terminal + Standard-or-Customer (+ same Customer, including Standard) has a validity window that touches or overlaps — even a shared boundary date counts. Unlike Local Port Tariff, customer-specific rebates cannot overlap. Message: AgencyRebates cannot overlap. Conflicting with: # [Agency No]."
+            },
+            {
+              "heading": "Draft vs Confirmed",
+              "type": "rules",
+              "items": [
+                "New records default to Draft. Confirming means editing, setting Status to Confirmed, and saving.",
+                "Saving an edit as Confirmed creates or refreshes the linked Local Port Tariff.",
+                "Creating a brand-new record directly as Confirmed does NOT sync — the first save is skipped. The next Edit+Save while still Confirmed then syncs.",
+                "A Confirmed rebate locks the linked Local Port Tariff’s Edit and Delete. The rebate itself stays editable and can be flipped back to Draft.",
+                "Switching Confirmed back to Draft marks the linked tariff inactive so it stops being offered to Quotations/Invoices.",
+                "Flipping Draft→Confirmed again does NOT re-activate that tariff — the inactive flag is never cleared by the sync."
+              ]
+            },
+            {
+              "heading": "Confirmed→Draft→Confirmed trap",
+              "type": "callout",
+              "style": "warning",
+              "content": "A rebate can look fully Confirmed on screen while its priced Local Port Tariff is still silently inactive. When SOA or invoices look wrong, check both the rebate status and whether the linked tariff is still active."
+            },
+            {
+              "heading": "Cloning",
+              "type": "text",
+              "content": "Clone opens a pre-filled form. Country, Port, Terminal, validity, Standard-or-Customer, Customer and header Agency Commission can still be changed; every Charge row is copied as-is. The new record always gets a fresh Agency No, always starts as Draft, and does not sync until later confirmed. Overlap checks still run."
+            },
+            {
+              "heading": "Import & export",
+              "type": "rules",
+              "items": [
+                "Import expects a Tariff No in the same Agency No format plus one row per Charge line.",
+                "Import is all-or-nothing: one failing row rolls back the entire upload and returns an Errors workbook.",
+                "A successful import immediately syncs every touched header into Local Port Tariff — even if that header is still Draft.",
+                "Export downloads every rebate matching the current list filters, one row per Charge line, as Agency THC Rebate.xlsx — the same format Import expects back."
+              ]
+            },
+            {
+              "heading": "Deleting",
+              "type": "callout",
+              "style": "danger",
+              "content": "There is no protection before delete — not even for a Confirmed rebate linked to a tariff used by real Quotations, Invoices or SOA figures. Delete marks the linked tariff inactive, deletes every Charge row, then deletes the rebate. Once the rebate is gone, that tariff stays permanently inactive with nothing left to re-activate it."
+            },
+            {
+              "heading": "Sync with Local Port Tariff",
+              "type": "rules",
+              "items": [
+                "The link lives only on the Local Port Tariff (agency_rebate_id). The rebate does not store which tariff it is linked to.",
+                "Saving or cloning a Local Port Tariff can create or link a Draft Agency Rebate and rebuild its Charge rows — but only while that rebate is still Draft. A Confirmed rebate is not overwritten from the tariff side.",
+                "Confirming a rebate creates a new Local Port Tariff if none matches. If a matching unlinked tariff already exists, that confirm can skip linking.",
+                "When updating a linked tariff’s rows, rows already used on an Invoice or an approved Quotation are left untouched and reported by name.",
+                "Cargo Type is not part of the tariff-row match, so the two screens are not guaranteed to stay one-to-one after edits in both places. Re-confirm the rebate to force them back in line.",
+                "The list Sync button only links records whose Tariff No text equals an Agency No and that are not linked yet — it does not refresh fields or Charge rows."
+              ]
+            },
+            {
+              "heading": "How this feeds the SOA",
+              "type": "text",
+              "content": "The SOA export reaches a rebate through the booking’s Quotation → that Quotation’s Local Port Tariff → that tariff’s linked Agency Rebate. Only a Confirmed rebate contributes. Commission is totaled across every matching row; Liner Revenue and Agency Revenue are totaled only from Shared rows. A Draft rebate is invisible to the SOA even if its synced tariff is already pricing real bookings."
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Agency THC Rebate is where actual take on THC-style charges is recorded and turned into the live Local Port Tariff. The two most common quiet failures are leaving a rebate in Draft (it never reaches Quotations/Invoices or the SOA) and cycling Confirmed→Draft→Confirmed (the priced tariff can stay inactive). When SOA revenue does not match, check that the rebate is Confirmed and that its linked tariff is still active."
+            }
+          ]
+        },
+        {
+          "id": "storage-detention-power-tariff",
+          "title": "Storage-Detention-Power Tariff",
+          "icon": "calculator",
+          "summary": "Free-time-then-per-day rate card for Storage, Detention and Power — one service+direction per record, consumed by every BL and period calculation screen.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "This is the rate card behind every Storage, Detention and reefer Power charge. Unlike Local Port Tariff, each record here is scoped to exactly one service+direction (for example Import Storage or Export Detention) for one Port/Terminal/Validity window. The rate is not a flat price — it is a free-time-then-per-day scale: for each equipment type, a series of day-range slabs, each with its own rate per day (the first slab is normally 0, the free days)."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Tariffs → Storage-Detention-Power Tariff"
+                ],
+                [
+                  "Route (list)",
+                  "demurrage.index"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open the Tariff",
+                  "desc": "Sidebar → Tariffs → Storage-Detention-Power Tariff.",
+                  "icon": "calculator"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Pick Type & Scope",
+                  "desc": "Tariff Type decides Storage/Detention/Power plus Import/Export/Empty. Then Port, Terminal(s), Currency, Standard/Customer and validity.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose an Action",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Create",
+                    "Edit",
+                    "Clone",
+                    "Sync",
+                    "Export",
+                    "Delete"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Add Equipment Slabs",
+                  "desc": "One row per equipment type (or All 20s / All 40s). Open Periods and add day-ranges with a rate per day.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Checks Overlap",
+                  "tone": "system",
+                  "desc": "Browser overlap check for the same Port + Terminal + Type + Category + validity window.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Rates Ready Downstream",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "BL Storage, BL Detention and Power Calculation can price a document",
+                    "Period reports and CRO free-time dates use the same slabs"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Header fields",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Tariff Type",
+                  "Required. One of EDET, ESTO, IDET, ISTO, EEST, IEST, PCEX, PCIM, ECST. This one choice fills Bound, Service+Direction and Full/Empty."
+                ],
+                [
+                  "Port",
+                  "Required. Dropdown only offers Egyptian ports — country is hard-coded to Egypt."
+                ],
+                [
+                  "Terminal / Depot",
+                  "Required. Multi-select on Create (one independent tariff per terminal). Edit allows a single terminal."
+                ],
+                [
+                  "Validity From / To",
+                  "Both required. To must be strictly after From — equal dates are rejected."
+                ],
+                [
+                  "Currency",
+                  "Required, must exist in the Currency master."
+                ],
+                [
+                  "Tariff Category",
+                  "Standard (company-wide) or Customer (one customer’s bookings only)."
+                ],
+                [
+                  "Customer",
+                  "Required only when Category is Customer; cleared automatically for Standard."
+                ],
+                [
+                  "Tariff No",
+                  "Auto-generated as [Type name]-[PortCode]-[TerminalCode]-[Customer or Standard]-[From].To.[To]."
+                ]
+              ]
+            },
+            {
+              "heading": "How Tariff Type fills hidden fields",
+              "type": "table",
+              "columns": [
+                "Tariff Type",
+                "Bound",
+                "Service + Direction",
+                "Status"
+              ],
+              "rows": [
+                [
+                  "EDET",
+                  "Export",
+                  "Export / Detention",
+                  "Full"
+                ],
+                [
+                  "ESTO",
+                  "Export",
+                  "Export / Storage",
+                  "Full"
+                ],
+                [
+                  "IDET",
+                  "Import",
+                  "Import / Detention",
+                  "Full"
+                ],
+                [
+                  "ISTO",
+                  "Import",
+                  "Import / Storage",
+                  "Full"
+                ],
+                [
+                  "EEST",
+                  "Export",
+                  "Export / Storage",
+                  "Empty"
+                ],
+                [
+                  "IEST",
+                  "Import",
+                  "Import / Storage",
+                  "Empty"
+                ],
+                [
+                  "PCEX",
+                  "Export",
+                  "Export / Power",
+                  "Full"
+                ],
+                [
+                  "PCIM",
+                  "Import",
+                  "Import / Power",
+                  "Full"
+                ],
+                [
+                  "ECST",
+                  "All",
+                  "Empty / Storage",
+                  "Empty"
+                ]
+              ]
+            },
+            {
+              "heading": "Equipment-row category",
+              "type": "rules",
+              "items": [
+                "Each equipment row stores Standard, IMO or OOG — independent of the header Standard/Customer field.",
+                "Storage types (ESTO, ISTO, EEST, IEST, ECST) allow all three. The same equipment type can appear once per category.",
+                "Detention (EDET, IDET) and Power (PCEX, PCIM) are always Standard. IMO/OOG are not offered and the server overwrites any posted category to Standard.",
+                "On Detention/Power the same equipment type can be listed only once.",
+                "Downstream Detention and Power calculations also ignore IMO/OOG on the booking and always look up the Standard slab."
+              ]
+            },
+            {
+              "heading": "Equipment rows and day-range periods",
+              "type": "rules",
+              "items": [
+                "At least one completed equipment row (type + category + at least one period) is required to save.",
+                "Each period needs a label, a numeric rate (may be 0; negatives are not blocked) and a whole number of days of 1 or more.",
+                "There is no check that periods are in order or that the last period covers unlimited future days. A container that overstays the last period can end up with nothing to charge.",
+                "20 (All 20ft) / 40 (All 40ft) expand at save into one real row per matching type. Explicit rows win. OOG expansion skips Reefer and Dry-only types.",
+                "Edit/Clone collapses matching rows back into All 20s/All 40s when every type of that size has the same category and scale.",
+                "Storage duplicate type+category is blocked in the browser only. Detention/Power duplicates are rejected by the server."
+              ]
+            },
+            {
+              "heading": "Overlap protection gaps",
+              "type": "callout",
+              "style": "warning",
+              "content": "The overlap check runs only in the browser before Save — the server does not re-check. It only catches a new range whose start or end falls inside an existing range, so a new range that fully swallows an existing one can slip through. Multi-terminal Create is not guaranteed to check each terminal separately. Overlapping tariffs for the same Port/Terminal/Type/Category can exist in the data."
+            },
+            {
+              "heading": "Edit, clone, delete, sync",
+              "type": "rules",
+              "items": [
+                "Edit is a full replace of rows and periods — existing periods are deleted and re-inserted from the form.",
+                "There is no check that blocks editing or deleting a tariff already used by a real calculation or invoice.",
+                "Delete removes periods, then equipment rows, then the header. Historical invoices keep the old numeric reference with nothing left to point to.",
+                "Clone opens Create pre-filled. Nothing is saved until you press Create. Overlap still runs.",
+                "List Sync copies header, rows and periods into your other companies by exact header match only — different rates under the same header are not detected."
+              ]
+            },
+            {
+              "heading": "How a tariff header is picked downstream",
+              "type": "steps",
+              "items": [
+                "Match Port + Terminal + Service+Direction (or Tariff Type) + company.",
+                "Priority 1: customer-specific header for that booking’s customer.",
+                "Priority 2: company-wide Standard header at the same port+terminal.",
+                "Valid To is checked against the container’s own end date, not always today. A completed row only needs the tariff still valid on that completion date; an in_completed row needs Valid To >= today.",
+                "Validity From is not required to have already started — a future-dated tariff can still be picked if it is the only match."
+              ]
+            },
+            {
+              "heading": "How the equipment slab is picked",
+              "type": "table",
+              "columns": [
+                "Screen",
+                "Slab rule"
+              ],
+              "rows": [
+                [
+                  "BL Storage",
+                  "Exact equipment type AND category (IMO, else OOG, else Standard)."
+                ],
+                [
+                  "BL Detention / Power",
+                  "Exact equipment type AND category Standard only. Booking IMO/OOG flags are ignored."
+                ],
+                [
+                  "Storage by Period (Full)",
+                  "Same as BL Storage."
+                ],
+                [
+                  "Storage by Period (Empty)",
+                  "First slab whose equipment name starts with the same two characters (size). Category ignored."
+                ],
+                [
+                  "Detention by Period",
+                  "First row for that equipment type with no category filter — on current data that first row is Standard."
+                ],
+                [
+                  "CRO free-time date",
+                  "First zero-rate period found across ANY equipment row, not specifically the container’s type."
+                ]
+              ]
+            },
+            {
+              "heading": "Export",
+              "type": "text",
+              "content": "Export downloads every matching tariff flattened to one row per period as storageAndDentention.xlsx. Tariff Ref No on the sheet is still built as [Type name]-[PortCode]-Standard Tariff (an old internal id, not the live auto Tariff No). The Rate column header always shows $ regardless of the real currency."
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Every Storage, Detention and Power charge in the system ultimately comes from a day-range rate typed here. Storage can have a different rate for Standard, IMO and OOG on the same equipment type; Detention and Power cannot. The two most common reasons a charge comes out wrong or zero are a Terminal that does not exactly match the booking, or a missing Standard slab (Detention/Power) / matching IMO-OOG-Standard slab (Storage)."
+            }
+          ]
         }
       ]
     },
@@ -2355,7 +3400,887 @@ window.DOCS_DATA = {
       "id": "vessel-voyage",
       "title": "Vessel & Voyage",
       "icon": "anchor",
-      "modules": []
+      "modules": [
+        {
+          "id": "principle-and-operators",
+          "title": "Principle & Vessel Operators",
+          "icon": "users",
+          "summary": "Company list of shipping lines and the roles they play — Principal, Vessel Operator or other — consumed by Quotations, Bookings, Routes, Vessels and Voyages.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "The list of shipping lines the agency deals with. One record (a line) can play one or more roles chosen in its Type: Principal (the shipping line we act as agent for), Vessel Operator (the line that operates the vessel / service), or other types such as Land Transportation. Almost every operational screen picks a line from this list. Each company has its own list. The sidebar label is spelled Principle — that is the live menu name; the shipping role itself is Principal."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Vessel & Voyage → Principle & Vessel Operators"
+                ],
+                [
+                  "Route (list)",
+                  "lines.index"
+                ],
+                [
+                  "Feature flags",
+                  "vessel_voyage, lines"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Search First",
+                  "desc": "Open Principle & Vessel Operators and search by name or code so the line is not already there.",
+                  "icon": "search"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Add New",
+                  "desc": "Fill Name, Code, Type (one or more roles), Country, and optional City, Address, Phone, Email, Tax ID.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · SYSTEM CHECK",
+                  "title": "Unique in This Company",
+                  "tone": "system",
+                  "desc": "Save is blocked if the code or name is already used in this company.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Copied to Sister Companies",
+                  "desc": "The line is copied automatically to companies that share the same company Code.",
+                  "icon": "users"
+                },
+                {
+                  "step": 5,
+                  "badge": "RESULT",
+                  "title": "Offered Downstream",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Principal and/or Vessel Operator appear in Quotations, Bookings, Routes, Vessels and Voyages",
+                    "A missing role is why a line exists but does not show in a dropdown"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Fields stored",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Name",
+                  "Required. Unique inside the company."
+                ],
+                [
+                  "Code",
+                  "Required. Unique inside the company. Service Route Excel files refer to the line by this code."
+                ],
+                [
+                  "Type",
+                  "One or more roles (multi-select, required): Vessel Operator, Principal, Land Transportation… The role decides where the line appears."
+                ],
+                [
+                  "Country",
+                  "Required."
+                ],
+                [
+                  "City / Address / Phone / Email / Tax ID",
+                  "Optional contact details."
+                ]
+              ]
+            },
+            {
+              "heading": "Create, edit & delete",
+              "type": "table",
+              "columns": [
+                "Rule",
+                "Message"
+              ],
+              "rows": [
+                [
+                  "Code already used in this company",
+                  "This Line Code Already Exists"
+                ],
+                [
+                  "Name already used in this company",
+                  "This Line Name Already Exists"
+                ],
+                [
+                  "Name, Code or Country empty",
+                  "Standard required message"
+                ],
+                [
+                  "Delete",
+                  "Asks for confirmation, then deletes the line"
+                ]
+              ]
+            },
+            {
+              "heading": "Sync to other companies",
+              "type": "rules",
+              "items": [
+                "On create or edit the line is copied to every sister company (same company Code), including name, code, country, contact details and all roles.",
+                "The sister line is matched by an earlier sync link, otherwise by the same Name. If it already exists it is updated instead of duplicated.",
+                "If the copy fails, the save still succeeds with a warning: Create/Update saved, but auto-sync to sibling company failed.",
+                "Manual Sync to Companies (per row or bulk) opens a pop-up to choose target companies and push on demand."
+              ]
+            },
+            {
+              "heading": "How this feeds other modules",
+              "type": "table",
+              "columns": [
+                "Screen",
+                "Lines offered"
+              ],
+              "rows": [
+                [
+                  "Quotations (Import, Export, Slot)",
+                  "Principal: Principal role. Operator: Vessel Operator role."
+                ],
+                [
+                  "Bookings (no quotation)",
+                  "Principal and Vessel Operator lists, by role."
+                ],
+                [
+                  "Bookings / B/L",
+                  "Show the booking’s Principal and Vessel Operator from this list."
+                ],
+                [
+                  "Service Routes",
+                  "Vessel Operator role only."
+                ],
+                [
+                  "Agents",
+                  "Principal role."
+                ],
+                [
+                  "Vessels, Voyages, Supplier Prices",
+                  "All lines of the company (no role filter)."
+                ],
+                [
+                  "Import Booking Excel",
+                  "main_line and vessel_operator columns are matched by line Name."
+                ]
+              ]
+            },
+            {
+              "heading": "Roles are found by Type number, not name",
+              "type": "callout",
+              "style": "warning",
+              "content": "Always pick roles from the Type list on this screen. A line without the right role will simply not appear in the Principal / Operator dropdowns. Fix the Type here instead of creating a second line with the same name."
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Principal and Vessel Operator drive who a quotation, booking, B/L and voyage belong to. The most common problem is a missing role: a line exists but does not appear in a Quotation or Service Route dropdown because its Type does not include Principal or Vessel Operator."
+            }
+          ]
+        },
+        {
+          "id": "service-routes",
+          "title": "Service Routes",
+          "icon": "layers",
+          "summary": "Named shipping service with ports in rotation, Vessel Operators and optional North/East/South/West bound — Voyages take their port list from here.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "A Service Route is a named shipping service (for example Red Sea Express) with its ports in rotation, the Vessel Operators that run it, and an optional direction (Service Bound: North / East / South / West). Voyages belong to a service route — choosing the route fills the voyage’s port list and operators. Quotations also pick a Service Route from this list."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Vessel & Voyage → Service Routes"
+                ],
+                [
+                  "Route (list)",
+                  "routes.index"
+                ],
+                [
+                  "Feature flags",
+                  "vessel_voyage, routes"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Operators Ready First",
+                  "desc": "Vessel Operators must already exist in Principle & Vessel Operators with the Vessel Operator role.",
+                  "icon": "users"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Add New Route",
+                  "desc": "Fill Name, Code, Vessel Operator(s), Ports, and optionally Service Bound.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Create or Bulk",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Save one route",
+                    "Template + Upload",
+                    "Export → edit → Overwrite"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4 · SYSTEM CHECK",
+                  "title": "Name/Code + Bound Unique",
+                  "tone": "system",
+                  "desc": "The same Name or Code may exist twice only if the Service Bound is different (RSX North and RSX South).",
+                  "icon": "activity"
+                },
+                {
+                  "step": 5,
+                  "badge": "RESULT",
+                  "title": "Pick It on Voyages",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Voyages load this route’s ports and operators",
+                    "Form save copies the route to sister companies"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Fields stored",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Name",
+                  "Required."
+                ],
+                [
+                  "Code",
+                  "Required. Always saved in lower case."
+                ],
+                [
+                  "Vessel Operator",
+                  "One or more lines with the Vessel Operator role (required)."
+                ],
+                [
+                  "Ports",
+                  "One or more ports of the rotation (required). Shown by port code in the list."
+                ],
+                [
+                  "Service Bound",
+                  "Optional: North, East, South or West."
+                ]
+              ]
+            },
+            {
+              "heading": "Create, edit & delete",
+              "type": "table",
+              "columns": [
+                "Rule",
+                "Message"
+              ],
+              "rows": [
+                [
+                  "Same Name + same Service Bound",
+                  "This name with the same service bound already exists."
+                ],
+                [
+                  "Same Code + same Service Bound",
+                  "This code with the same service bound already exists."
+                ],
+                [
+                  "Delete while any voyage uses the route",
+                  "Can not Delete This Route Because It Has Related Voyage Records"
+                ]
+              ]
+            },
+            {
+              "heading": "Bulk upload & overwrite",
+              "type": "rules",
+              "items": [
+                "Upload template columns: name, code, port codes, line codes. Port and line codes are comma-separated.",
+                "Rows without name or code are skipped. A Name that already exists is skipped and listed.",
+                "Unknown port / line codes are silently ignored. Uploaded routes have no Service Bound and are not copied to sister companies.",
+                "Overwrite uses the Export file and matches by the id column. Filled port_codes / line_codes replace the current lists; empty cells keep them.",
+                "Overwrite changes are not copied to sister companies."
+              ]
+            },
+            {
+              "heading": "Sister-company sync",
+              "type": "callout",
+              "style": "warning",
+              "content": "Form create/edit copies the route, ports and operators to every sister company. Every Vessel Operator must already exist there (same name and code). If one is missing that company is skipped: saved, but auto-sync failed because Line (route operator) X does not exist. Sync the line first, then save the route again."
+            },
+            {
+              "heading": "How this feeds other modules",
+              "type": "rules",
+              "items": [
+                "When a Service Route is chosen on a voyage, the system loads the route’s ports and its operators. The Voyage list can be filtered by Service Route.",
+                "The quotation’s Service Route is picked from this company’s routes. On a new quotation it is required only for MLH companies; when editing a quotation it is always required."
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Voyages take their port rotation from the Service Route, so a wrong or missing port here means the voyage is set up with the wrong ports. The most common sync problem is an operator that exists only in one company — the route then silently stays out of the sister company until that operator line is synced first."
+            }
+          ]
+        },
+        {
+          "id": "vessels",
+          "title": "Vessel List",
+          "icon": "anchor",
+          "summary": "Company list of ships — name, code, type, operator and technical details. Every voyage is vessel + voyage number, and the vessel’s Operator becomes the voyage’s line.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "The list of ships the company works with: name, code, type, operator and technical details (IMO, call sign, flag, tonnage, TEU capacity). A vessel is the base of every Voyage: a voyage is always vessel + voyage number. The vessel’s Operator is copied to the voyage as its line. Bookings, Movements and Manifest imports also pick vessels from this list. Each company has its own list."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Vessel & Voyage → Vessel List"
+                ],
+                [
+                  "Route (list)",
+                  "vessels.index"
+                ],
+                [
+                  "Feature flags",
+                  "vessel_voyage, vessels"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Operator Ready",
+                  "desc": "The operator must already exist in Principle & Vessel Operators.",
+                  "icon": "users"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Type Name, then Scan",
+                  "desc": "Scan fills empty technical fields from the internet. It never overwrites what the user typed.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3",
+                  "title": "Fill Code, Type, Operator",
+                  "desc": "Check Call Sign, IMO and the rest, then Save.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4 · SYSTEM CHECK",
+                  "title": "Unique in This Company",
+                  "tone": "system",
+                  "desc": "Name, Code, and a filled Call Sign or IMO Number must not already be used.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 5,
+                  "badge": "RESULT",
+                  "title": "Create Voyages",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "The vessel is copied to sister companies",
+                    "New voyages of this vessel inherit its Operator as the line"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Fields stored",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Name / Code",
+                  "Both required and unique inside the company."
+                ],
+                [
+                  "Vessel Type",
+                  "Required on the form (e.g. Container, RoRo)."
+                ],
+                [
+                  "Vessel Operator",
+                  "Required. Any line from Principle & Vessel Operators. Becomes the line of every voyage of this vessel."
+                ],
+                [
+                  "Call Sign / IMO Number",
+                  "Optional. If filled, unique inside the company."
+                ],
+                [
+                  "Year Built / MMSI / Flag / G.W / DWT / Total TEU",
+                  "Optional technical details."
+                ],
+                [
+                  "Notes / Attach",
+                  "Optional free text and certificate file, shown as a link in the list."
+                ]
+              ]
+            },
+            {
+              "heading": "Scan button",
+              "type": "callout",
+              "style": "info",
+              "content": "Next to Code. Searches the vessel by the Name typed and fills Call Sign, IMO, Year Built, MMSI, Flag, G.W, DWT and Total TEU — only fields that are still empty. Messages: Vessel not found. / Vessel API is not configured. / Flag could not be matched to a country (other fields are still filled)."
+            },
+            {
+              "heading": "Create, edit & delete",
+              "type": "table",
+              "columns": [
+                "Rule",
+                "Message"
+              ],
+              "rows": [
+                [
+                  "Name already used",
+                  "This Vessel Name Already Exists"
+                ],
+                [
+                  "Code already used",
+                  "This Vessel Code Already Exists"
+                ],
+                [
+                  "Call Sign already used",
+                  "This Vessel Call Sign Already Exists"
+                ],
+                [
+                  "IMO Number already used",
+                  "This Vessel Imo Number Already Exists"
+                ],
+                [
+                  "Delete while any voyage exists",
+                  "Can not Delete This Vessel Because It Has Related Voyages Records"
+                ]
+              ]
+            },
+            {
+              "heading": "Bulk upload & sync",
+              "type": "rules",
+              "items": [
+                "Upload headers: name, code, vessel_type, operator, flag. Name and Code are required.",
+                "Vessel type and operator are matched by name. Flag is matched by country name and left empty if not found.",
+                "Good rows are imported and bad rows are listed. Uploaded vessels are not copied to sister companies, and only name, code, type, operator and flag are filled.",
+                "Form create/edit copies the vessel to every sister company, matched by sync link or the same Code.",
+                "The Operator must already exist in the sister company. If not, that company is skipped until the line is synced first."
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Every voyage, booking and movement points to a vessel, and the vessel’s Operator decides the voyage’s line. A wrong operator here spreads to all new voyages of the vessel. Use Scan to avoid typing mistakes in IMO / call sign, and sync the operator line before the vessel so sister companies receive it too."
+            }
+          ]
+        },
+        {
+          "id": "voyages",
+          "title": "Voyage List",
+          "icon": "anchor",
+          "summary": "One trip of a vessel — vessel + voyage number + leg on a Service Route, with port calls and ETA/ETD. Bookings, B/Ls, EDI, invoices and CRO free time all hang off it.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "A Voyage is one trip of a vessel: vessel + voyage number + leg (Import, Export, transshipment…), on a Service Route, with its port calls (port, terminal, road / wharf number, ETA, ETD). It is the backbone of operations: bookings, B/Ls, manifests, EDI, movements, invoices and printed letters are all linked to a voyage, and the voyage’s port dates are printed on documents and used for storage free-time on the CRO letter."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Vessel & Voyage → Voyage List"
+                ],
+                [
+                  "Route (list)",
+                  "voyages.index"
+                ],
+                [
+                  "Feature flags",
+                  "vessel_voyage, voyage_list"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Vessel and Route Ready",
+                  "desc": "The Vessel and the Service Route must already exist.",
+                  "icon": "anchor"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Add New Voyage",
+                  "desc": "Pick Vessel, Voyage No, Service Route and Leg. Choosing the route loads its ports.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3",
+                  "title": "Add Port Calls",
+                  "desc": "One row per port: Terminal, Road / Wharf No, ETA and ETD.",
+                  "icon": "layers"
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4 · SYSTEM CHECK",
+                  "title": "Dates, Unique Port, No Duplicate",
+                  "tone": "system",
+                  "desc": "ETD must be on or after ETA, a port can appear only once, and vessel + voyage no + leg + route must be unique in this company.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 5,
+                  "badge": "RESULT",
+                  "title": "Shared Serial + Space Confirmation",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Copied to sister companies with a shared Serial",
+                    "Export voyages need Space Confirmation ticked before B/L creation"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Header fields",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Vessel / Voyage No",
+                  "Both required. Vessel from Vessel List."
+                ],
+                [
+                  "Service Route",
+                  "Required on the form. Filters the ports offered for the port calls."
+                ],
+                [
+                  "Leg",
+                  "Required: All, Import, Export, Load Transshipment, Discharge Transshipment."
+                ],
+                [
+                  "Vessel Operator",
+                  "Not typed on create. Copied from the vessel’s Operator, and again only if the vessel is changed later."
+                ],
+                [
+                  "Principal",
+                  "Optional. Any line of the company."
+                ],
+                [
+                  "Space Confirmation",
+                  "Yes/No. Import voyages are always Yes. Export starts Yes on create; changing Leg to a non-Import on edit sets it to No until it is ticked again in the list."
+                ],
+                [
+                  "Serial",
+                  "Never typed. Shared code of the same voyage across sister companies."
+                ],
+                [
+                  "Actual times",
+                  "Edit form only: Arrived, Berthed, Discharge / Loading commenced and completed, Sailed."
+                ]
+              ]
+            },
+            {
+              "heading": "Port calls",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Port",
+                  "From the route’s ports. A port can appear only once per voyage."
+                ],
+                [
+                  "Terminal",
+                  "Terminals of that port."
+                ],
+                [
+                  "Road No / Wharf No",
+                  "Optional."
+                ],
+                [
+                  "ETA / ETD",
+                  "Required dates. ETD must be on or after ETA."
+                ]
+              ]
+            },
+            {
+              "heading": "Listing notes",
+              "type": "rules",
+              "items": [
+                "Latest ETA first, 30 per page. Search includes Port From / Port To, Vessel, Voyage No, Service Route, Leg.",
+                "Port From only shows voyages that call at that port (that row only). Port From + Port To shows voyages that call at both, From before To.",
+                "Total BL is clickable: Import leg counts bookings (cancelled excluded); other legs count distinct B/Ls.",
+                "Space Confirmation checkbox saves immediately. Read-only for Import.",
+                "Export can be the Voyages list or a TEU Summary (20'/40'/TEU per voyage from Load and Discharge movements)."
+              ]
+            },
+            {
+              "heading": "Create, edit & delete",
+              "type": "table",
+              "columns": [
+                "Rule",
+                "Message"
+              ],
+              "rows": [
+                [
+                  "ETD before ETA",
+                  "Voyage ETD Must Be Bigger Than or Equal ETA"
+                ],
+                [
+                  "Same port twice",
+                  "Voyage Port Must be unique"
+                ],
+                [
+                  "Same vessel + voyage no + leg + route",
+                  "This Voyage Already Exists"
+                ],
+                [
+                  "Delete while any booking uses it",
+                  "Can not Delete This voyage Because It Has Related Booking Records"
+                ]
+              ]
+            },
+            {
+              "heading": "Serial & sister-company sync",
+              "type": "rules",
+              "items": [
+                "On save the system looks in this company and its sisters for another voyage with the same Voyage No and a vessel with the same name. If found, it takes that Serial; otherwise the serial is voyage-id plus vessel-id padded to 3 digits (e.g. 1520-007).",
+                "Reports that let the user pick voyages (Export Booking, DO Prints, Seals List, Booking Transhipment) use the serial to include matching sister voyages.",
+                "Form create/edit (and uploading NEW voyages) copies the voyage, port calls and actual times to every sister company.",
+                "Service Route, Vessel and line must already exist there. If not, that company is skipped with a warning. Sync those records first.",
+                "Overwrite of existing voyages is not synced to sister companies."
+              ]
+            },
+            {
+              "heading": "Bulk upload & overwrite",
+              "type": "rules",
+              "items": [
+                "Upload is one row per port call: vessel_code, voyage_no, port, terminal, eta, etd, road_no, wharf_no, leg, service_route.",
+                "Vessel Code, Voyage No, Port and Leg are required. Rows with the same vessel + voyage no + route + leg go into one voyage.",
+                "New uploaded voyages get Space Confirmation = Yes and line = vessel operator, and are synced to sister companies.",
+                "Overwrite uses the same columns plus voyage_id, job_no, principal. It replaces the port call for that port. Result: Voyages overwritten successfully."
+              ]
+            },
+            {
+              "heading": "How this feeds other modules",
+              "type": "rules",
+              "items": [
+                "A booking has a first voyage and, for transshipment, a second voyage. Import uses the discharge (or transshipment) Egypt port call; Export uses the load port.",
+                "Confirmed bookings can create a B/L and print the Shipping Order / Booking Confirmation only when Space Confirmation is Yes. Ready For BL uses the same rule.",
+                "B/L, manifests, CRO, Gate In, VGM, DO and arrival notice print vessel, voyage no and the port call’s ETA / ETD. CRO storage free-time expiry is calculated from the Egypt port call’s ETA.",
+                "Invoices and quotations can be filtered by voyage ETA. CUSCAR / manifest files and movements are linked to the voyage and its port calls."
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "A wrong ETA or terminal on a voyage is printed on every B/L, CRO and manifest of that voyage and shifts the storage free time. Export bookings stay blocked from B/L creation until Space Confirmation is ticked — the most common reason a user cannot create a B/L. Create the vessel, route and lines in all companies before the voyage, because sister companies share voyages through the Serial."
+            }
+          ]
+        },
+        {
+          "id": "voyage-tde",
+          "title": "Voyage TDR List",
+          "icon": "file-text",
+          "summary": "Time Departure Report for one Egypt port call — arrival through departure times exported to Excel for the line. Other modules do not read these times.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "The TDR (Time Departure Report / statement of facts) records the actual timeline of a vessel call at an Egypt port: arrival, anchor, pilots, berthing, discharge and loading, and departure. There is one TDR per voyage. It is a reporting screen: the main output is the TDR Excel export (company logo + voyage details + all times), which is sent to the line / principal. Other modules do not read these times."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Vessel & Voyage → Voyage TDR List"
+                ],
+                [
+                  "Route (list)",
+                  "voyageTDR.index"
+                ],
+                [
+                  "Feature flags",
+                  "vessel_voyage, voyageTDR_list"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Voyage Must Call Egypt",
+                  "desc": "Only voyages with at least one Egypt port call can have a TDR.",
+                  "icon": "anchor"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Add New TDR",
+                  "desc": "Pick the voyage (Vessel / Voyage No (Leg)) and fill the times that happened. All times are optional.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · SYSTEM CHECK",
+                  "title": "One TDR per Voyage",
+                  "tone": "system",
+                  "desc": "A second TDR for the same voyage is rejected. The voyage cannot be changed after saving.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Update as the Call Progresses",
+                  "desc": "Edit the times, then search the voyage and Export the TDR Excel.",
+                  "icon": "file-text"
+                },
+                {
+                  "step": 5,
+                  "badge": "RESULT",
+                  "title": "Official Timeline for the Line",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "voyageTdr.xlsx with logo, Egypt port/terminal, vessel, voyage, times",
+                    "Voyage actual times on the Voyage edit form are a separate record"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Fields stored",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Voyage",
+                  "Required. Only voyages with at least one Egypt port call. Cannot be changed after saving. The voyage’s Leg is saved with the TDR."
+                ],
+                [
+                  "Times",
+                  "All optional date+time: Arrived On, Dropped Anchor Outside, Anchor Up, Sea Pilot On Board, Vessel Entered Inner Road, FLA, All Fast, Berthed On, Discharge / Loading / Operation commenced and completed, Harbour Pilot On Board, Un-Berth, Pilot Off, Sailed On."
+                ]
+              ]
+            },
+            {
+              "heading": "Separate from Voyage actual times",
+              "type": "callout",
+              "style": "warning",
+              "content": "These times are separate from the actual times on the Voyage edit form (Arrived, Berthed, Sailed…). Updating one does not update the other."
+            },
+            {
+              "heading": "Export & upload",
+              "type": "rules",
+              "items": [
+                "Export requires a Vessel / Voyage selected in search first: Please select Vessel / Voyage No before export.",
+                "The file is built from the company template: logo, Egypt port and terminal, vessel, voyage no, job number, shipping line (user’s company name), vessel operator, then each time as dd/mm/yyyy hh:mm.",
+                "Template download is one voyage per file with values in column B. Voyage is matched by Voyage No and vessel name (any company).",
+                "Upload is blocked if a TDR already exists for that vessel / voyage, or if Voyage No is missing in cell B11.",
+                "Delete asks for confirmation and removes the TDR only. The voyage is not touched."
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "The TDR export is the official timeline the principal receives for the port call; wrong or missing times are sent as-is. Always check the vessel and voyage label before creating or exporting, so the TDR is attached to the right voyage."
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "container-control",
@@ -2513,7 +4438,7 @@ window.DOCS_DATA = {
                 "Required: Size/Type (name) + Category. Everything else optional.",
                 "Duplicate check on (Name + Category) pair — same name with a DIFFERENT category is allowed.",
                 "Size is auto-extracted from leading digits: '20 DV' → 20, '40HC' → 40. No leading number → Size stays empty.",
-                "New record is auto-stamped with the creating user's company_id."
+                "A new record is automatically assigned to the creating user’s company."
               ]
             },
             {
@@ -3013,7 +4938,7 @@ window.DOCS_DATA = {
             {
               "heading": "What is this screen?",
               "type": "text",
-              "content": "The master list of valid Operator Codes — short codes identifying which shipping line currently owns/operates a container. Unlike most master tables, this list is GLOBAL (no company_id) — one shared list for every company on the platform."
+              "content": "The master list of valid Operator Codes — short codes identifying which shipping line currently owns/operates a container. Unlike most master tables, this list is global — one shared list for every company on the platform."
             },
             {
               "heading": "Access",
@@ -3392,6 +5317,191 @@ window.DOCS_DATA = {
           ]
         },
         {
+          "id": "movement-activities",
+          "title": "Movement Activity Codes",
+          "icon": "activity",
+          "summary": "Per-company rulebook of which movement activities are used, what status each implies, and which activity is allowed next — read by Movement Control, Bulk Moves and Excel Import.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "This screen defines, per company, which movement activities (On Hire, Gate In Full, Discharge Empty, and the rest) the company actually uses, what container status each one implies, and — most importantly — which activity is allowed to come next after each one. This is the rulebook that Movement Control (Single Movement, Bulk Movements, and Excel Import) reads to decide which next moves to offer for a container, and whether a movement being imported or entered is a valid next step given the container’s last movement. Without a correctly configured sequence here, Bulk Moves would offer nonsensical next-activity options and Excel Import would either reject valid rows or silently accept an impossible sequence."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Container Control → Mv Activity Codes"
+                ],
+                [
+                  "Route (list)",
+                  "container-movement.index"
+                ],
+                [
+                  "Feature flag",
+                  "movement_codes — only visible when enabled for the company"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Mv Activity Codes",
+                  "desc": "Sidebar → Container Control → Mv Activity Codes (movement_codes flag).",
+                  "icon": "activity"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Activate a Global Activity",
+                  "desc": "Pick one system activity (shown as Name - CODE, e.g. On Hire - ONHI) and give it this company’s Line Code and Container Status.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Wire Next Possible Activities",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Edit multi-select — add and remove",
+                    "List eye icon — add only"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4 · SYSTEM CHECK",
+                  "title": "Movement Control Reads This",
+                  "tone": "system",
+                  "desc": "Bulk Moves offer only the next activities wired here. Excel Import rejects a row that is not in that list, and also checks it against the next chronological movement already on file.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5",
+                  "title": "Export Column Order (optional)",
+                  "desc": "Master Data → Excel Templates → Reorder on a movements template. This only changes which movement columns appear on that export; it does not change sequence rules.",
+                  "icon": "file-text"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Company Workflow Encoded",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Each company can use different Line Codes and different next-activity rules for the same global activity",
+                    "An activity with no row here means no restriction — every global activity is offered as a starting move"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Two layers — global catalogue vs this screen",
+              "type": "table",
+              "columns": [
+                "Layer",
+                "What it is"
+              ],
+              "rows": [
+                [
+                  "Movement Activities (global)",
+                  "Shared catalogue of every possible activity code in the system (ONHI, GOMT, GIFU, LOFU, DIFU, GOFU, GIMT, LOMT, DIMT, LOTR, DITR, RCVE, RCVF, TRNE, TRAS, SWAP, and the rest). Same list for every company. There is no screen to add or edit these — they are fixed system constants. A brand-new activity type has to be requested from the product team; a company admin cannot create one here."
+                ],
+                [
+                  "Movement Activity Codes (this screen)",
+                  "A per-company row that activates one global activity for that company and attaches Line Code, Container Status, export Order, and allowed next activities. Two companies can configure completely different Line Codes and next-activity rules for the same underlying Activity."
+                ]
+              ]
+            },
+            {
+              "heading": "Fields per row",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Movement Activity",
+                  "Which global activity this row is activating. Dropdown of all Movement Activities, shown as Name - CODE (e.g. On Hire - ONHI). Required."
+                ],
+                [
+                  "Line Code",
+                  "Free-text code the company associates with this activity. Required."
+                ],
+                [
+                  "Container Status",
+                  "Which status (Full / Empty) this activity implies. Required on create; optional on edit."
+                ],
+                [
+                  "Next Possible Activities",
+                  "The other activities allowed next for a container whose latest movement is this one. Configured from the Next Activities modal on the list, or the multi-select on Edit."
+                ],
+                [
+                  "Order",
+                  "Numeric position used only for Excel export column ordering. Not shown on Create/Edit — managed from Excel Templates. A row with no Order is treated as disabled for export only; it still works normally in Movement Control and sequence validation."
+                ]
+              ]
+            },
+            {
+              "heading": "Listing & search",
+              "type": "text",
+              "content": "Paginated (30 per page) table of the company’s own rows, ordered by ID. Columns: Activity Name, Activity Code, Line Code, Container Status, plus Actions (view Next Activities / Edit / Sync to Companies / Delete). Combined header filters: Activity Name, Activity Code, Line Code."
+            },
+            {
+              "heading": "Creating & editing",
+              "type": "rules",
+              "items": [
+                "Movement Activity and Line Code are required on both Create and Edit. Container Status is required on Create; Edit may leave it as-is.",
+                "The same Movement Activity cannot be activated twice for the same company. Reusing one already configured is rejected with: This Movement Name Already Exists. On Edit, the check excludes the record being edited.",
+                "On the Edit screen, Next Possible Activities is a multi-select of every other activity already configured for this company. Whatever is selected is fully synced (added and removed) on Save.",
+                "From the list, the eye icon opens a Next Activities modal that only ADDS. Removing requires the Edit multi-select. Adding activities that are already present is rejected with: These activities are already added.",
+                "Success: Container Movement Created / Updated, then back to the list."
+              ]
+            },
+            {
+              "heading": "Deleting a row",
+              "type": "callout",
+              "style": "warning",
+              "content": "The server does not block delete if the activity is already in use. The UI does: if any Movement records already exist under this activity for this company, Delete shows a hard block instead of a confirmation — “This Movement Activity cannot be deleted because it already has movements assigned to it.” If none exist yet, a normal Are you sure? confirmation is shown."
+            },
+            {
+              "heading": "How this drives Movement Control",
+              "type": "rules",
+              "items": [
+                "Every container’s last movement points at one row here (matched by company + activity).",
+                "Bulk Movements / Assign Operator: the system looks up the last movement’s activity, finds this company’s row, and reads Next Possible Activities. That list is offered as the next move (with a few extra hard-coded exceptions for discharge / gate-out / transhipment). If the container has no prior movement, or the last activity has no row for this company, every global Movement Activity is offered — an unconfigured activity means no restriction.",
+                "Excel Import: each imported row is checked against the previous movement’s Next Possible Activities (rejecting with Invalid movement sequence…) and also against the next chronological movement already on file, so a row cannot be inserted into the middle of existing history out of sequence. Example: Date conflict for [container]: you are importing [code] on [date], but this container already has [code] recorded at [date]. [code] cannot come before [code] in the movement sequence.",
+                "A container loaded under one company and later discharged under a sibling company skips the sequence check for that one load-to-discharge transition (the box physically sailed there). A load-to-discharge within the same company is still fully validated.",
+                "Some activities are exempt from having Port / Terminal / Voyage / Vessel / Booking enforced during Import. That exemption list is hard-coded by activity code in the import logic — not configured on this screen."
+              ]
+            },
+            {
+              "heading": "Excel export column order is a separate switch",
+              "type": "callout",
+              "style": "info",
+              "content": "From Master Data → Excel Templates, a template with a movements column has a Reorder button. That drag-and-drop list is this same company list; toggling a row off only hides that movement column on that export. It has no effect on Bulk Moves or Import sequence logic. A row toggled off here still behaves normally everywhere else."
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "This is where the shared catalogue of movement activities becomes a company’s own day-to-day workflow: which activities it uses, what it calls them (Line Code), and in what order they are allowed to happen. Get Next Possible Activities wrong and the symptoms show up two places a junior teammate might not expect: Bulk Moves offering the wrong (or no) next-step options, and Excel Import rejecting movement rows that look perfectly correct as invalid-sequence errors."
+            }
+          ]
+        },
+        {
           "id": "movement-control",
           "title": "Movement Control",
           "icon": "truck",
@@ -3624,7 +5734,7 @@ window.DOCS_DATA = {
                 "Single movement: after the container is selected, the form offers its valid next activities — the server save mainly relies on that controlled dropdown.",
                 "Bulk movements: every selected row is checked against the container's previous and next history. If any row is invalid, the whole batch is rejected and no movement is created.",
                 "Excel import/overwrite: the activity is checked against the movement immediately before AND immediately after it, preventing a dated event from breaking either side of history.",
-                "The same activity twice in a row is normally rejected — import raises \"Invalid movement sequence ... Expected: <allowed codes>\".",
+                "The same activity twice in a row is normally rejected — import raises \"Invalid movement sequence ... Expected: [allowed codes]\".",
                 "If an activity has no per-company configuration/next-move rule, the system can behave as unrestricted in some paths — correct Movement Activity Code setup is essential before entering movements."
               ]
             },
@@ -3834,7 +5944,669 @@ window.DOCS_DATA = {
       "id": "storage-detention-power",
       "title": "Storage, Detention & Power",
       "icon": "calculator",
-      "modules": []
+      "modules": [
+        {
+          "id": "bl-storage",
+          "title": "BL Storage",
+          "icon": "calculator",
+          "summary": "Per-document storage calculation for one Import booking or Export BL — the screen that produces a Storage Invoice or Storage Extension Invoice.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "Calculate terminal storage charges for one Import booking or one Export BL, container by container, using that document’s movements and the live Storage tariff (port + terminal + customer, still valid depending on the container movement data). This is the per-document screen operations uses to produce a Storage Invoice or a Storage Extension Invoice. It is not a date-range fleet report — that is Storage by Period."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Storage, Detention & Power → BL Storage"
+                ],
+                [
+                  "Route",
+                  "storage.index"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Search the Document",
+                  "desc": "Type a BL/Booking ref and pick an Import booking or an Export BL.",
+                  "icon": "search"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Choose Containers & Clock",
+                  "desc": "Select containers (or All), set From/To movements, Till Date and day-count flags.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Calculate, then Bill",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Calculate",
+                    "Create invoice",
+                    "Create Extension",
+                    "Export Excel"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4 · SYSTEM CHECK",
+                  "title": "System Prices Slabs",
+                  "tone": "system",
+                  "desc": "Looks up the Storage tariff, pours days through slabs, and totals only boxes with a start movement.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 5,
+                  "badge": "RESULT",
+                  "title": "Invoice or Extension Ready",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Create invoice writes or updates a draft Storage Invoice",
+                    "After confirm, only Create Extension is allowed"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "What the user fills in",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "BL Number",
+                  "Required type-ahead. Import bookings tagged [Import]; Export BL drafts tagged [Export]. Search is limited to the logged-in company. Import only lists bookings that already have movements and are either not transhipment or transhipment discharging in Egypt."
+                ],
+                [
+                  "Container No",
+                  "Required multi-select: containers on the document that already have a movement. All cannot be mixed with individual boxes. Boxes with no movement are listed in a warning and cannot be calculated."
+                ],
+                [
+                  "From",
+                  "Start of the storage clock. Import is hidden and posts DCHF. Export offers RCVS and STFU."
+                ],
+                [
+                  "To",
+                  "Optional end activity. Import: SNTC, RSTR. Export: LODF. Mutually exclusive with Till Date."
+                ],
+                [
+                  "Till Date",
+                  "Optional end date. If empty and To is empty, charging runs through today or the cycle-complete movement. Must be after the start date."
+                ],
+                [
+                  "Apply First Day",
+                  "Default ON. Adds 1 calendar day (include the start date)."
+                ],
+                [
+                  "Execute Last Day",
+                  "Default OFF. Subtracts 1 calendar day (exclude the end date)."
+                ],
+                [
+                  "Administration Fees",
+                  "Optional. Auto-checked for Import, auto-unchecked for Export. Does not change Grand Total — it only tells the invoice screen to add ADFE."
+                ],
+                [
+                  "Consolidation",
+                  "When ticked, zero-rate (free) slabs are skipped so the table starts at the first paid period."
+                ]
+              ]
+            },
+            {
+              "heading": "How days and money are calculated",
+              "type": "rules",
+              "items": [
+                "One container at a time. Boxes with no start movement are skipped — they do not fail the whole BL.",
+                "Start: Import DCHF/RCVF; Export RCVS/STFU/RCVF; Empty RCVF/DCHF/RCVS/ONHR.",
+                "End: a cycle-complete movement inside the allowed window marks the row completed. Otherwise Till Date, else To date, else today — and the row is in_completed.",
+                "A cycle-complete movement after Till Date is ignored for this calculation.",
+                "Cycle-complete: Import TRFF/RSTR/SNTC; Export LODF/TRFF; Empty TRFE/SNTS/LODE/OFHR.",
+                "Days = calendar days + Apply First Day − Execute Last Day, then poured through tariff slabs in order.",
+                "Storage always uses 0 booking free time — quotation free time is not used here.",
+                "Category: IMO if flagged, else OOG, else Standard. With a quotation the flag comes from the quotation line for that equipment type. Without a quotation, Import uses the container line; Export always falls back to Standard."
+              ]
+            },
+            {
+              "heading": "Which Storage tariff is used",
+              "type": "rules",
+              "items": [
+                "Type IMPORT/STORAGE or EXPORT/STORAGE. Export port = load port; Import port = discharge port. Terminal = booking terminal_id.",
+                "Customer: Export = booking customer; Import = receiver, else consignee.",
+                "Customer-specific tariff wins over Standard at the same port+terminal.",
+                "Valid To is checked against this container’s end date: completed rows may still use an expired tariff that was valid on the completion date; in_completed rows need a tariff valid today.",
+                "Tariff type from shipment + full/empty: ESTO, EEST, ISTO, IEST, or ECST.",
+                "Company is always the logged-in company. Operator Code does not redirect the tariff here (unlike BL Detention).",
+                "Missing tariff or missing type+category slab stops the whole calculation."
+              ]
+            },
+            {
+              "heading": "Create Invoice & Extension",
+              "type": "table",
+              "columns": [
+                "Action",
+                "Rule"
+              ],
+              "rows": [
+                [
+                  "Create invoice",
+                  "Storage Invoice. Charge code IS (Import) or ES (Export). Only containers with total > 0 are sent. Updates an existing draft instead of creating a second one."
+                ],
+                [
+                  "Grand Total <= 0",
+                  "Both buttons stay disabled."
+                ],
+                [
+                  "Confirmed Storage Invoice exists",
+                  "Create invoice disabled. Create Extension enabled."
+                ],
+                [
+                  "Create Extension",
+                  "Only boxes whose current To is SNTC, No Next Move or WTOR. Starts from the latest confirmed invoice end date. Invoice type: Extention Storage Invoice."
+                ],
+                [
+                  "Administration Fees",
+                  "Adds ADFE on the invoice, not on this table. For MLH the posted amount is 100 when currency is EGP, otherwise 5."
+                ]
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "This is the gate from operations movements to a customer storage bill. If the From movement is missing, the container silently drops out. If the tariff is missing, expired or on the wrong port/terminal/customer, Calculate refuses the whole BL on purpose. The most common live mistake is confirming a Storage Invoice and then trying Create invoice again — the screen will only allow an Extension, and only for boxes still sitting on SNTC / no next move / WTOR."
+            }
+          ]
+        },
+        {
+          "id": "bl-detention",
+          "title": "BL Detention",
+          "icon": "calculator",
+          "summary": "Per-document detention calculation for one Import booking or Export BL — bills the equipment overdue clock and produces a Detention Invoice.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "Calculate detention (equipment overdue) charges for one Import booking or one Export BL, container by container, from the document’s movements and the live Detention tariff. Same search and Calculate → Invoice / Extension pattern as BL Storage. Differences that matter: different start/end movements, quotation free time is used (Import only), no Administration Fees, no Consolidation, and the invoice is a Detention Invoice, not a Storage Invoice."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Storage, Detention & Power → BL Detention"
+                ],
+                [
+                  "Route",
+                  "dententions.index"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Search the Document",
+                  "desc": "Pick an Import booking or Export BL. Import bookings with booking_confirm = 3 are excluded.",
+                  "icon": "search"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Set From / To / Till Date",
+                  "desc": "From/To stay visible for both directions. Import From is DCHF; Export From is SNTS.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Calculate, then Bill",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Calculate",
+                    "Create invoice",
+                    "Create Extension"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4 · SYSTEM CHECK",
+                  "title": "Apply Free Time",
+                  "tone": "system",
+                  "desc": "Import uses quotation/booking free time. Export free time is always 0. Slab category is always Standard.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 5,
+                  "badge": "RESULT",
+                  "title": "Detention Invoice Ready",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Create invoice writes a Detention Invoice (ID/ED)",
+                    "Confirmed invoice unlocks Extension only"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Clock and free time",
+              "type": "table",
+              "columns": [
+                "Rule",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Import From / To",
+                  "From DCHF. To RSTR, RCVC."
+                ],
+                [
+                  "Export From / To",
+                  "From SNTS. To RCVS, RCVE."
+                ],
+                [
+                  "Cycle-complete",
+                  "Import RSTR/RCVC. Export RCVS/RCVE."
+                ],
+                [
+                  "Free time — Export",
+                  "Always 0."
+                ],
+                [
+                  "Free time — Import",
+                  "Quotation equipment-line free_time, else the booking-container-detail free_time. Free days eat the first slabs at rate 0."
+                ],
+                [
+                  "Category",
+                  "Always Standard. IMO/OOG flags are ignored."
+                ],
+                [
+                  "Reefer NOR",
+                  "Same dry-equivalent lookup as storage: RH→HC, FR→HC, TK→DV."
+                ]
+              ]
+            },
+            {
+              "heading": "Which Detention tariff is used",
+              "type": "rules",
+              "items": [
+                "Type IMPORT/DETENTION or EXPORT/DETENTION. No ESTO/ISTO full/empty type filter.",
+                "Port/terminal/customer and customer-vs-standard priority match BL Storage.",
+                "Valid To is checked against the container’s own end date, not flatly today.",
+                "Company can be redirected by the container’s Operator Code: find a sister company that shares both that line_code and the same company code as the BL’s company.",
+                "No Operator Code, or no unique sister match → logged-in company. More than one match prefers the same agency_code.",
+                "This is the one calculation on this module where Operator Code can change whose tariff is billed. The result table shows that Tariff Company per row."
+              ]
+            },
+            {
+              "heading": "Create Invoice & Extension",
+              "type": "rules",
+              "items": [
+                "Invoice main_type: Detention Invoice. Charge type posted is demurrage. Charge code ID (Import) or ED (Export).",
+                "Button lock looks for a Detention Invoice, not a Storage Invoice.",
+                "Extension eligibility is the same as storage: current To must be SNTC, No Next Move or WTOR.",
+                "Already-billed days on the latest confirmed Detention / Extention Detention invoice are subtracted."
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Storage bills the terminal stay; this screen bills the equipment. Mixing the two invoices, or using storage movements (RCVS/LODF) here, produces the wrong clock. The most common Import mistake is an empty free_time on the quotation/booking line — the slab engine then bills from day one. On Export, free time is hardcoded to 0, so every day past SNTS is potentially chargeable."
+            }
+          ]
+        },
+        {
+          "id": "storage-by-period",
+          "title": "Storage by Period",
+          "icon": "calculator",
+          "summary": "Fleet storage report across many containers by yard period or by voyage — read-only; billing still happens on BL Storage.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "A storage report across many containers — not one BL. Operations uses it to see what storage would be, then view it on screen or export Excel. It does not create invoices. Billing a customer still happens on BL Storage. The screen has two mutually exclusive paths: Period/terminal (who was on this yard in this window) or Vessel/Voyage (what would storage be for every box on this sailing)."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Storage, Detention & Power → Storage by Period"
+                ],
+                [
+                  "Route",
+                  "calculation-storage-period.index"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1 · DECISION",
+                  "title": "Pick a Path",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Period / terminal (no voyage)",
+                    "Vessel / Voyage"
+                  ]
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Fill the Path Filters",
+                  "desc": "Period path: Status, Import/Export if Full, Egypt port, terminals, From/Till dates. Voyage path: sailing, optional Cross and Shipment.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3",
+                  "title": "Calculate or Export",
+                  "desc": "View the on-screen table or download ExportStorage_{timestamp}.xls. There is no Create Invoice.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 4,
+                  "badge": "RESULT",
+                  "title": "Fleet Storage Picture",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Period path answers who was on the yard",
+                    "Voyage path prices every box on that sailing"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "The two paths",
+              "type": "table",
+              "columns": [
+                "Path",
+                "What it does"
+              ],
+              "rows": [
+                [
+                  "Period / terminal",
+                  "Egypt port + terminals, Full or Empty, optional Import/Export, From Date + Till Date. Port, terminal and status are required."
+                ],
+                [
+                  "Vessel / Voyage",
+                  "Selecting any voyage switches the whole run. Always treated as Full. Port, terminal, status and Import/Export are ignored. Dates become optional. Each box uses its booking’s own port, terminal and company."
+                ]
+              ]
+            },
+            {
+              "heading": "Which containers are included",
+              "type": "rules",
+              "items": [
+                "Period path: a start movement at one of the selected terminals on/before Till Date, matching Full/Empty. Full+Export starts RCVS/RCVF; Full+Import DCHF/RCVF; Empty RCVC/RCVE/DCHE/ONHI.",
+                "Voyage path: every container on a booking of the selected sailing (container-detail lines or a movement against that booking). No terminal filter and no start-movement-in-window filter. Empty is not available.",
+                "Cross (voyage path only) includes sister companies that share the same company code and expands the sailing to those sisters’ copies of the same vessel + voyage number + leg.",
+                "A complete movement before From Date skips that container (cycle already finished before the period)."
+              ]
+            },
+            {
+              "heading": "Days, free days and tariff",
+              "type": "rules",
+              "items": [
+                "Apply First Day is always ON. Execute Last Day is not used. Booking free time is forced to 0 — FREE DAYS shows the first zero-rate tariff slab.",
+                "Days before the window (get-in earlier than From Date) are subtracted and eat the early slabs first, so free time already used is not given again.",
+                "Period path looks up the filter port + selected terminals. Voyage path uses the booking’s load/discharge port and terminal, and the booking’s company.",
+                "Full uses ESTO/ISTO from the booking shipment and exact type+category (same IMO/OOG/Standard rule as BL Storage).",
+                "Empty chooses exactly one type: Depot terminal → ECST; Export booking → EEST; Import or a DCHE movement → IEST; else ECST. Empty slabs match by size prefix only."
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "The easy mistake on the period path is treating From Date as get-in — get-in can be weeks earlier; From Date is only the report window. The easy mistake on the voyage path is still filling Port / Terminal / Status and expecting them to apply — they do not. Wrong path = wrong population and often a different rate card."
+            }
+          ]
+        },
+        {
+          "id": "detention-by-period",
+          "title": "Detention by Period",
+          "icon": "calculator",
+          "summary": "Fleet detention report across many full bookings by movement window or by voyage — read-only; customer bills still go through BL Detention.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "A detention report across many full bookings — not one BL. It does not create invoices. Like Storage by Period, picking a Vessel/Voyage switches the whole run: Period/movement path finds boxes that hit a To movement in a date window; Voyage path prices every full box on that sailing."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Storage, Detention & Power → Detention by Period"
+                ],
+                [
+                  "Route",
+                  "calculation-dentention-period.index"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1 · DECISION",
+                  "title": "Pick a Path",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Period / movement (no voyage)",
+                    "Vessel / Voyage"
+                  ]
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Fill From / To or Sailing",
+                  "desc": "Period path: Import/Export, one From, one or more To codes, From/Till dates. Voyage path hides From/To.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3",
+                  "title": "Calculate or Export",
+                  "desc": "View the table or download ExportDentention_{timestamp}.xls. No Create Invoice.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 4,
+                  "badge": "RESULT",
+                  "title": "Fleet Detention Picture",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "DM DAYS = max(Total Days − Free Days, 0)",
+                    "Use BL Detention if the same numbers must become an invoice"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Period-path movements — not the same as BL Detention",
+              "type": "callout",
+              "style": "warning",
+              "content": "Period Export starts at RCVS and finds boxes on LODF. BL Detention Export starts at SNTS and ends at RCVS/RCVE. Same word detention, different operational clock. Do not mix the two screens’ movement pairs and expect the totals to agree."
+            },
+            {
+              "heading": "Inclusion and calculation",
+              "type": "rules",
+              "items": [
+                "Booking Type is display-only: always full. Empty bookings are not offered.",
+                "Period path includes company movements whose activity is one of the selected To codes in the date window.",
+                "Voyage path includes every container on the sailing’s bookings. No To-code filter and no date window at the inclusion step.",
+                "Missing start movement on the period path STOPS the whole report. On the voyage path that box is skipped and the rest still calculates.",
+                "Free time: Export 0; Import quotation free_time else booking-container-line free_time.",
+                "Slab is the first row for that equipment type with no category filter. Reefer NOR still maps RH/FR/TK to dry equivalents.",
+                "Tariff company is the booking’s company (so Cross sister-line bookings price from that sister’s tariff)."
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Three traps: Period Export is RCVS→LODF, not the BL Detention Export clock SNTS→RCVS/RCVE. On the period path a single missing start movement aborts the entire run. Picking a Vessel/Voyage does not add a column to the period filter — it replaces the filter, and each booking’s own company/port/terminal picks the tariff."
+            }
+          ]
+        },
+        {
+          "id": "power-calculation",
+          "title": "Power Calculation",
+          "icon": "activity",
+          "summary": "Per-document reefer power (plug-in) calculation for one Import booking or Export BL — produces a Power Invoice, independent of Storage and Detention.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "Calculate reefer power (plug-in / electricity) charges for one Import booking or one Export BL, using a per-container movement clock like storage, but the POWER tariff family (IMPORT/POWER or EXPORT/POWER). Invoices created here are Power Invoice / Extention Power Invoice. They reuse the storage invoice and storage-extension screens with cal_type = power — they are not detention invoices."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Storage, Detention & Power → Power Calculation"
+                ],
+                [
+                  "Route",
+                  "power.index"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Search the Document",
+                  "desc": "Same Import-booking / Export-BL type-ahead as BL Storage.",
+                  "icon": "search"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Set the Power Clock",
+                  "desc": "Import From DCHF, To SNTC/RSTR. Export From RCVS, To LODF. STFU is not a power start. No Administration Fees or Consolidation.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Calculate, then Bill",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Calculate",
+                    "Create invoice",
+                    "Create Extension"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4 · SYSTEM CHECK",
+                  "title": "Price POWER Slabs",
+                  "tone": "system",
+                  "desc": "Booking free time is 0. Category is forced to Standard. Company is always the logged-in company.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 5,
+                  "badge": "RESULT",
+                  "title": "Power Invoice Ready",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Charge codes PI (Import) or PE (Export)",
+                    "A confirmed Storage Invoice on the same BL does not block Power"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Import end-date mismatch",
+              "type": "callout",
+              "style": "danger",
+              "content": "Power’s cycle-complete check is a fixed pair — RCVC and LODF — for both directions. Import To options are SNTC and RSTR, and neither is in that pair. Every Import row therefore shows in_completed, and tariff validity is checked against today rather than the real completion date. If To is selected and the box already has an RCVC, the end-date lookup can ignore SNTC/RSTR and bill through today, or drop the container entirely when Till Date is also set — with no warning. BL Storage and BL Detention do not have this problem."
+            },
+            {
+              "heading": "Tariff and invoices",
+              "type": "rules",
+              "items": [
+                "A valid STORAGE tariff does not substitute. The row must be IMPORT/POWER or EXPORT/POWER at the booking port+terminal.",
+                "Customer-specific preferred over Standard. Operator Code is not used.",
+                "Create invoice opens the same storage invoice screen with cal_type=power. Button lock looks at Power Invoice only.",
+                "Extension eligibility is still SNTC, No Next Move or WTOR. Already-billed Power / Extention Power days are subtracted.",
+                "A BL can have Storage, Detention and Power invoices at once; confirming one type does not lock the others."
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Power is the reefer electricity bill. Using a Storage tariff or detention movements (SNTS) starts the wrong clock or the wrong rate card. The invoice buttons look identical to BL Storage but they only look at whether a Power invoice is already confirmed. If an Import row is unexpectedly missing or billed through today, the section 4 end-date mismatch — not a data problem — is the first thing to check."
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "quotations",
@@ -4055,7 +6827,7 @@ window.DOCS_DATA = {
                 ],
                 [
                   "Filename",
-                  "cuscar_<ref_no>_<Egypt-time timestamp>.edi"
+                  "cuscar_[ref_no]_[Egypt-time timestamp].edi"
                 ]
               ]
             },
@@ -4076,6 +6848,217 @@ window.DOCS_DATA = {
               "type": "callout",
               "style": "info",
               "content": "Import CUSCAR is a regulatory-compliance generator for Egyptian customs. Its validation report is often the earliest precise signal of missing ACID/tax IDs, vessel IMO/call sign, ETA, customer country or Container tare weight."
+            }
+          ]
+        },
+        {
+          "id": "export-cuscar",
+          "title": "Export CUSCAR",
+          "icon": "file-text",
+          "summary": "Generates the EDIFACT CUSCAR D.95B customs manifest required by NAFEZA for cargo leaving Egypt — one file per Voyage + Egyptian load port + chosen BL Drafts.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "Export CUSCAR builds the EDIFACT customs-manifest file required by NAFEZA for cargo leaving Egypt. One file is generated per Voyage + Egyptian Load Port + a chosen set of BL Drafts from live Export BL, Booking and Voyage data. Only voyages whose leg is Export or All, that touch at least one Egyptian port, and that already have at least one BL Draft are offered. Import arrivals are generated on Cuscar List, not here. Both screens write into the same CUSCAR table; Export rows are the ones whose Egyptian port is the load port (is_load_port = 1)."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "EDI → Export Cuscar"
+                ],
+                [
+                  "Route (list)",
+                  "cuscar.export.index → /edi/cuscar-export"
+                ],
+                [
+                  "Route (generate/download)",
+                  "cuscar.export.create"
+                ],
+                [
+                  "Route (show)",
+                  "cuscar.export.show"
+                ],
+                [
+                  "Route (re-download)",
+                  "cuscar.export.download"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Export CUSCAR",
+                  "desc": "Sidebar → EDI → Export Cuscar. The list shows this company’s previously generated export files.",
+                  "icon": "file-text"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Generate Export CUSCAR",
+                  "desc": "Pick an Export voyage, the Egyptian load port if there is more than one, and at least one BL Draft (all ticked by default).",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Generate & Download",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Generate & Download",
+                    "Show",
+                    "Re-download",
+                    "Submit to Nafeza"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4 · SYSTEM CHECK",
+                  "title": "All BLs Must Pass",
+                  "tone": "system",
+                  "desc": "Vessel IMO/call sign, ETD, exporter tax ID, assigned containers and tare are validated. Any failure downloads an Excel error report and saves nothing.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 5,
+                  "badge": "RESULT",
+                  "title": "File Saved",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "A CUSC-EXP- ref is stored and the .edi file downloads",
+                    "Submit to Nafeza is a separate, stricter step"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "The list screen",
+              "type": "rules",
+              "items": [
+                "Shows only this company’s export CUSCARs (is_load_port = 1), newest first, 30 per page.",
+                "Columns: Ref No, Voyage/Vessel, Port (Load), clickable BL Count, Created At, Nafeza badge, Actions.",
+                "Nafeza badge: Uploaded (every linked booking Manifest Uploaded), N/M (some uploaded), or a dash (none).",
+                "The Vessel/Voyage filter dropdown is filled with eligible voyages, but pressing Filter currently does not narrow the table — voyage_id is posted and ignored."
+              ]
+            },
+            {
+              "heading": "Generate modal",
+              "type": "rules",
+              "items": [
+                "Opened from Generate Export CUSCAR on the list — not a separate full page like Import CUSCAR.",
+                "If the voyage has exactly one Egyptian port it is used automatically; otherwise a Load Port dropdown appears.",
+                "Every BL Draft starts ticked. At least one must stay ticked — unlike Import, select none = all does not apply.",
+                "Each card shows BL ref, booking ref, UCR (green) or No UCR on booking (red), and consignee.",
+                "Missing UCR does not block Generate — it only blocks Submit to Nafeza later."
+              ]
+            },
+            {
+              "heading": "Validation before the file is saved",
+              "type": "table",
+              "columns": [
+                "Check",
+                "Rule"
+              ],
+              "rows": [
+                [
+                  "Required submit",
+                  "Voyage, Load Port, and at least one BL Draft."
+                ],
+                [
+                  "Duplicate guard",
+                  "Meant to block the same company + voyage + load port + BL set. It currently compares new bl_draft_ids against the old record’s booking_ids, so a true duplicate is usually not caught."
+                ],
+                [
+                  "Container assignment",
+                  "Every container line on each selected BL’s booking must already have a real container. Failures return export_cuscar_errors_[Egypt-time].xlsx."
+                ],
+                [
+                  "Vessel",
+                  "Call Sign and IMO Number must both be filled — failure hits every BL on the voyage."
+                ],
+                [
+                  "ETD",
+                  "Voyage Ports must have an ETD for that booking’s load port. Export uses departure, not ETA."
+                ],
+                [
+                  "UCR",
+                  "Optional at Generate. If present (and not just 0) it must be exactly 19 digits."
+                ],
+                [
+                  "Exporter Tax ID",
+                  "booking.exportal_id, else customer tax card, else BL shipper tax card. Required, exactly 9 digits."
+                ],
+                [
+                  "Tare weight",
+                  "Required on every assigned container. Defaults tried from size + category (20 Dry 2150, 40 Dry 3750, 20 Reefer 2900, 40 Reefer 4560)."
+                ]
+              ]
+            },
+            {
+              "heading": "Partial success is not written",
+              "type": "callout",
+              "style": "warning",
+              "content": "Unlike Import, a partial success (some BLs good, some bad) is not saved. All selected BLs must pass or the whole run stops, no CUSCAR row is created, and the Excel error report is downloaded."
+            },
+            {
+              "heading": "What is written",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "File",
+                  "One EDIFACT CUSCAR D.95B message. Sender = company line code, receiver = NAFEZA."
+                ],
+                [
+                  "Header",
+                  "Egyptian LOAD port (LOC+9) and ETD (DTM+133). Direction EXPORT."
+                ],
+                [
+                  "Parties",
+                  "From the BL Draft: shipper NAD+CZ, consignee NAD+CN, notify if present. UCR as RFF+AFM after the shipper."
+                ],
+                [
+                  "Ref No",
+                  "CUSC-EXP- + company booking_code + voyage number + running Settings.cuscar_ref_no. Import uses CUSC without -EXP-."
+                ],
+                [
+                  "Filename",
+                  "export_cuscar_[ref_no]_[Egypt-time].edi"
+                ]
+              ]
+            },
+            {
+              "heading": "Show, re-download and Nafeza",
+              "type": "rules",
+              "items": [
+                "Download re-generates the .edi from current BL/booking/vessel/container data using the saved bl_draft_ids — it is not a stored snapshot.",
+                "The Show page Re-generate CUSCAR link only sends voyage + load port, so create validation rejects it. Use the list Download button to rebuild the same selection.",
+                "Submit to Nafeza (when enabled) re-generates the EDI and POSTs it. Every linked booking must have a valid 19-digit UCR (not blank, not 19 zeroes).",
+                "On success the bookings are marked Manifest Uploaded and the list badge flips to Uploaded.",
+                "Generate & Download only produces the local .edi file. Submit is the only place on this screen that talks to Nafeza."
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Export CUSCAR is the outbound customs manifest for cargo leaving Egypt. Generate is the data-quality gate (vessel IMO/call sign, ETD, exporter tax ID, container assignment, tare). Submit to Nafeza is the compliance gate (every BL must already have a 19-digit UCR). The most common live mistake is generating a file that still has no UCR — it downloads fine and then fails on Submit."
             }
           ]
         }
@@ -4742,7 +7725,7 @@ window.DOCS_DATA = {
               "rows": [
                 [
                   "Selling rate lower than cost",
-                  "The <Charge> selling rate must be greater than or equal to the cost."
+                  "The [Charge] selling rate must be greater than or equal to the cost."
                 ],
                 [
                   "Same trucker + same From + same To (empty To counts as its own route) and the dates overlap",
@@ -4935,7 +7918,7 @@ window.DOCS_DATA = {
                 ],
                 [
                   "Same charge type + size twice",
-                  "Duplicate charge type: <Charge> for the same equipment <size>ft already exists."
+                  "Duplicate charge type: [Charge] for the same equipment [size]ft already exists."
                 ]
               ]
             },
@@ -4965,13 +7948,1559 @@ window.DOCS_DATA = {
       "id": "accounting",
       "title": "Accounting",
       "icon": "file-text",
-      "modules": []
+      "modules": [
+        {
+          "id": "credit-note",
+          "title": "Credit Note",
+          "icon": "file-text",
+          "summary": "Refunds part or all of a confirmed Invoice or Debit Note — lowers what is left to collect, can credit the customer balance, and releases Storage / Detention / Power so they can be re-issued.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "A Credit Note reduces (refunds) what a customer owes. It is usually issued against a confirmed Invoice or Debit Note and gives back part or all of its charges; it can also be issued on its own for a customer. The credit note is saved in the invoice table as type C. It lowers the remaining amount to collect on the original invoice, can add the amount to the customer’s credit balance when that invoice was already paid, and releases storage / detention / power invoices so they can be recalculated and re-issued. Yard companies see Yard Credit Note instead — a separate screen, not covered here."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Accounting → Credit Note"
+                ],
+                [
+                  "Route (list)",
+                  "creditNote.index"
+                ],
+                [
+                  "Feature flags",
+                  "accounting, credit_note"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Add Credit Note",
+                  "desc": "Pick the Invoice Number — only confirmed invoices / debit notes that still have something left to refund are offered.",
+                  "icon": "search"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Header Fills In",
+                  "desc": "Customer, booking / B/L, ports, voyage, currency, exchange rate, VAT and the refundable charges fill automatically.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3",
+                  "title": "Adjust Refund Amounts",
+                  "desc": "Keep the charges to refund. Never go above what is left on each charge. Add date and notes.",
+                  "icon": "calculator"
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4 · SYSTEM CHECK",
+                  "title": "Remaining Amounts Checked",
+                  "tone": "system",
+                  "desc": "Fixed-discount invoices must refund all remaining charges at their full remaining amounts. Status is always saved as confirmed.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 5,
+                  "badge": "RESULT",
+                  "title": "Number Generated",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Print PDF and sync to QuickBooks if used",
+                    "A newer credit note on the same charges locks this one"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Fields stored",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Invoice Number (parent)",
+                  "Optional. The confirmed invoice or debit note being credited. Once saved it cannot be changed."
+                ],
+                [
+                  "Booking Ref / B/L",
+                  "Filled from the parent invoice. Locked after saving."
+                ],
+                [
+                  "Load / Discharge Port, Vessel / Voyage",
+                  "Filled from the invoice or its booking."
+                ],
+                [
+                  "Customer",
+                  "Required. Customers of all lines of the same agency."
+                ],
+                [
+                  "Currency / Exchange Rate",
+                  "USD, EUR and EGP are handled."
+                ],
+                [
+                  "VAT Percentage",
+                  "Default 14."
+                ],
+                [
+                  "Discount",
+                  "Copied from the invoice (read-only)."
+                ],
+                [
+                  "Charge lines",
+                  "At least one. Each line refunded from an invoice remembers which invoice line it credits."
+                ],
+                [
+                  "Credit Note No",
+                  "Generated, or used as typed if a number is entered."
+                ],
+                [
+                  "Status",
+                  "Always saved as confirmed."
+                ]
+              ]
+            },
+            {
+              "heading": "Create rules",
+              "type": "table",
+              "columns": [
+                "Rule",
+                "Message"
+              ],
+              "rows": [
+                [
+                  "No charge lines",
+                  "Table Cannot Be Empty"
+                ],
+                [
+                  "No customer",
+                  "Please Select Customer"
+                ],
+                [
+                  "Total is zero",
+                  "Invoice Total Amount Can not be Equal Zero"
+                ],
+                [
+                  "Line not refundable on the parent",
+                  "One or more selected charges are not refundable for this invoice."
+                ],
+                [
+                  "Line points to another invoice’s charge",
+                  "Invalid invoice charge reference for at least one line."
+                ],
+                [
+                  "Same invoice charge twice",
+                  "Duplicate invoice charge lines are not allowed."
+                ],
+                [
+                  "Negative amount",
+                  "Charge amount cannot be negative."
+                ],
+                [
+                  "Amount above what is left",
+                  "Charge amount exceeds remaining refundable amount for at least one line."
+                ],
+                [
+                  "Fixed-discount invoice, partial refund",
+                  "This invoice has a fixed discount; you must refund all remaining charges."
+                ]
+              ]
+            },
+            {
+              "heading": "Credit note number",
+              "type": "rules",
+              "items": [
+                "If a number is typed, it is used as is.",
+                "MLH companies: generated from the MLH serial counters shared by the company group. CNINV = credit note on an invoice (5-digit). CNSC = credit note on a debit note (6-digit). Digit 1 = import, 2 = export (3 / 4 for MLHC).",
+                "Other companies: CN + 3-digit counter + / + year, e.g. CN015 / 26 (counter in company Settings)."
+              ]
+            },
+            {
+              "heading": "Edit is locked after a newer note",
+              "type": "callout",
+              "style": "danger",
+              "content": "A credit note cannot be edited once a newer credit note was created on the same invoice charges. The list shows a lock icon instead of Edit. Credit notes cannot be deleted from this screen. Correct mistakes with a new credit note instead of editing an older one."
+            },
+            {
+              "heading": "What Edit still changes",
+              "type": "rules",
+              "items": [
+                "The invoice, booking and B/L stay as they were.",
+                "Charge lines are replaced and checked again. Each line may go up to its remaining amount plus what this credit note already had.",
+                "VAT % and quantity are updated.",
+                "Customer, date, currency, exchange rate and notes are not updated by Edit."
+              ]
+            },
+            {
+              "heading": "How this feeds other modules",
+              "type": "rules",
+              "items": [
+                "Remaining amount to collect on an invoice is its total minus its confirmed credit notes. Receipts use that remaining amount. Fully credited invoices are shown in red.",
+                "If the parent invoice is already paid, the credited amount (after VAT) is added to the customer’s credit balance in the note’s currency. Credit notes on unpaid invoices, or without an invoice, do not change the balance.",
+                "A credited Storage / Detention / Power invoice (or extension) is ignored when checking whether such an invoice already exists, when the CRO letter reads the last storage invoice, and when booking calculations look for existing invoices.",
+                "A booking is no longer flagged as having an unpaid invoice when that invoice is fully credited.",
+                "QuickBooks: green Sync queues the credit note. The Web Connector must then run to finish."
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Credit notes directly change what customers owe, their credit balance, and whether storage / detention can be invoiced again. Always create them from the original invoice so the system can check the remaining amounts. Once a newer credit note exists on the same charges, older ones are frozen."
+            }
+          ]
+        },
+        {
+          "id": "cost",
+          "title": "Cost (Vendor Bills)",
+          "icon": "calculator",
+          "summary": "Vendor bills for what the company owes a supplier — depot storage, THC, ocean freight, trucking, DA. Totals are calculated from charge lines and container rates, not stored.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "This is where the company records what it owes a supplier — depot storage, terminal THC, ocean freight, trucking, DA and the rest. It is a vendor bill, not a customer invoice. The list button says Add Vendor Bill for that reason. A Cost has a header (who billed us, which bill number, which dates, which currency) and one or more charge lines taken from that supplier’s charge-item catalogue. Each line can then be broken down onto real BLs, bookings or container numbers, with a rate per box and, for storage, a quantity of days. Nothing here posts to QuickBooks. The QB columns on a charge line are labels copied from the supplier catalogue so accountants can recognise the item later."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Accounting → Cost"
+                ],
+                [
+                  "Route (list)",
+                  "cost.index → /cost"
+                ],
+                [
+                  "Feature flags",
+                  "costs"
+                ],
+                [
+                  "Permissions",
+                  "Cost-List, Cost-Create, Cost-Show, Cost-Edit, Cost-Delete, plus Cost-Store on save"
+                ],
+                [
+                  "Delete",
+                  "Soft-delete. The bill, charge lines, container links and attachment file are removed, but the row stays in the table."
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Add Vendor Bill",
+                  "desc": "Pick Supplier Type, then Supplier. Pick Invoice Type(s) and Operation Date (ATB) so the charge catalogue can load.",
+                  "icon": "search"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Add Charge Lines",
+                  "desc": "Pick matching Charge Items. Set Qty, Unit Rate and VAT. Optionally open BL to hang the cost on real boxes.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3",
+                  "title": "Set Bill Header",
+                  "desc": "Bill Number, Invoice Date and Payment Status (defaults to UnPaid). Currency is forced to USD.",
+                  "icon": "calculator"
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4 · DECISION",
+                  "title": "On the List",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Filter and read totals",
+                    "Click UnPaid to mark Paid",
+                    "Show / Edit / Delete",
+                    "Eye on a BL/Booking ref for a cost summary"
+                  ]
+                },
+                {
+                  "step": 5,
+                  "badge": "RESULT",
+                  "title": "Payable Is Recorded",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "List Total USD / Total EGP is calculated from lines and container rates",
+                    "Trust the list / Show screen, not the Create header, when a line has individual storage days"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Header fields",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Supplier Type",
+                  "Depot, Services Provider, Seller, Trucker, Lessor, Haulage, Terminal or Other. Locked on Edit."
+                ],
+                [
+                  "Supplier",
+                  "Must belong to this company and carry that type. The Name list is empty until Type is chosen. Copies Country onto the header."
+                ],
+                [
+                  "Invoice Type",
+                  "Multi-select: Storage, General, THC, Ocean Freight, DA. This is what filters the charge catalogue."
+                ],
+                [
+                  "Bill Number",
+                  "Free text, required. No uniqueness check — two bills can share INV0001."
+                ],
+                [
+                  "Operation Date From (ATB)",
+                  "Required on save even though the create form does not mark it with a star. The catalogue will not load without it."
+                ],
+                [
+                  "Operation Date To (ATD)",
+                  "Optional."
+                ],
+                [
+                  "Invoice Date",
+                  "The supplier’s invoice date. Required. Used by the list date filter and the Cross-company 1-month cap."
+                ],
+                [
+                  "Shipment Type",
+                  "EXPORT / IMPORT / TRANSHIPMENT / ALL. Optional. Filters the voyage list and the charge catalogue."
+                ],
+                [
+                  "Vessel / Voyage",
+                  "Optional multi-select. Filters the BL / Booking picker."
+                ],
+                [
+                  "Currency / Conversion",
+                  "Currency is forced to USD. Conversion Same or USD → EGP. Exchange Rate is required, default 1."
+                ],
+                [
+                  "Payment Status",
+                  "Paid / UnPaid / Dispute. Defaults to UnPaid. The list’s red UnPaid badge flips to Paid without opening Edit."
+                ],
+                [
+                  "Attach File",
+                  "pdf, jpg, jpeg, png, xlsx, xls, max 10 MB. Replacing it on Edit deletes the old file."
+                ]
+              ]
+            },
+            {
+              "heading": "Charge lines and container links",
+              "type": "rules",
+              "items": [
+                "Charge Item comes from Master Data → Supplier Charge Items for this company, this supplier, the selected Invoice Type(s), valid on the Operation Date.",
+                "Qty ≥ 1 and Unit Rate ≥ 0. Used as the fallback total when the line has no per-container rates.",
+                "VAT tick adds 14%. There is no company-level VAT rate.",
+                "The same charge item can be added more than once so two payers can share a bill.",
+                "Each charge row’s BL button opens a modal: confirmed Export BL Drafts / Service BLs, Import bookings (confirmed or summary), or — on Create only — pasted direct container numbers.",
+                "Rate modes: General (one unit_rate for every selected box) or Individual (each box gets its own unit_rate and unit_qty / storage days).",
+                "On Edit, saving a line deletes every old container link for that line and writes the modal contents again. An empty allocation wipes the previous one."
+              ]
+            },
+            {
+              "heading": "What appears in the charge picker",
+              "type": "callout",
+              "style": "warning",
+              "content": "The Select Charge Items box stays empty until Supplier, Invoice Type and Operation Date are all set. Transhipment shipment type excludes All catalogue items on purpose. Changing Supplier after adding lines will reject those lines on save — the charge item must belong to the header supplier. Change the supplier first, then re-add the lines."
+            },
+            {
+              "heading": "How the total is calculated",
+              "type": "rules",
+              "items": [
+                "If any linked container has unit_rate > 0: sum unit_rate × (unit_qty or 1) per box, then × 1.14 if VAT is on.",
+                "Otherwise: qty × unit_rate, then × 1.14 if VAT is on.",
+                "The Create/Edit running total uses the simpler qty × unit_rate × 1.14 and does not see per-box days. Trust the list / Show screen after save.",
+                "USD + Same shows Total USD only. USD + USD → EGP fills both columns (EGP = USD × rate). A zero column is shown as a dash.",
+                "store does not write a total. update computes one but total_amount is not fillable, so that write is thrown away. Both paths rely on the accessor.",
+                "The BL / Booking summary (eye next to the filter) is company-scoped only — Cross on the list does not widen that popup."
+              ]
+            },
+            {
+              "heading": "The Cost list",
+              "type": "rules",
+              "items": [
+                "30 per page, newest first. Default scope is the logged-in company.",
+                "Filters: Supplier, Bill Number, Invoice Type (DA is missing from the list filter), Shipment Type, Invoice Date, Operation Date, Payment Status, Charge Description, Voyage, BL / Booking Ref, Container No.",
+                "Cross includes every company the user can switch to. Invoice Date From/To then cannot exceed one month.",
+                "Export All Bills and Summary honour Cross and the 1-month cap.",
+                "The mark-as-Paid click on the list has no permission check of its own. Anyone who can load the list and hit the badge can flip UnPaid → Paid. There is no click-path from Paid back to UnPaid except Edit."
+              ]
+            },
+            {
+              "heading": "Create vs Edit traps",
+              "type": "table",
+              "columns": [
+                "Trap",
+                "What happens"
+              ],
+              "rows": [
+                [
+                  "Supplier Type frozen",
+                  "The name can change to another supplier of the same type. Country stays the supplier’s country."
+                ],
+                [
+                  "Currency hardcoded USD on Edit",
+                  "Saving an old EGP bill silently rewrites it to USD. The exchange rate is kept."
+                ],
+                [
+                  "Direct-container paste is Create only",
+                  "Edit can still change a line that was saved that way, but cannot start a new type-the-numbers allocation."
+                ],
+                [
+                  "Empty BL modal wipes allocation",
+                  "Confirming the modal with nothing selected deletes the previous container links."
+                ],
+                [
+                  "DA bills hide under the list filter",
+                  "DA is on Create/Edit. The list filter does not offer it, so a DA-only bill disappears if Invoice Type is filtered to the four listed values."
+                ]
+              ]
+            },
+            {
+              "heading": "Common problems",
+              "type": "table",
+              "columns": [
+                "Problem",
+                "Fix"
+              ],
+              "rows": [
+                [
+                  "Charge picker is empty",
+                  "Set Supplier + Invoice Type + Operation Date first. Then check the supplier catalogue’s invoice type, shipment type and validity window."
+                ],
+                [
+                  "Save says Operation Date is invalid",
+                  "Fill Operation Date From. The form does not mark ATB with a star, but the server requires it."
+                ],
+                [
+                  "Charge item rejected on save",
+                  "The line must belong to the header supplier. Change the supplier first, then re-add the lines."
+                ],
+                [
+                  "Supplier list empty after picking a type",
+                  "Master Data → Suppliers: set the type flags and company."
+                ],
+                [
+                  "Create total does not match the list",
+                  "You entered per-container rates or storage days. Open Show, or trust the list."
+                ],
+                [
+                  "BL / Booking picker missing a known ref",
+                  "Export wants a confirmed BL Draft or Service BL. Import wants a confirmed or summary booking. Cap 500. Clear voyage / routing filters."
+                ],
+                [
+                  "Cross drops Invoice Date To",
+                  "The range is longer than one month. Shorten it, or turn Cross off."
+                ],
+                [
+                  "Cannot un-pay from the list",
+                  "Only UnPaid is clickable, and only to Paid. Edit the bill to change Payment Status."
+                ]
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Cost is the payable side of the same shipment the Invoice List bills the customer for. Set Supplier, Invoice Type and Operation Date before touching the charge list. If the charge is per box or per storage day, put the rate on the containers — do not trust the Qty × Rate box at the top of Create. Payment Status is a flag you own: the list will let anyone mark Paid, and nothing here talks to the bank or to QuickBooks. The bill number is yours to keep unique. The total is calculated — if it disagrees with the supplier PDF, look at the allocation on the charge lines."
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "custody",
       "title": "Custody",
       "icon": "briefcase",
-      "modules": []
+      "modules": [
+        {
+          "id": "custody-issues",
+          "title": "Issues Custody",
+          "icon": "briefcase",
+          "summary": "Cash advances and petty-cash funds issued to employees — the outflow log that keeps treasury money accountable by person and currency.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "The Issues Custody screen records financial custody (cash advances, petty cash funds, or operational expenses) issued by the company to employees. When an employee receives cash from the treasury or safe for company-related disbursements, field operations or advance expense coverage, that transaction is registered here. This is the primary log for cash outflows handed over to individual staff members."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Custody → Issues"
+                ],
+                [
+                  "Route (list)",
+                  "custodies.index with type parameter issue"
+                ],
+                [
+                  "Feature flags",
+                  "custody"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Issues",
+                  "desc": "Sidebar → Custody → Issues. The list is latest first, 30 per page.",
+                  "icon": "briefcase"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Create or Filter",
+                  "desc": "Search by employee (type at least 3 characters) and/or exact creation date. Header badges show live totals per currency.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3",
+                  "title": "Enter the Issue",
+                  "desc": "Pick Employee, Currency and Amount. Remarks are optional.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4 · SYSTEM CHECK",
+                  "title": "Stored as Type Issue",
+                  "tone": "system",
+                  "desc": "The system automatically assigns type = 0 so the record stays on the Issues side.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 5,
+                  "badge": "RESULT",
+                  "title": "Cash Is Accountable",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Currency totals in the header recalculate with the filters",
+                    "Receiving later balances this outflow"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Fields stored",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Employee",
+                  "Required. Active user receiving the custody."
+                ],
+                [
+                  "Currency",
+                  "Required. Active currency from master data."
+                ],
+                [
+                  "Amount",
+                  "Required numeric value, minimum 0, step 0.01."
+                ],
+                [
+                  "Remarks",
+                  "Optional. Purpose of the issue, e.g. cash advance for port customs inspection expenses."
+                ],
+                [
+                  "Date",
+                  "System-generated creation date (YYYY-MM-DD)."
+                ],
+                [
+                  "Type",
+                  "Internal. Stored as 0 = Issue. Assigned from the screen context."
+                ]
+              ]
+            },
+            {
+              "heading": "Currency totals",
+              "type": "text",
+              "content": "At the top right of the header the system shows live sum badges for every currency in the current filtered list, for example Total USD: 1,500.00. Formula: SUM(amount) grouped by currency for matching issue records. The badges recalculate whenever search filters are applied or cleared."
+            },
+            {
+              "heading": "Listing & remarks",
+              "type": "rules",
+              "items": [
+                "Employee filter is a multi-select autocomplete (TomSelect, at least 3 characters).",
+                "Date filter matches the exact creation date.",
+                "Search applies the filters; Reset returns to the full issue list.",
+                "A remark longer than 50 characters is hidden behind an eye icon. Clicking it opens a popup with the full text."
+              ]
+            },
+            {
+              "heading": "Create, edit & delete",
+              "type": "rules",
+              "items": [
+                "Employee must exist in Users. Currency must exist and be active.",
+                "Amount must be numeric and >= 0. Remarks are optional.",
+                "Success: Custody record created/updated successfully.",
+                "Delete asks Are you sure you want to delete this Custody Record? and then permanently removes the row."
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Custody Issues are cash liabilities outstanding with company employees. If issues are omitted or entered with the wrong amount or currency, petty cash will fail to reconcile and employee expense settlements cannot be verified."
+            }
+          ]
+        },
+        {
+          "id": "custody-receiving",
+          "title": "Receiving Custody",
+          "icon": "briefcase",
+          "summary": "Cash returned or collected by employees back into the treasury — the inflow log that balances Issues Custody.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "The Receiving Custody screen records financial custody received or returned to the company by employees. When an employee returns unused cash advance funds, settles a petty cash balance, or hands over cash collected on behalf of the company into the treasury/safe, that transaction is registered here. This is the central log for cash inflows received from staff."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Custody → Receiving"
+                ],
+                [
+                  "Route (list)",
+                  "custodies.index with type parameter receiving"
+                ],
+                [
+                  "Feature flags",
+                  "custody"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Receiving",
+                  "desc": "Sidebar → Custody → Receiving. Latest first, 30 per page.",
+                  "icon": "briefcase"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Create or Filter",
+                  "desc": "Search by employee and/or exact creation date. Header badges show live totals per currency for receiving records only.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3",
+                  "title": "Enter the Return",
+                  "desc": "Pick Employee, Currency and Amount. Remarks can describe the settlement.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4 · SYSTEM CHECK",
+                  "title": "Stored as Type Receiving",
+                  "tone": "system",
+                  "desc": "The system automatically assigns type = 1 so the record stays on the Receiving side.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 5,
+                  "badge": "RESULT",
+                  "title": "Liability Comes Down",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Returned funds have an audit trail in the safe",
+                    "Employee cash liability is no longer overstated"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Fields stored",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Employee",
+                  "Required. Active user returning or settling the custody."
+                ],
+                [
+                  "Currency",
+                  "Required. Active currency of the received funds."
+                ],
+                [
+                  "Amount",
+                  "Required numeric value, minimum 0, step 0.01."
+                ],
+                [
+                  "Remarks",
+                  "Optional. Settlement details, e.g. return of unused travel cash advance."
+                ],
+                [
+                  "Date",
+                  "System-generated creation date (YYYY-MM-DD)."
+                ],
+                [
+                  "Type",
+                  "Internal. Stored as 1 = Receiving. Assigned from the screen context."
+                ]
+              ]
+            },
+            {
+              "heading": "Same list behaviour as Issues",
+              "type": "rules",
+              "items": [
+                "Currency totals are SUM(amount) grouped by currency for matching receiving records only.",
+                "Employee search needs at least 3 characters. Date matches the exact creation date.",
+                "Long remarks (over 50 characters) open in an eye-icon popup.",
+                "Create/Edit validation matches Issues. Delete permanently removes the row after confirmation.",
+                "The two screens share the same table and route; only the type parameter (issue vs receiving) changes which rows and which type is written."
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Receiving Custody balances out Custody Issues by logging cash re-entering company accounts. Without accurate receiving records, employee cash liability stays overstated and returned funds in the safe lack an audit trail."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "integration",
+      "title": "Integration",
+      "icon": "activity",
+      "modules": [
+        {
+          "id": "nafeza-ucr",
+          "title": "Nafeza (UCR)",
+          "icon": "activity",
+          "summary": "Egyptian customs export chain hanging off the Export Booking — paste a 19-digit UCR, then report booking confirmation, empty containers, draft/final BOL and the export manifest.",
+          "sections": [
+            {
+              "heading": "What is this integration?",
+              "type": "text",
+              "content": "Egyptian customs (Nafeza) require every export shipment to be declared before it moves, and the shipping line to report each milestone against a single customs reference: the UCR, a 19-digit number. We do not create the UCR — the exporter or broker gets it from Nafeza. Our job is to paste it onto the Export Booking, prove the booking matches their declaration, and report each milestone: booking confirmed, empty containers picked up, draft BOL, final BOL, and finally the export manifest. Nothing here is a screen you manage. The single most common reason it fails is wrong master data (customer tax card, vessel IMO, port codes, voyage dates), not the integration itself."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Sidebar entry",
+                  "None. Lives inside screens you already use."
+                ],
+                [
+                  "Export Booking",
+                  "UCR field and the Check UCR status badge"
+                ],
+                [
+                  "BL Draft",
+                  "Draft Sync / Final Sync / Retry buttons"
+                ],
+                [
+                  "Export Cuscar",
+                  "Submit to Nafeza button"
+                ],
+                [
+                  "Where it appears",
+                  "Export Booking, BL Draft and Export Cuscar — there is no separate Nafeza menu."
+                ],
+                [
+                  "Master switch",
+                  "Nafeza (UCR) must be switched on for the company. When off, the UCR column, sync buttons and every Nafeza action are disabled."
+                ],
+                [
+                  "Audit trail",
+                  "The daily Nafeza log — that log, not the badge, is what really happened. Ask support if you need a copy."
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Paste the UCR",
+                  "desc": "Get the 19-digit UCR from the exporter and type it on the Export Booking.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Save as Confirmed",
+                  "desc": "Auto-verifies the UCR with Nafeza and sends the Booking Confirmation. Read the Check UCR badge.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3",
+                  "title": "Draft Sync",
+                  "desc": "Create the BL Draft and press Draft Sync on the BL Draft list.",
+                  "icon": "file-text"
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Final Sync",
+                  "desc": "After departure press Final Sync on the BL Draft.",
+                  "icon": "anchor"
+                },
+                {
+                  "step": 5,
+                  "badge": "RESULT",
+                  "title": "Submit Export CUSCAR",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Generate the Export CUSCAR, then Submit to Nafeza",
+                    "Linked bookings move to Manifest Uploaded"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Fields that drive the chain",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "UCR",
+                  "19-digit customs reference. Optional on the form, but nothing Nafeza-related happens without it. Rejected unless exactly 19 digits."
+                ],
+                [
+                  "Nafeza Status",
+                  "System-written after each call. Shown as the Check UCR badge."
+                ],
+                [
+                  "Last Synced At",
+                  "Stamped every time status changes — including when a call fails. Means last time we tried, not last success."
+                ],
+                [
+                  "Idempotency Key",
+                  "One-time key overwritten on every submission. Protects a double-click, not a re-submit tomorrow."
+                ],
+                [
+                  "Exportal ID",
+                  "9-digit exporter tax ID. Not on the Export Booking form and almost always empty — in practice the customer’s Tax Card is used."
+                ],
+                [
+                  "Customer Tax Card",
+                  "The single most important field in this integration. Must be exactly 9 digits. A blank one is the number-one live failure."
+                ]
+              ]
+            },
+            {
+              "heading": "UCR verification",
+              "type": "rules",
+              "items": [
+                "Verification is read-only: does this declaration exist, and may I book against it? It changes nothing on Nafeza’s side.",
+                "A successful verification does NOT mean the UCR is usable. Success only means Nafeza answered. The booking advances to UCR Verified only when Booking Eligible = Yes.",
+                "If verification fails during create or update, the booking is still saved. The user only gets a warning — a booking can exist with Nafeza Status = Error.",
+                "Once the badge reads Booking Confirmed, later edits skip both verification and milestones. You cannot cancel a confirmed booking by editing it — use the explicit cancel action.",
+                "An export booking with no UCR saved as Confirmed is marked UCR Verified anyway. Treat that as meaningless.",
+                "A failed cancellation leaves the badge on Booking Confirmed and does not write Error."
+              ]
+            },
+            {
+              "heading": "Status lifecycle",
+              "type": "table",
+              "columns": [
+                "Status",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "(blank) / Not Started",
+                  "Every new booking. Nothing writes Pending, so the badge shows a dash."
+                ],
+                [
+                  "verified",
+                  "UCR Verified — Booking Eligible = Yes, or a no-UCR confirmed booking (trap)."
+                ],
+                [
+                  "confirmed",
+                  "Booking Confirmation accepted. Later edits then do nothing."
+                ],
+                [
+                  "cancelled",
+                  "Booking Cancellation accepted."
+                ],
+                [
+                  "empty_sent",
+                  "Empty-container milestone accepted. Almost never happens in practice."
+                ],
+                [
+                  "draft_bol / final_bol",
+                  "Draft Sync / Final Sync on the BL Draft list succeeded."
+                ],
+                [
+                  "manifest_sent",
+                  "Export CUSCAR accepted by Nafeza."
+                ],
+                [
+                  "error",
+                  "Verification or confirmation failed. A failed cancellation does not set this."
+                ]
+              ]
+            },
+            {
+              "heading": "Silent defaults on milestones",
+              "type": "callout",
+              "style": "warning",
+              "content": "A missing commodity description becomes General Cargo, a missing HS code becomes 000000, and missing dates fall back to today or a calculated date. A submission can be accepted by Nafeza while carrying a placeholder that is legally wrong. Fill commodity, HS code and dates properly."
+            },
+            {
+              "heading": "Export CUSCAR and the UCR",
+              "type": "rules",
+              "items": [
+                "Generating the file: UCR is optional. If the booking has no UCR the segment is left out and the file still downloads.",
+                "Submitting to Nafeza: every BL is supposed to have a valid 19-digit UCR.",
+                "The pre-flight check only flags a UCR that is present but the wrong length. An empty UCR or nineteen zeroes is excluded from the check and can pass through.",
+                "Nothing forces the booking to have reached Booking Confirmed, Draft BOL or Final BOL before the manifest is uploaded."
+              ]
+            },
+            {
+              "heading": "Common problems",
+              "type": "table",
+              "columns": [
+                "Problem",
+                "Fix"
+              ],
+              "rows": [
+                [
+                  "Missing / invalid customer tax card",
+                  "Master Data → Customers: set the exporter’s 9-digit Egyptian tax ID, then retry. One bad customer fails every booking that uses it."
+                ],
+                [
+                  "Loading date in the past",
+                  "Correct ETD/ETA on Voyage Ports for that load port, then retry."
+                ],
+                [
+                  "Booking reference already taken",
+                  "Nafeza already tied this UCR to a different booking ref. The customer must update the declaration to the new booking ref."
+                ],
+                [
+                  "UCR already used (405)",
+                  "A UCR belongs to exactly one booking. Remove the duplicate. Do not retry until it is gone."
+                ],
+                [
+                  "Declaration already finalised",
+                  "Stop retrying. Continue with the next legitimate step or ask the exporter for a new declaration."
+                ],
+                [
+                  "Wrong declarant / shipper",
+                  "Correct the customer’s Tax Card so it matches the exporter on the declaration. Never substitute Importer ID."
+                ],
+                [
+                  "Missing gross weight / vessel IMO",
+                  "Fill booking container gross weight; set IMO and flag country on the Vessel; link vessel and carrier on the voyage."
+                ],
+                [
+                  "No booking at Nafeza yet",
+                  "A later milestone was sent before Booking Confirmation was accepted. Get Booking Confirmed first."
+                ],
+                [
+                  "Authentication / timeout",
+                  "Credentials or Nafeza/network problem. Retrying the booking will not fix a missing access_token."
+                ]
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Without an accepted Nafeza chain the cargo does not legally leave Egypt. The badge on the Export Booking list is a compliance indicator — anything showing Failed needs someone to open the Nafeza log. Almost all confirmation failures trace back to five records: the customer’s 9-digit Tax Card, the voyage’s dates at the load port, a booking ref renamed after confirmation, a UCR used twice, and the vessel’s IMO. If the UCR is already consumed, the declaration is finalised, or the token request is refused, retries will not help."
+            }
+          ]
+        },
+        {
+          "id": "nafeza-aci",
+          "title": "Nafeza (ACI Check)",
+          "icon": "activity",
+          "summary": "Read-only Import ACID verification hanging off the Import BL List — asks Nafeza whether each 19-digit ACID is still valid for the importer, exporter, vessel and booking on file.",
+          "sections": [
+            {
+              "heading": "What is this integration?",
+              "type": "text",
+              "content": "Egyptian customs (Nafeza) require every import shipment to carry an ACID — Advanced Cargo Information — before the cargo can be declared. The ACID is a 19-digit number the importer or broker gets from Nafeza. We do not create it. Our job is to paste it onto the Import Booking and ask Nafeza, in a batch, whether each ACID is still valid for the importer, exporter, vessel and booking we have on file. This is a read-only question. A green tick only means Nafeza answered Yes, with an expiry date. It does not submit a manifest and does not replace Import CUSCAR. The single most common reason it fails is wrong master data (importer tax ID, exporter ID, vessel IMO, load port code), not the integration itself."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Sidebar entry",
+                  "None. Lives on Booking → Import BL List: the ACID Check column and the clipboard-check button once rows are selected."
+                ],
+                [
+                  "Routes",
+                  "POST /booking/check-aci and GET /booking/voyage-aci-stats"
+                ],
+                [
+                  "Master switch",
+                  "System lock nafeza_aci_check_enabled (Check ACID), off by default. Super-admin toggles it from Sidebar → Lock."
+                ],
+                [
+                  "Not the UCR switch",
+                  "Turning on Export UCR / Nafeza does not turn ACI Check on. They are separate switches."
+                ],
+                [
+                  "Audit trail",
+                  "Daily application log, entries prefixed ACI Check — that log, not the icon, is what really happened."
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Paste the ACID",
+                  "desc": "Get the 19-digit ACID from the importer. Type it on the Import Booking with the Exporter ID, then save.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Open Import BL List",
+                  "desc": "Tick the booking(s), or Select All across pages.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3",
+                  "title": "Press Check ACI",
+                  "desc": "The clipboard-check button in the Actions header. Confirm Check ACI? The check is never automatic — create/edit does not call Nafeza.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4 · SYSTEM CHECK",
+                  "title": "Read the Icon",
+                  "tone": "system",
+                  "desc": "Green tick = Valid with expiry. Red cross = Failed. Dash = no ACID or never checked.",
+                  "icon": "hash"
+                },
+                {
+                  "step": 5,
+                  "badge": "RESULT",
+                  "title": "Download Failures if Needed",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Failed ACIs Excel is offered from the flash message",
+                    "Already-valid rows stay green unless someone posts recheck_all=1"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Fields that drive the check",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "ACID",
+                  "19-digit import customs reference. Required on Import Booking. Also arrives from Manifest / EDI CUSCAR upload. Without it the check silently skips the row."
+                ],
+                [
+                  "Importer ID",
+                  "Egyptian importer’s 9-digit tax ID, sent as EgyptianImporterVATNumber. The Create/Edit Importer ID box is currently hidden, so a hand-created booking often has this empty."
+                ],
+                [
+                  "Exporter ID",
+                  "Foreign exporter’s registration number (booking.exportal_id). Required on the form; if empty the service substitutes the word Unknown."
+                ],
+                [
+                  "ACI Check",
+                  "Written by the system. Blank means never checked; otherwise Failed or Valid."
+                ],
+                [
+                  "ACI Valid Date",
+                  "Nafeza’s expiry date, stored only when Valid. Cleared whenever the check fails."
+                ]
+              ]
+            },
+            {
+              "heading": "A successful HTTP 200 is not a usable ACID",
+              "type": "callout",
+              "style": "warning",
+              "content": "Success only means Nafeza answered. A booking can come back 200 with IsValid = false, and the icon turns red. Import CUSCAR already refuses anything that is not 19 digits; ACI Check does not repeat that check — it will send whatever is in booking.acid, including a short value, letters, or nineteen zeroes."
+            },
+            {
+              "heading": "Status traps",
+              "type": "rules",
+              "items": [
+                "Importer ID is often empty on hand-created bookings. The service then pads nothing to 000000000. Manifest upload fills importer_id from the first 9 digits of the ACID — that is the value you want.",
+                "A dash is ambiguous: no ACID, or an ACID that nobody has pressed Check on yet. Look at the ACID field on the booking first.",
+                "Green is sticky from the list. The Check ACI button never sends recheck_all, so a booking that once passed is not sent again — even if the declaration later expires.",
+                "A failed batch still marks every row in that chunk as Failed, including ones that might have been Valid a minute earlier.",
+                "UCR is export. ACID is import. They share the same client ID / secret / base URL, but different OAuth scopes (aci.verify_before_shipment) and different enable switches."
+              ]
+            },
+            {
+              "heading": "Silent defaults — a green tick can be legally wrong",
+              "type": "table",
+              "columns": [
+                "Missing data",
+                "What is sent"
+              ],
+              "rows": [
+                [
+                  "Load port / port country",
+                  "TRIST (Istanbul) / TR"
+                ],
+                [
+                  "Vessel / IMO",
+                  "Unknown Vessel / 9999999"
+                ],
+                [
+                  "Exporter country / exportal_id",
+                  "AE (UAE) / Unknown"
+                ],
+                [
+                  "Importer ID",
+                  "000000000"
+                ],
+                [
+                  "Company on user",
+                  "MSCU / Mediterranean Shipping Company"
+                ]
+              ]
+            },
+            {
+              "heading": "How the list button actually runs",
+              "type": "rules",
+              "items": [
+                "Selected rows post booking IDs remembered across pages. Select All re-runs the Import BL List query, including Cross when that filter is on.",
+                "Many bookings are grouped by (second voyage or first voyage) + load port, then chunked into batches of 50. One OAuth token for the whole run.",
+                "Bookings without an ACID are dropped before anything is sent. They do not appear in the failed Excel.",
+                "Already-valid bookings are dropped unless recheck_all=1. The list button does not send that flag.",
+                "The service always restricts to the logged-in user’s company. Sister-company IDs collected by Cross are silently ignored.",
+                "Failures are written to failed_acis_YYYY-MM-DD_His.xlsx. The ACID column is forced to text so Excel does not swallow leading zeroes."
+              ]
+            },
+            {
+              "heading": "Common problems",
+              "type": "table",
+              "columns": [
+                "Problem",
+                "Fix"
+              ],
+              "rows": [
+                [
+                  "Importer VAT sent as nine zeroes",
+                  "Put the first 9 digits of the ACID into Importer ID (or re-upload the manifest), then Check ACI again."
+                ],
+                [
+                  "Exporter sent as Unknown / country AE",
+                  "Fill Exporter ID on the booking and set the shipper customer’s Country in Master Data."
+                ],
+                [
+                  "Vessel sent as IMO 9999999",
+                  "Link a vessel to the voyage and set a 7-digit IMO on the Vessel master."
+                ],
+                [
+                  "Load port sent as TRIST",
+                  "Set the load port. The code we send is country prefix + first 3 characters of the port code."
+                ],
+                [
+                  "Booking reference does not match",
+                  "We strip a trailing -1 / -2 / -3. The ref on our side must be the one on the declaration, minus only a numeric split suffix."
+                ],
+                [
+                  "No ACID on the booking",
+                  "Type the 19-digit ACID first. Select All quietly skips the row."
+                ],
+                [
+                  "Green icon but the declaration has expired",
+                  "Needs a request with recheck_all=1. The list button will not re-ask on its own."
+                ],
+                [
+                  "Authentication failed",
+                  "Credentials / ACI verify scope — not a booking-data problem. Same env keys as UCR; a working UCR setup can still fail here."
+                ],
+                [
+                  "Batch timeout marks the whole chunk Failed",
+                  "Retry later. A timeout also clears expiry dates on rows that were Valid before this run."
+                ],
+                [
+                  "Cross-company rows silently skipped",
+                  "Run the check while logged in as each company, or turn Cross off."
+                ],
+                [
+                  "Check ACID is currently disabled",
+                  "Super-admin turns Check ACID on under Sidebar → Lock. This is not the same switch as Export UCR / Nafeza."
+                ]
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Without a valid ACID the import does not legally enter Egypt. Import CUSCAR already refuses a missing or non-19-digit ACID on Egypt-bound full containers. The icon on the Import BL List is a compliance indicator — a red cross needs someone to open the failed Excel or ask support for the application log. Almost every failure traces back to five records: the importer’s 9-digit tax ID (often empty on hand-created bookings), the exporter ID and country, the vessel’s IMO, the load-port code, and the booking reference. If the token is refused, the lock is off, or the row has no ACID, retries will not help."
+            }
+          ]
+        },
+        {
+          "id": "quickbooks",
+          "title": "QuickBooks Desktop Sync",
+          "icon": "database",
+          "summary": "Queues invoices, credit notes, yard invoices and receipts so QuickBooks Web Connector can pull them into QuickBooks Desktop — Sync does not push anything itself.",
+          "sections": [
+            {
+              "heading": "What is this integration?",
+              "type": "text",
+              "content": "Accounting is kept in QuickBooks Desktop, which sits on an office PC and has no public API. Invoices, credit notes, yard invoices and receipts are entered in this system and then copied into QuickBooks so accountants do not re-type them. The direction matters: this system does not push anything to QuickBooks. QuickBooks Web Connector (QBWC) runs next to QuickBooks and PULLS from us on a schedule. Pressing Sync only queues the record. Nothing reaches QuickBooks until the Web Connector runs on that PC."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "QB Sync Monitor",
+                  "Accounting → QB Sync Monitor. Visible when QuickBooks sync is enabled for the company."
+                ],
+                [
+                  "QB Accounts",
+                  "Accounting → QB Accounts. Visible when the QB Accounts feature is enabled."
+                ],
+                [
+                  "Sync buttons",
+                  "On Invoices (including credit notes), Receipts and Yard Invoices — not on a screen of their own."
+                ],
+                [
+                  "Web Connector",
+                  "QuickBooks Web Connector on the office PC pulls from this system on a schedule. Sync only queues the record."
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open the Record",
+                  "desc": "Invoice, credit note, yard invoice or receipt.",
+                  "icon": "file-text"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Press Sync",
+                  "desc": "The badge turns Pending. Nothing has been sent yet — the record is only queued.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · SYSTEM CHECK",
+                  "title": "Web Connector Drains the Queue",
+                  "tone": "system",
+                  "desc": "The Web Connector on the accounts PC signs in, pulls one request at a time, and posts the answer back.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4 · DECISION",
+                  "title": "Read the Badge",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Synced",
+                    "Failed → open QB Sync Monitor",
+                    "Resync after fixing data"
+                  ]
+                },
+                {
+                  "step": 5,
+                  "badge": "RESULT",
+                  "title": "Books Updated",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "QuickBooks transaction ID is stored on success",
+                    "Receipts stay last in the queue so the invoice exists first"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "How the pipe works",
+              "type": "rules",
+              "items": [
+                "The Connector username carries the company code as a suffix (for example QBIntegeration_NMD). We answer with a session ticket and the QuickBooks company FILE path for that code.",
+                "One record takes many round trips. An invoice walks customer → items → accounts → class → ship method → sales rep → AR account → create/update invoice, skipping steps already known.",
+                "Queue order: regular invoices, then credit memos, then yard invoices, then receipts. Receipts are last because a payment cannot be posted before its invoice exists in QuickBooks.",
+                "Customers, service items, accounts, classes, shipping methods, sales reps and foreign-currency receivable accounts are created automatically only when genuinely missing.",
+                "A full QuickBooks path item (for example CPI Import:CPI - Others Imp) cannot be auto-created. Those sub-items must already exist under that exact FullName.",
+                "Customer names are built as TaxID-Currency-CustomerName and truncated to 41 characters, so the same real customer appears once per currency."
+              ]
+            },
+            {
+              "heading": "Statuses",
+              "type": "table",
+              "columns": [
+                "Place",
+                "Values"
+              ],
+              "rows": [
+                [
+                  "Queue",
+                  "pending, queued (legacy), processing, completed, failed"
+                ],
+                [
+                  "Record badge",
+                  "pending, synced or failed, plus the QuickBooks transaction ID and sync time on success"
+                ],
+                [
+                  "Status-polling trap",
+                  "A FAILED queue item is reported as completed with an error attached. Completed here means stop polling, not succeeded. Judge success by the error and the badge."
+                ],
+                [
+                  "Retries",
+                  "Nothing retries on its own. Failed records stay failed until a person presses Resync, or support re-queues them."
+                ]
+              ]
+            },
+            {
+              "heading": "QB Sync Monitor",
+              "type": "rules",
+              "items": [
+                "Company-code selector at the top (defaults to MLHE) — each QuickBooks company file is a separate world.",
+                "Overview: mapped invoices/customers/payments, queue counts, today’s log and error totals.",
+                "Queue: 20 per page, newest first, filterable by entity, status and date. Shows step reached, attempt count, error, and who pressed Sync.",
+                "Mappings: link table between our records and QuickBooks IDs, exportable to CSV.",
+                "Logs: every exchange with QuickBooks, with request, response, status and duration.",
+                "Retry rebuilds a clean starting state rather than resuming mid-ladder. Clear Failed DELETES the failed rows — read the errors first."
+              ]
+            },
+            {
+              "heading": "The four things that can be synced",
+              "type": "table",
+              "columns": [
+                "Record",
+                "Rule"
+              ],
+              "rows": [
+                [
+                  "Invoices",
+                  "Full ladder. Zero-value lines are skipped. An invoice with no positive line is rejected."
+                ],
+                [
+                  "Credit notes",
+                  "Only records marked as credit notes. Weaker duplicate protection — a careless resync can create a duplicate credit memo in QuickBooks."
+                ],
+                [
+                  "Yard invoices",
+                  "Always EGP. Amount is the base EGP total — not the VAT-inclusive total. Zero base amount is refused."
+                ],
+                [
+                  "Receipts",
+                  "Refused until every linked invoice is already synced. Payment is applied only up to each invoice’s remaining QuickBooks balance. Over/under-payment is handled, not rejected."
+                ]
+              ]
+            },
+            {
+              "heading": "What support can run if the queue is stuck",
+              "type": "table",
+              "columns": [
+                "Action",
+                "What it does"
+              ],
+              "rows": [
+                [
+                  "Queue unsynced invoices",
+                  "Put one invoice, or every unsynced invoice, onto the QuickBooks queue."
+                ],
+                [
+                  "Show sync status",
+                  "Print the current queue picture — pending, processing, completed, failed."
+                ],
+                [
+                  "Retry failed items",
+                  "Reset failed items back to pending, up to the retry limit."
+                ],
+                [
+                  "Unstick frozen items",
+                  "Clear items left in processing. After three attempts they are marked failed; the rest go back to pending. Ask support to run this when the queue looks frozen."
+                ]
+              ]
+            },
+            {
+              "heading": "Common problems",
+              "type": "table",
+              "columns": [
+                "Problem",
+                "Fix"
+              ],
+              "rows": [
+                [
+                  "Sales rep / employee never auto-creates (3180 blank name)",
+                  "Invoice still syncs; only the sales-rep tag is lost. Create the employee and Sales Rep by hand in QuickBooks using the initials the log prints (first five letters, upper-cased)."
+                ],
+                [
+                  "Unbounded retry on invalid item (3140)",
+                  "The queue looks frozen. Stop the Connector, ask support to unstick items left in processing, create the missing item (or full-path sub-item) in the company file, then Resync."
+                ],
+                [
+                  "Receipt cannot find its invoice",
+                  "Stored TxnID is missing from this company file — often a mapping from a different company. Resync the INVOICE first, then the receipt."
+                ],
+                [
+                  "Yard receipt: no active QB mapping",
+                  "Resync the YARD INVOICE first so a yard_invoice mapping row is written, then resync the receipt."
+                ],
+                [
+                  "Transaction locked (3176 / 3180)",
+                  "Somebody has the record or file open in QuickBooks. Close it and retry."
+                ],
+                [
+                  "Could not start QuickBooks / invalid ticket",
+                  "Make sure QuickBooks is open on the correct company file with a user logged in. Items left in processing: ask support to unstick them."
+                ],
+                [
+                  "No AR account for currency",
+                  "Enable multi-currency and create the USD/EUR/EGP receivable account in that company file."
+                ],
+                [
+                  "VAT missing in QuickBooks",
+                  "Invoice-level VAT wins over a charge marked add_vat=1. Check the invoice, not just the charge."
+                ]
+              ]
+            },
+            {
+              "heading": "QuickBooks error cheat sheet",
+              "type": "table",
+              "columns": [
+                "Code",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "3090",
+                  "Name contains an illegal character (a colon)."
+                ],
+                [
+                  "3100 / 3170",
+                  "Name already exists — recoverable, requery."
+                ],
+                [
+                  "3140",
+                  "Invalid reference — stale mapping, wrong company, or a sub-item path."
+                ],
+                [
+                  "3176 / 3180",
+                  "Locked / in use, or could not save a list element. Read the message."
+                ],
+                [
+                  "500",
+                  "A stored transaction could not be found in this file."
+                ],
+                [
+                  "0x80040408 / 0x8004040D",
+                  "Could not start QuickBooks / invalid session ticket — new session."
+                ],
+                [
+                  "0x80040423",
+                  "Unsupported QBXML version — configuration, not data."
+                ]
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "QuickBooks is where the company’s books actually live, so anything stuck in this queue is revenue or cash that has not landed. The worst failures are quiet: an invoice that arrives without its sales rep, or one record looping on an item reference and monopolising the Connector. Always check which company code you are looking at before believing a mapping. Always sync the invoice before its receipt. If the queue looks frozen, do not wait — it will not stop on its own."
+            }
+          ]
+        }
+      ]
     }
   ]
 };
@@ -5090,40 +9619,48 @@ function getSavedRoute(){
 }
 
 /* ============== RENDER: SECTIONS ============== */
+function escapeHtml(value){
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
 function renderSection(section){
   let inner = '';
 
   switch(section.type){
     case 'text':
-      inner = `<p class="text">${section.content}</p>`;
+      inner = `<p class="text">${escapeHtml(section.content)}</p>`;
       break;
 
     case 'table': {
       const cols = section.columns || [];
       const rows = section.rows || [];
       inner = `<table class="doc-table"><thead><tr>${
-        cols.map(c => `<th>${c}</th>`).join('')
+        cols.map(c => `<th>${escapeHtml(c)}</th>`).join('')
       }</tr></thead><tbody>${
-        rows.map(r => `<tr>${r.map(cell => `<td>${cell}</td>`).join('')}</tr>`).join('')
+        rows.map(r => `<tr>${r.map(cell => `<td>${escapeHtml(cell)}</td>`).join('')}</tr>`).join('')
       }</tbody></table>`;
       break;
     }
 
     case 'rules':
       inner = `<ul class="rules-list">${
-        (section.items || []).map(i => `<li>${i}</li>`).join('')
+        (section.items || []).map(i => `<li>${escapeHtml(i)}</li>`).join('')
       }</ul>`;
       break;
 
     case 'filters':
       inner = `<div class="filter-fields">${
-        (section.items || []).map(i => `<div class="filter-field"><span class="filter-field-icon">${svg('search', 12)}</span><span>${i}</span></div>`).join('')
+        (section.items || []).map(i => `<div class="filter-field"><span class="filter-field-icon">${svg('search', 12)}</span><span>${escapeHtml(i)}</span></div>`).join('')
       }</div>`;
       break;
 
     case 'steps':
       inner = `<ol class="steps-list">${
-        (section.items || []).map((i, idx) => `<li><span class="step-num">${idx + 1}</span><span>${i}</span></li>`).join('')
+        (section.items || []).map((i, idx) => `<li><span class="step-num">${idx + 1}</span><span>${escapeHtml(i)}</span></li>`).join('')
       }</ol>`;
       break;
 
@@ -5132,19 +9669,19 @@ function renderSection(section){
       const renderCard = (step, idx) => {
         const tone = step.tone || 'default';
         const actions = (step.actions || []).length
-          ? `<div class="flow-chips">${step.actions.map(a => `<span class="flow-chip">${a}</span>`).join('')}</div>`
+          ? `<div class="flow-chips">${step.actions.map(a => `<span class="flow-chip">${escapeHtml(a)}</span>`).join('')}</div>`
           : '';
         const outcomes = (step.outcomes || []).length
-          ? `<ul class="flow-outcomes">${step.outcomes.map(o => `<li>${o}</li>`).join('')}</ul>`
+          ? `<ul class="flow-outcomes">${step.outcomes.map(o => `<li>${escapeHtml(o)}</li>`).join('')}</ul>`
           : '';
 
         return `<div class="flow-card flow-card--${tone}">
           <div class="flow-card-head">
-            <span class="flow-badge">${step.badge || `STEP ${idx + 1}`}</span>
+            <span class="flow-badge">${escapeHtml(step.badge || `STEP ${idx + 1}`)}</span>
             <span class="flow-icon">${svg(step.icon || 'info', 13)}</span>
           </div>
-          <h4 class="flow-title">${step.title || ''}</h4>
-          ${step.desc ? `<p class="flow-desc">${step.desc}</p>` : ''}
+          <h4 class="flow-title">${escapeHtml(step.title || '')}</h4>
+          ${step.desc ? `<p class="flow-desc">${escapeHtml(step.desc)}</p>` : ''}
           ${actions}
           ${outcomes}
         </div>`;
@@ -5162,7 +9699,7 @@ function renderSection(section){
         }).join('');
       };
 
-      inner = `<div class="flow-diagram" role="region" aria-label="${section.heading || 'User flow'}">
+      inner = `<div class="flow-diagram" role="region" aria-label="${escapeHtml(section.heading || 'User flow')}">
         <div class="flow-line">
           ${renderLine(line1, 0)}
         </div>
@@ -5180,16 +9717,16 @@ function renderSection(section){
 
     case 'callout': {
       const style = section.style || 'info';
-      inner = `<div class="callout ${style}">${svg(CALLOUT_ICON[style] || 'info', 18)}<span>${section.content}</span></div>`;
+      inner = `<div class="callout ${style}">${svg(CALLOUT_ICON[style] || 'info', 18)}<span>${escapeHtml(section.content)}</span></div>`;
       break;
     }
 
     default:
-      inner = `<p class="text">${section.content || ''}</p>`;
+      inner = `<p class="text">${escapeHtml(section.content || '')}</p>`;
   }
 
-  return `<div class="section-card" data-heading="${(section.heading || '').toLowerCase()}" data-body="${stripHtml(inner).toLowerCase()}">
-      ${section.heading ? `<h3>${section.heading}</h3>` : ''}
+  return `<div class="section-card" data-heading="${escapeHtml((section.heading || '').toLowerCase())}" data-body="${escapeHtml(stripHtml(inner).toLowerCase())}">
+      ${section.heading ? `<h3>${escapeHtml(section.heading)}</h3>` : ''}
       ${inner}
     </div>`;
 }
