@@ -1519,6 +1519,262 @@
           ]
         },
         {
+          "id": "customers-list",
+          "title": "Customers List",
+          "icon": "users",
+          "summary": "This is the master registry of every external CUSTOMER / party the company deals with on shipments and invoices — shippers, consignees, notify parties, freight forwarders, booking parties, agreement parties, and liners.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "This is the master registry of every external CUSTOMER / party the company deals with on shipments and invoices — shippers, consignees, notify parties, freight forwarders, booking parties, agreement parties, and liners. Nothing downstream is typed as a free-text company name for those roles: Bookings, BL Drafts, Quotations, Invoices, Receipts, Credit Notes, and related screens all pick a row from this list (usually filtered by role and by the user's agency group). Getting the profile, Tax ID, roles, and credit flag right here is what keeps those documents consistent."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Master Data → Customers List"
+                ],
+                [
+                  "Route",
+                  "customers.index"
+                ],
+                [
+                  "Feature flag",
+                  "customers_list"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Customers List",
+                  "desc": "Sidebar → Master Data → Customers List (customers_list flag).",
+                  "icon": "users"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Search & Locate",
+                  "desc": "Search by name / country / Tax ID",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose an Action",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Create",
+                    "Edit",
+                    "Delete",
+                    "Export",
+                    "Import"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Enter Details & Save",
+                  "desc": "Create Primary or Validated with at least one Role → Edit profile / promote Primary to Validated / Block (Sobek only) → Merge duplicate rows into one survivor → Import from template or Export list/performance",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Validates",
+                  "tone": "system",
+                  "desc": "Required fields, guards, and business rules are enforced before save.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Ready in System",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Delete only if the row is unused on quotations, bookings, BLs, invoices, or yard invoices 2a. USER FLOW DIAGRAMS (MERMAID) Paste either block into a Mermaid …",
+                    "Downstream screens can consume the updated data"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Fields stored",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Customer Status",
+                  "Required. Primary (0) = lightweight / early"
+                ],
+                [
+                  "(customer_kind)",
+                  "capture; Validated (1) = full commercial profile. Validated non-Foreign customers must carry a Tax ID (see section 5). Status can also be promoted later via the Validate AJAX path (section 6)."
+                ],
+                [
+                  "Customer Type",
+                  "Optional; defaults to Business."
+                ],
+                [
+                  "(customer_type)",
+                  "B = Business P = Personal F = Foreign Foreign Validated customers are NOT forced to have a Tax ID on create/edit; Business/Personal Validated customers are."
+                ],
+                [
+                  "Name",
+                  "Required. Must be unique across the whole agency group (all companies that share the same agency_code), not just the logged-in company. Rejected with: \"Customer Name Already Exists\"."
+                ],
+                [
+                  "Country",
+                  "Required dropdown from the Country master. Also drives the auto-built Code (below)."
+                ],
+                [
+                  "City / Address",
+                  "Optional text. The form may show a visual \"*\" when Status is Validated, but the server does not currently enforce City/Address as required."
+                ],
+                [
+                  "Phone / Landline",
+                  "Optional contact numbers."
+                ],
+                [
+                  "Tax ID",
+                  "Stored as tax_card_no. Required when Status ="
+                ],
+                [
+                  "(tax_card_no)",
+                  "Validated AND Type is not Foreign. Must be letters/numbers only on create/edit, and unique among non-deleted customers. Separate, stricter rules apply on the Validate AJAX path (exactly 9 digits) — see section 6."
+                ],
+                [
+                  "Email",
+                  "Optional. If filled: must be a valid email and unique within the agency group. Errors: \"Please enter a valid email address.\" / \"This email address is already registered for another customer.\""
+                ],
+                [
+                  "Fax / Website",
+                  "Optional (Website field name on the form is"
+                ],
+                [
+                  "(customers_website)",
+                  "\"Customer Website Url\")."
+                ],
+                [
+                  "Sales Person",
+                  "Optional. Create form offers users of the current company only; Edit form currently loads users from ALL companies."
+                ],
+                [
+                  "Currency /",
+                  "Optional. Other Currency must differ from"
+                ],
+                [
+                  "Other Currency",
+                  "Currency or save is rejected with: \"Other Currency The Same Currency\"."
+                ],
+                [
+                  "Contact Person",
+                  "Optional single free-text contact name (separate from the Contact People table below)."
+                ],
+                [
+                  "Is Credit Customer",
+                  "Yes/No. Defaults to No. Only a user with the"
+                ],
+                [
+                  "(is_credit)",
+                  "Accountant role (or a super admin) can set this to Yes; everyone else keeps the current/default value even if they tamper with the form. This flag is load-bearing for BL print / unpaid invoice gates (section 10)."
+                ],
+                [
+                  "Certificate",
+                  "Optional PDF or image upload, stored under public/certificat/."
+                ],
+                [
+                  "Notes",
+                  "Optional free text."
+                ],
+                [
+                  "Code (system)",
+                  "Auto-built on create as: {country.prefix}{name}-{id} e.g. EGACME Shipping-12345. Renaming later does NOT regenerate the code."
+                ],
+                [
+                  "Roles",
+                  "At least one Role is required on the form."
+                ],
+                [
+                  "(customerRole[])",
+                  "Chosen from the Role Customer master (table role_cutomer), seeded as: 1 Shipper 2 Consignee 3 Notify 4 Booking Party 5 Agreement Party 6 Freight Forwarder 7 Liner A customer can hold several roles. Duplicate role rows on the same form are blocked in the browser. Roles are what Booking / BL / Quotation dropdowns filter on — a party without the matching role simply never appears as an option for that field."
+                ],
+                [
+                  "Contact People",
+                  "Optional repeatable named contacts (shared Contact People component used elsewhere too)."
+                ],
+                [
+                  "Blocked",
+                  "0/1 flag. When blocked, the name is highlighted on the list. Block/Unblock UI is shown for Sobek agency companies only (section 6)."
+                ],
+                [
+                  "Company ID",
+                  "The creating company owns the row. Sister companies in the same agency can still see and reuse it through agency-scoped pickers (forAgency)."
+                ]
+              ]
+            },
+            {
+              "heading": "Listing & Search",
+              "type": "text",
+              "content": "Paginated (30/page) table, ordered by ID (sortable asc/desc from the header). IMPORTANT: the list itself is intentionally GLOBAL — it is NOT filtered to the current company or agency. Comment in code: customers are treated as shared master data for search on this screen. Downstream pickers usually narrow to the agency again. SEARCH FILTERS Customer Search (q chips) Each selected chip is an EXACT match on the customer Name only (not email, code, phone, or substrings of other fields). The autocomplete placeholder mentions name/code/tax/email/ phone for finding candidates, but the Filter button applies exact name equality per chip. Country Exact country_id. Tax ID Partial match (LIKE) on tax_card_no. DISPLAYED COLUMNS (main ones) Name (red when blocked), Phone, Tax ID, Address, Sales person, Role(s), Credit badge, Status (Primary / Validated), Actions. Each row also carries a live invoice count and a precomputed \"cannot delete\" flag when the customer is referenced by quotations, bookings, BL drafts, invoices, or yard invoices (see section 7). The Merge modal's helper customer list ($allCustomers) is limited to the CURRENT company even though the main table is global — so merge candidates on screen can look narrower than the list you just searched."
+            },
+            {
+              "heading": "Creating & Editing",
+              "type": "text",
+              "content": "REQUIRED FIELDS Customer Status, Name, Country, and at least one Role. For Validated + non-Foreign: Tax ID is also required (\"Tax ID is required for validated customers.\"). DUPLICATE NAME CHECK Name must be unique within the agency (forAgency / same agency_code). On Edit, the check excludes the row being edited. Rejected with alert: \"Customer Name Already Exists\". TAX ID RULES (create/edit form) - Letters and numbers only (\"Tax Number must contain letters and numbers only.\") - Unique among non-deleted customers (\"This Tax Number already exists for another customer.\") - Required for Validated non-Foreign; optional for Foreign / Primary (but uniqueness still applies if a value is entered). Egypt + Business maxlength=9 is a browser hint only — the create/edit server path does NOT require exactly 9 digits (that stricter rule lives on Validate — section 6). ROLES ON EDIT Existing role rows can be updated; removed role IDs are sent in a hidden \"removed\" field and deleted; new roles are inserted. IS CREDIT Only Accountant / super admin can change it. Non-accountants see a disabled \"No\" (create) or the current value (edit) and cannot flip the flag server-side. On success the UI flashes translation keys: Create → Customer.created Update → customer.updated.success (Those lang keys may show as the raw key if language files are missing — the business outcome is still a successful save.)"
+            },
+            {
+              "heading": "Validate Primary → Validated  /  Block",
+              "type": "text",
+              "content": "VALIDATE (AJAX, agency-scoped lookup) Promotes a Primary customer to Validated (customer_kind = 1). - If the customer already has a Tax ID: status flips only; message \"Customer validated successfully\". - If no Tax ID yet: user must supply one that is exactly 9 digits and unique within the agency. Errors: \"Tax Number is required.\" / \"Tax Number must be exactly 9 digits.\" / \"This Tax Number already exists for another customer.\" Missing customer → \"Customer not found\". NOTE: This 9-digit rule is stricter than the create/edit form (alphanumeric, any length). The same customer can therefore be saved as Validated from the form with a non-9-digit Tax ID, while the Validate button would reject that same number. BLOCK / UNBLOCK (AJAX) Flips the blocked flag. Success messages: \"Customer blocked successfully\" / \"Customer unblocked successfully\" The Block button is shown on the list only for Sobek agency companies ($isSobek). The endpoint itself still only requires update access + an agency-visible customer."
+            },
+            {
+              "heading": "Deleting a Customer",
+              "type": "rules",
+              "items": [
+                "Soft-delete (SoftDeletes). Roles for that customer are removed in the same transaction.",
+                "The Delete button is HIDDEN on the list when the customer is already known to be used (cannotDelete), and destroy() re-checks the same tables before deleting.",
+                "USAGE CHECK (any hit blocks delete) quotations → customer_id, customer_consignee_id, ffw_id booking → customer_id, ffw_id, customer_consignee_id, reciver_customer, customer_notifiy_id bl_draft → customer_id, customer_consignee_id, customer_notifiy_id, additional_notify_id invoice → customer_id yard_invoices → customer_id",
+                "Rejected with: \"This customer cannot be deleted because it is used in existing records.\"",
+                "Success flashes: customer.deleted.success (translation key).",
+                "NOTE: Delete guards are narrower than Merge. Receipts, credit notes, CRM leads, local/demurrage tariffs, consignee banks, container repair, etc. are rewritten by Merge but are NOT checked before Delete — a customer used only there can still be soft-deleted from this screen, which is a known gap."
+              ]
+            },
+            {
+              "heading": "Merge Duplicates",
+              "type": "text",
+              "content": "The list \"Merge\" action opens a multi-source → one-target merge. Business purpose: one real-world party often exists as several customer rows (different companies in the agency, typos, Primary vs Validated copies). Merge keeps ONE survivor and moves every linked document onto it. RULES - Target cannot also be in the source list (\"Target customer cannot be included in the source list.\") - At least one source different from the target is required (\"Select at least one source customer different from the target.\") - Sources and target must belong to the same agency group (orphaned company_id is allowed through as a special case). WHAT MOVE HAPPENS Foreign keys are rewritten across (among others): Quotations (shipper / consignee / FFW), Bookings (shipper / forwarder / consignee / receiver / notify), BL Drafts (shipper / consignee / notify / additional notify), Invoices, Yard invoices, Receipts, Credit notes, Quotation tariffs, Agency rebate, Demurrage, Consignee banks, CRM, Container repair. Roles, contact people, credit/QB-related mappings and similar nested links are consolidated onto the target. Source rows are then soft-deleted (deleted_by set) and a merge log is stored for audit. Success message examples: All data merged from \"<name>\" (ID: x) to \"<target>\" (ID: y) successfully. Source customer was soft-deleted. — or — Merged N customers into \"<target>\" (ID: y). M records moved. All source customers were soft-deleted."
+            },
+            {
+              "heading": "Import / Export",
+              "type": "text",
+              "content": "TEMPLATE Download: documents/customer_list_template.xlsx IMPORT (Upload) Excel/CSV via CustomerImport. Duplicate Name / Tax ID checks are by CURRENT company_id only (stricter agency-wide uniqueness is NOT applied on import the same way as the create form). Status column must be Primary or Validated. Sobek agency: Tax ID required and only Validated rows allowed (\"Only Validated customers are allowed.\"). Partial failures download an error workbook with: \"Some customers have errors. Please check the downloaded error report.\" Full success: \"{N} Customers Imported Successfully.\" EXPORT — Customers List Uses the same list filters, but then restricts to the logged-in company_id. That means rows from sister companies that you can SEE on the global index may NOT appear in the Excel file. EXPORT — Customer Performance Separate performance workbook; built with agency scope (forAgency), not the same company-only cut as the list export. 10. HOW THIS FEEDS OTHER MODULES — the real business logic Almost every operational screen that needs a \"customer\" loads from this table. The usual pattern is: Customers::forAgency(current company) → whereHas roles matching the field → offer as dropdown / search Agency = every company_id that shares the same agency_code (Company::idsWithSameAgencyCode). That is why a customer created under MLHE can appear when an MLHC user opens a Booking, as long as both companies are under agency MLH. ROLE FILTERING (typical) Booking shipper → role 1 Booking / BL consignee → role 2 Booking / BL notify → role 3 (BL notify often allows 2 or 3) Booking forwarder (FFW) → role 6 Quotation customer / agreement party → roles 1 and/or 5 Quotation booking party → roles 4 and/or 6 If the Role is missing on the customer row, the party simply does not show in that field — this is the most common reason \"I created the customer but can't pick it on the booking\". BOOKING / BL DRAFT Party fields store the customers.id foreign key (plus free-text detail blocks on the BL for printed address text). Creating a customer inline from a booking modal may use a separate API path with slightly different Tax ID / kind rules — prefer the Master Data form when you need a clean Validated profile. INVOICES / RECEIPTS / CREDIT NOTES / REFUNDS Bill-to customer is customers.id. Invoice index customer filters often limit options to customers that already have invoices for the company; create/edit pickers usually use forAgency again. Bulk \"Assign Customer\" on the invoice list can re-point unpaid invoices for one BL/booking ref (export: shipper → forwarder or notify under conditions; import: new receiver with Tax ID) — that tool consumes this master; it does not create new customers. QUOTATIONS / LOCAL PORT TARIFF / AGENCY REBATE / DEMURRAGE Customer filters and tariff rows reference customers.id. Shared \"customer\" filters must only OR-match ffw_id / customer_consignee_id on tables that actually have those columns. IS_CREDIT AND BL PRINT GATES is_credit is set on this screen and read when printing Seaway / Original (and related) BLs from the Attachments menu: - A credit shipper on the BL can bypass unpaid / storage / power print gates. - Separately, unpaid related invoices billed to shipper / notify / forwarder only stop blocking when THAT billed customer is itself marked credit; unpaid invoices billed to anyone else still block. Wrong credit flags therefore either block legitimate prints or silently allow prints that should wait for payment. QUICKBOOKS This screen does not sync customers to QuickBooks. When an invoice is synced, QB customer naming/mapping is derived from the invoice's customer (Tax ID, currency, sanitized name). Merge remaps existing QB mappings onto the surviving customer. CRM / STATEMENTS / MULTI-COMPANY SYNC CRM can create Primary customers or CRM-only leads and lists agency customers. Customer Statements report against this model. Admin Sync (entity_type=customer) can copy a customer setup to another company (zeros credit/debit balances, remaps nested customer_id, copies roles and contact people) — a separate admin flow, not the list Merge button. COST (DEBIT) INVOICES Cost documents are supplier-driven. They do NOT consume the Customers List."
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Customers List is the shared party book for the whole agency: every booking party, BL party, quotation counterparty, and invoice bill-to points here. Wrong Roles hide the party from the right dropdown; missing or duplicate Tax IDs break validation, import (especially Sobek), and bulk invoice reassignment; duplicate rows without Merge scatter history across IDs; and a mistaken Is Credit flag changes whether unpaid invoices block BL release. The most common day-to-day failure mode is creating a customer without the Role the next screen filters on — the row exists on this list, but Booking / BL / Quotation simply never offer it."
+            }
+          ]
+        },
+        {
           "id": "suppliers-list",
           "title": "Suppliers List",
           "icon": "users",
@@ -5317,6 +5573,269 @@
           ]
         },
         {
+          "id": "containers-repairs",
+          "title": "Containers Repairs",
+          "icon": "box",
+          "summary": "This is the operational + commercial log of repairing a PHYSICAL container at a depot.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "This is the operational + commercial log of repairing a PHYSICAL container at a depot. Each record is one repair job for one container on one Issue Date, with damage lines picked from the Damage List catalogue, amounts / VAT / profits, line confirmation, optional photos, and optional auto movements (Sent To Repair / Received From Repair). It is NOT the Damage List (that is only the price catalogue of damage types). It is NOT Movement Control (movements are created here only when Hold Move is checked). Container List / Equipment Status / Movement exports read this screen's latest repair to decide whether a box shows as Available (AV) or Damaged (DM)."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Container Control → Containers Repairs"
+                ],
+                [
+                  "Route",
+                  "container-repair.index"
+                ],
+                [
+                  "Feature flag",
+                  "repairs"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Containers Repairs",
+                  "desc": "Sidebar → Container Control → Containers Repairs (repairs flag).",
+                  "icon": "box"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Search & Locate",
+                  "desc": "Filter the list",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose an Action",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Create",
+                    "Edit",
+                    "Delete",
+                    "Export",
+                    "Import"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Enter Details & Save",
+                  "desc": "Add Repair (or Edit) → type Container No (line- scoped lookup; set PTI if Reefer) → choose Depot and Issue Date → add damage description lines (amounts, profits, confirmation, payer) → optional Hold Move / Is Sold / h…",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Validates",
+                  "tone": "system",
+                  "desc": "Required fields, guards, and business rules are enforced before save.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Ready in System",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "from the list: view Cost/Invoice summary, manage Before/After attachments, open EIR or EOR PDF, Export / Template+Upload, or Delete.",
+                    "Downstream screens can consume the updated data"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Fields stored",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Repair No",
+                  "Display only: {company line_code}-R-{id} (e.g. MLH-R-42). Used on the list and on EIR/EOR PDFs as Job Order #."
+                ],
+                [
+                  "Container No",
+                  "Required. Typed (not a free dropdown). Must exist and be visible to this company's line (unclaimed containers still allowed; boxes claimed by another known line are hidden). Lookup messages: \"Container code is required.\" / \"Container not found.\""
+                ],
+                [
+                  "PTI",
+                  "Shown only when the container's equipment category is Reefer. Tested (1) / Non Tested (0) / blank."
+                ],
+                [
+                  "Depot",
+                  "Required. Terminals of type Depot only."
+                ],
+                [
+                  "Bl No",
+                  "Optional free text (related B/L reference)."
+                ],
+                [
+                  "Invoice No",
+                  "Optional free text (depot / supplier invoice reference — not a system Invoice document)."
+                ],
+                [
+                  "Issue Date",
+                  "Required. Unique together with Container + company: one repair per container per issue date."
+                ],
+                [
+                  "Repair Date",
+                  "Optional. Must be on or after Issue Date. Needed (together with Confirmed) before a Received From Repair movement is created."
+                ],
+                [
+                  "Currency",
+                  "Required. Form offers EGP / USD."
+                ],
+                [
+                  "Conversion /",
+                  "Optional. Form effectively offers \"Same\""
+                ],
+                [
+                  "Exchange Rate",
+                  "(value 0); rate defaults to 1. Used when displaying converted totals on EOR / export."
+                ],
+                [
+                  "Discount (header)",
+                  "Optional amount + %. Stored as container_discount_amount / container_discount_percentage. When header discount amount > 0, list PDF/export apply the header % to line totals; otherwise each line's own discount is used."
+                ],
+                [
+                  "Customer Name",
+                  "Optional agency customer."
+                ],
+                [
+                  "Contact Person",
+                  "Shown on the form and validated, but NOT saved on the repair header. EOR PDF reads contact person from the linked Customer master instead."
+                ],
+                [
+                  "Remarks",
+                  "Optional notes."
+                ],
+                [
+                  "Hold Move",
+                  "Checkbox (default off). When on, the system auto-creates repair movements (see section 7). Help text: Create \"SNTR\" movement automatically when repair is pending."
+                ],
+                [
+                  "Is Sold",
+                  "Checkbox (default off). Form field is named isSold; stored as is_sold. Overrides the list badge to Sold and hides EIR/EOR. Does NOT create or remove movements."
+                ],
+                [
+                  "Repair Description",
+                  "Required on the form. Stores the Damage List row id (looked up for display / PDF)."
+                ],
+                [
+                  "Repair Type / Size",
+                  "Taken from the Damage List (repair_type / unit_type); shown read-only."
+                ],
+                [
+                  "Fresh / Old (F/O)",
+                  "Optional Fresh or Old flag on the damage."
+                ],
+                [
+                  "Rate / Qty",
+                  "Optional. Rate x Qty can drive Depot Amount on the form."
+                ],
+                [
+                  "Depot Amount",
+                  "Depot charge for the line (stored as amount)."
+                ],
+                [
+                  "Depot Vat",
+                  "Checkbox. If on: VAT = round(Depot Amount x 14%, 2); Depot Total = Amount + VAT."
+                ],
+                [
+                  "Line Profit /",
+                  "Optional amounts and optional % helpers."
+                ],
+                [
+                  "Agency Vat",
+                  "Checkbox. If on: VAT = round( (Depot Total + Line Profit + Agency Profit) x 14%, 2)."
+                ],
+                [
+                  "Total",
+                  "Depot Total + Line Profit + Agency Profit + Agency VAT. Discount is stored separately and is NOT subtracted from this stored Total."
+                ],
+                [
+                  "Discount",
+                  "Optional amount and/or % on the line."
+                ],
+                [
+                  "Payer",
+                  "Optional. From active repair_payers list (status = 1). Header payer is not used."
+                ],
+                [
+                  "Line Confirm",
+                  "Per line: Pending (2, default) / Confirm (1) / Rejected (0)."
+                ],
+                [
+                  "- No description lines",
+                  "→ Pending (2)"
+                ],
+                [
+                  "- ANY line still Pending",
+                  "→ Pending (2)"
+                ],
+                [
+                  "- ALL lines Rejected",
+                  "→ Rejected (0)"
+                ],
+                [
+                  "of Confirm + Rejected)",
+                  "→ Confirm (1)"
+                ]
+              ]
+            },
+            {
+              "heading": "Listing, Search & Export",
+              "type": "text",
+              "content": "- This company's repairs only, 30 per page, newest first. - Filters that actually apply: Container No (multi), BL No (multi), Depot, Line Confirmation (Rejected / Confirmed / Pending / Is sold), Issue From–To, Repair From–To. - \"Created by\" appears in the filter area but is NOT applied by the filter. - Columns: #, Repair No, Container No, Eq.Type, Depot, Bl No, Invoice No, Issue Date, Repair Date, Line Confirm, Attach, EIR/EOR (hidden for Sobek companies and when Sold), Actions. - Buttons: Add Repair, Template, Upload, Export. - Export: filtered list to container_repairs.xlsx. Empty set: \"No data available for export\"."
+            },
+            {
+              "heading": "Creating, Editing & Deleting",
+              "type": "text",
+              "content": "Rule Message shown Same container + same issue date \"This container already has a (this company), create or edit repair record with the same issue date.\" Container missing \"Please select a container number.\" / \"The selected container is invalid or does not exist.\" Depot missing \"Please select a depot.\" Issue date missing / bad \"Issue date is required.\" / \"Please enter a valid issue date.\" Repair date before issue date \"Repair date must be on or after the issue date.\" Currency missing \"Please select a currency.\" Exchange rate <= 0 \"Exchange rate must be greater than 0.\" Damage type missing on a line \"Please select a damage type for each repair description.\" Bad description row on update \"Error processing repair description #N. Please check the data and try again.\" Attachment on create Multi-file: pdf/jpg/jpeg/png/ doc/docx/xls/xlsx, max 5MB each. No Before/After stage on create (treated as Before later). On edit, all description lines are deleted and re-created from the form. Edit does not use the multi-attachment create field (manage attachments from the list modal instead). Success: Create → translation key \"Container Repair.created\" (often shown as that key if the language file is empty) Update → \"Container Repair Updated Successfully\" Delete → \"Container Repair and all related data deleted successfully\" Delete confirm: \"Are you sure you want to delete this item?\" Delete also removes: auto SNTR/RCVR for this repair (if Hold Move was on), all attachment files, all description rows, then the repair itself. Container List will not delete a container that still has repairs: \"Cannot delete this container because it has related repair records\"."
+            },
+            {
+              "heading": "Import",
+              "type": "text",
+              "content": "IMPORT Template: documents/container_repairs_template.xlsx Columns used: container_no, container_type, depot, issue_date, repair_date, bl_no, invoice_no, pti, hold_move, line_confirmation, remarks. Defaults: currency USD, rate 1, conversion Same. Import can create a missing container type and container (ISO-6346 check digit validated). It does NOT create description lines. Hold Move on an imported row still triggers the same movement rules as create. Typical row errors: \"Row N: Container No is required\" \"Row N: Invalid container number format or check digit for 'X'\" \"Row N: Container Type is required\" / \"Depot is required\" / \"Depot 'X' not found\" \"Row N: Invalid or missing issue date for container X\" \"Row N: Container X already has a repair record with issue date Y\" Success: \"Container Repair Imported Successfully. Imported N records.\" Partial: \"Import completed with errors: …\" ATTACHMENTS (list modal) Before Repair (stage 0, default) and After Repair (stage 1). Upload / move between stages / delete. Same file types, max 5MB. Messages: \"Attachment uploaded successfully\" / \"Attachment moved successfully\" / \"Attachment deleted successfully\". PDFs (hidden when Sold; hidden entirely for Sobek) EIR — Equipment Interchange Receipt: job #, issue date, BL, depot, container specs, damage lines (description / F/O / size). NO money, NO invoice, NO customer block. EOR — Estimate of Repair: adds repair date, invoice no, customer / contact (from Customer master), payer, repair type, qty, amounts, discount / total / currency. Optional USD→EGP conversion when conversion = 1."
+            },
+            {
+              "heading": "How This Feeds Other Modules",
+              "type": "text",
+              "content": "DAMAGE LIST Description dropdown = damages for the chosen depot PLUS General damages (depo_id = \"all\"). Rates/types come from that catalogue. MOVEMENT CONTROL (Hold Move only) Activities matched by name: \"Sent To Repair\" (SNTR) and \"Received From Repair\" (RCVR). Remarks: Auto-generated movement for (Repair No: R-{id}) Movement date = Issue Date or Repair Date at 12:00:00 Terminal = the repair's Depot; container status Empty. After create/update/delete → container stock status recalculated. Priority rules: 1. Hold Move OFF → no auto movements (and turning it off removes this repair's SNTR + RCVR). 2. Hold Move ON → always create/update SNTR on Issue Date. 3. RCVR only when header Line Confirmation = Confirm (1) AND Repair Date is filled; otherwise any RCVR for this repair is removed. 4. Delete with Hold Move ON → remove this repair's SNTR (and RCVR if a repair date existed). These SNTR/RCVR rows are protected from normal edit/delete in Movement Control — they belong to this workflow. CONTAINER LIST / EQUIPMENT STATUS / MOVEMENT EXPORTS (AV vs DM) Latest repair for the container (newest created): - No repair, OR repair is Confirm AND has Repair Date → AV - Otherwise → DM Movement display also forces DM when the latest move is SNTR; otherwise it follows the repair flag above. COST / INVOICE MODULES Repairs do NOT create Invoice or Cost documents. The descriptions modal \"Cost Breakdown\" / \"Invoice Summary\" is on-screen only (sums non-rejected lines; VAT line is Agency VAT at 14%). CUSTOMERS Optional customer_id on the repair; customer merge keeps the link. Contact person on EOR comes from the Customer master."
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "A wrong Hold Move or missing Repair Date leaves a box stuck as Damaged (DM) on Container List / Equipment Status, or creates a Sent To Repair movement with no Received From Repair when the job is finished. A Pending description line keeps the whole job Pending, so RCVR never fires even if a repair date is filled. Is Sold hides EIR/EOR and overrides the confirmation badge without clearing movements — so marking Sold does not by itself put the box back to Available. The most common operational mistake is Confirming lines without setting Repair Date (or turning Hold Move on too late), which leaves SNTR/DM in place after the physical repair is done."
+            }
+          ]
+        },
+        {
           "id": "movement-activities",
           "title": "Movement Activity Codes",
           "icon": "activity",
@@ -6612,13 +7131,1175 @@
       "id": "quotations",
       "title": "Quotations",
       "icon": "clipboard",
-      "modules": []
+      "modules": [
+        {
+          "id": "import-quotations",
+          "title": "Import Quotations",
+          "icon": "clipboard",
+          "summary": "This screen is used to create an Import Quotation for a customer.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "This screen is used to create an Import Quotation for a customer. The user selects the validity period, route, ports, agreement party, tariff, freight term, and equipment. The system filters route-related values and automatically retrieves the applicable Standard Charges, including THC and BL Fees where configured."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Quotations → Import Quotations → Add Quotation"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Import Quotations",
+                  "desc": "Sidebar → Quotations → Import Quotations → Add Quotation.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Search & Locate",
+                  "desc": "Filter or search the list to find the right record.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose an Action",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Create",
+                    "Edit",
+                    "Import",
+                    "Save"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Enter Details & Save",
+                  "desc": "1. Open Quotations",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Validates",
+                  "tone": "system",
+                  "desc": "Required fields, guards, and business rules are enforced before save.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Ready in System",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Import Quotations. 2. Click \"Add Quotation\". 3. The system generates a unique Quotation Reference Number automatically. The user cannot edit it. 4. Select Sa…",
+                    "Downstream screens can consume the updated data"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Fields stored",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Quotation Reference No.",
+                  "Generated automatically when the quotation is created. It is unique and read-only for the user."
+                ],
+                [
+                  "Sales Person",
+                  "Required. The user responsible for the quotation."
+                ],
+                [
+                  "SRR",
+                  "Optional. The quotation can be created when SRR is empty."
+                ],
+                [
+                  "Validity From / To",
+                  "Required. Validity To cannot be earlier than Validity From."
+                ],
+                [
+                  "Service Route",
+                  "Required. Determines the available POL, Via Port, and route-related POD values."
+                ],
+                [
+                  "POL",
+                  "Required. Must belong to the selected Service Route."
+                ],
+                [
+                  "Via Port",
+                  "Optional. Must belong to the selected Service Route and POL."
+                ],
+                [
+                  "POD",
+                  "Required. If Via Port is empty, it must belong to the Service Route. If Via Port is selected, any active port is allowed."
+                ],
+                [
+                  "Agreement Party / Payer",
+                  "Required. The party responsible for the quotation agreement and charges."
+                ],
+                [
+                  "Booking Party",
+                  "Optional."
+                ],
+                [
+                  "Port Tariff",
+                  "Required. Must be related to the selected POL."
+                ],
+                [
+                  "Ocean Freight Term",
+                  "Required. Prepaid or Collect."
+                ],
+                [
+                  "Vessel Operator",
+                  "Optional."
+                ],
+                [
+                  "HAZ / Reefer / OOG Details,",
+                  "Optional shipment information."
+                ],
+                [
+                  "Re-Import Shipment",
+                  "Yes / No. Default is No."
+                ],
+                [
+                  "Quotation Rates",
+                  "Request Type, Equipment Type, Qty, Currency, Cost, Ocean Freight, War Risk Cost, War Risk Selling, Free Time, and Special Equipment (SOC, COC, IMO, RF, OOG, NOR)."
+                ],
+                [
+                  "Standard Charges",
+                  "Retrieved automatically from the selected Port Tariff for each Equipment Type."
+                ]
+              ]
+            },
+            {
+              "heading": "Route, Port, and Tariff Filtering",
+              "type": "text",
+              "content": "- POL displays only ports assigned to the selected Service Route. - Via Port is optional. - Via Port displays only ports related to the selected Service Route and selected POL. - If Via Port is empty, POD displays only ports related to the selected Service Route. - If Via Port is selected, POD is not restricted by the Service Route and displays all active ports. - Port Tariff displays only tariffs related to the selected POL. - The user cannot select a POL, Via Port, or Port Tariff outside the available filtered values."
+            },
+            {
+              "heading": "Quotation Rates",
+              "type": "callout",
+              "style": "warning",
+              "content": "- The user clicks the \"+\" button to add another rate row. - The user can add different Equipment Types in separate rows. - The same Equipment Type cannot be added more than once in the same quotation. - Ocean Freight can be entered for each Equipment Type. - War Risk Cost and War Risk Selling can be entered when applicable. - The freight term in the quotation header determines whether Ocean Freight is Prepaid or Collect."
+            },
+            {
+              "heading": "Standard Charges and Re",
+              "type": "rules",
+              "items": [
+                "Rule Expected System Behaviour Equipment Type selected The system retrieves the applicable Standard Charges from the selected Port Tariff for that equipment type.",
+                "THC configured in Port Tariff The system applies normal THC when Re-Import Shipment is No.",
+                "BL Fees configured in tariff The system retrieves the applicable BL Fees automatically.",
+                "Re-Import Shipment is Yes The system replaces normal THC with the applicable Re-Import THC.",
+                "Re-Import changes from Yes to No The system replaces Re-Import THC with normal THC.",
+                "Equipment or charge changes The quotation values are recalculated immediately."
+              ]
+            },
+            {
+              "heading": "Validations",
+              "type": "rules",
+              "items": [
+                "Rule Message shown Validity To earlier than From \"Validity To cannot be earlier than Validity From.\"",
+                "Mandatory header field missing Standard required-field validation.",
+                "SRR is empty No validation message. SRR is optional.",
+                "Duplicate Equipment Type \"This equipment type has already been added to the quotation.\"",
+                "Invalid route-related selection The system does not allow a value outside the available filtered list."
+              ]
+            },
+            {
+              "heading": "Saving the Quotation",
+              "type": "rules",
+              "items": [
+                "The quotation can be created only when all mandatory information is completed and all validations pass.",
+                "When the user clicks \"Create\", the system stores the generated Quotation Reference Number, quotation header, route and port details, parties, Port Tariff, freight term, quotation-rate rows, retrieved Standard Charges, Re-Import selection, and calculated quotation values."
+              ]
+            },
+            {
+              "heading": "How This Feeds Other Modules",
+              "type": "rules",
+              "items": [
+                "BOOKING A confirmed quotation can be used as the commercial reference for booking route, ports, equipment type, freight term, and rates.",
+                "OPERATIONS Equipment, special-equipment requirements, ports, and commodity information can be used as an operational reference.",
+                "COSTING AND INVOICING Ocean Freight, THC, BL Fees, War Risk, and other quotation charges can be used as a selling reference."
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "This screen ensures that each quotation uses valid route and port combinations, the correct POL tariff, and correct charges for each Equipment Type. Automatic Standard Charges reduce manual entry and ensure that Re-Import THC is used whenever the shipment is marked as Re-Import."
+            }
+          ]
+        },
+        {
+          "id": "export-quotations",
+          "title": "Export Quotations",
+          "icon": "clipboard",
+          "summary": "This screen is used to create an Export Quotation for a customer.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "This screen is used to create an Export Quotation for a customer. The user selects the validity period, route, ports, agreement party, tariff, freight term, and equipment. The system filters route-related values and automatically retrieves the applicable Standard Charges, including THC and BL Fees where configured."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Quotations → Export Quotations → Add Quotation"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Export Quotations",
+                  "desc": "Sidebar → Quotations → Export Quotations → Add Quotation.",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Search & Locate",
+                  "desc": "Filter or search the list to find the right record.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose an Action",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Create",
+                    "Edit",
+                    "Export",
+                    "Save"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Enter Details & Save",
+                  "desc": "1. Open Quotations",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Validates",
+                  "tone": "system",
+                  "desc": "Required fields, guards, and business rules are enforced before save.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Ready in System",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Export Quotations. 2. Click \"Add Quotation\". 3. The system generates a unique Quotation Reference Number automatically. The user cannot edit it. 4. Select Sa…",
+                    "Downstream screens can consume the updated data"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Fields stored",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Quotation Reference No.",
+                  "Generated automatically when the quotation is created. It is unique and read-only for the user."
+                ],
+                [
+                  "Sales Person",
+                  "Required. The user responsible for the quotation."
+                ],
+                [
+                  "SRR",
+                  "Optional. The quotation can be created when SRR is empty."
+                ],
+                [
+                  "Validity From / To",
+                  "Required. Validity To cannot be earlier than Validity From."
+                ],
+                [
+                  "Service Route",
+                  "Required. Determines the available POL, Via Port, and route-related POD values."
+                ],
+                [
+                  "POL",
+                  "Required. Must belong to the selected Service Route."
+                ],
+                [
+                  "Via Port",
+                  "Optional. Must belong to the selected Service Route and POL."
+                ],
+                [
+                  "POD",
+                  "Required. If Via Port is empty, it must belong to the Service Route. If Via Port is selected, any active port is allowed."
+                ],
+                [
+                  "Agreement Party / Payer",
+                  "Required. The party responsible for the quotation agreement and charges."
+                ],
+                [
+                  "Booking Party",
+                  "Optional."
+                ],
+                [
+                  "Port Tariff",
+                  "Required. Must be related to the selected POL."
+                ],
+                [
+                  "Ocean Freight Term",
+                  "Required. Prepaid or Collect."
+                ],
+                [
+                  "Vessel Operator",
+                  "Optional."
+                ],
+                [
+                  "HAZ / Reefer / OOG Details,",
+                  "Optional shipment information."
+                ],
+                [
+                  "Re-Export Shipment",
+                  "Yes / No. Default is No."
+                ],
+                [
+                  "Quotation Rates",
+                  "Request Type, Equipment Type, Qty, Currency, Cost, Ocean Freight, War Risk Cost, War Risk Selling, Free Time, and Special Equipment (SOC, COC, IMO, RF, OOG, NOR)."
+                ],
+                [
+                  "Standard Charges",
+                  "Retrieved automatically from the selected Port Tariff for each Equipment Type."
+                ]
+              ]
+            },
+            {
+              "heading": "Route, Port, and Tariff Filtering",
+              "type": "text",
+              "content": "- POL displays only ports assigned to the selected Service Route. - Via Port is optional. - Via Port displays only ports related to the selected Service Route and selected POL. - If Via Port is empty, POD displays only ports related to the selected Service Route. - If Via Port is selected, POD is not restricted by the Service Route and displays all active ports. - Port Tariff displays only tariffs related to the selected POL. - The user cannot select a POL, Via Port, or Port Tariff outside the available filtered values."
+            },
+            {
+              "heading": "Quotation Rates",
+              "type": "callout",
+              "style": "warning",
+              "content": "- The user clicks the \"+\" button to add another rate row. - The user can add different Equipment Types in separate rows. - The same Equipment Type cannot be added more than once in the same quotation. - Ocean Freight can be entered for each Equipment Type. - War Risk Cost and War Risk Selling can be entered when applicable. - The freight term in the quotation header determines whether Ocean Freight is Prepaid or Collect."
+            },
+            {
+              "heading": "Standard Charges and Re",
+              "type": "rules",
+              "items": [
+                "Rule Expected System Behaviour Equipment Type selected The system retrieves the applicable Standard Charges from the selected Port Tariff for that equipment type.",
+                "THC configured in Port Tariff The system applies normal THC when Re-Export Shipment is No.",
+                "BL Fees configured in tariff The system retrieves the applicable BL Fees automatically.",
+                "Re-Export Shipment is Yes The system replaces normal THC with the applicable Re-Export THC.",
+                "Re-Export changes from Yes to No The system replaces Re-Export THC with normal THC.",
+                "Equipment or charge changes The quotation values are recalculated immediately."
+              ]
+            },
+            {
+              "heading": "Validations",
+              "type": "rules",
+              "items": [
+                "Rule Message shown Validity To earlier than From \"Validity To cannot be earlier than Validity From.\"",
+                "Mandatory header field missing Standard required-field validation.",
+                "SRR is empty No validation message. SRR is optional.",
+                "Duplicate Equipment Type \"This equipment type has already been added to the quotation.\"",
+                "Invalid route-related selection The system does not allow a value outside the available filtered list."
+              ]
+            },
+            {
+              "heading": "Saving the Quotation",
+              "type": "rules",
+              "items": [
+                "The quotation can be created only when all mandatory information is completed and all validations pass.",
+                "When the user clicks \"Create\", the system stores the generated Quotation Reference Number, quotation header, route and port details, parties, Port Tariff, freight term, quotation-rate rows, retrieved Standard Charges, Re-Export selection, and calculated quotation values."
+              ]
+            },
+            {
+              "heading": "How This Feeds Other Modules",
+              "type": "rules",
+              "items": [
+                "BOOKING A confirmed quotation can be used as the commercial reference for booking route, ports, equipment type, freight term, and rates.",
+                "OPERATIONS Equipment, special-equipment requirements, ports, and commodity information can be used as an operational reference.",
+                "COSTING AND INVOICING Ocean Freight, THC, BL Fees, War Risk, and other quotation charges can be used as a selling reference."
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "This screen ensures that each quotation uses valid route and port combinations, the correct POL tariff, and correct charges for each Equipment Type. Automatic Standard Charges reduce manual entry and ensure that Re-Export THC is used whenever the shipment is marked as Re-export."
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "documentation",
       "title": "Documentation",
       "icon": "file",
-      "modules": []
+      "modules": [
+        {
+          "id": "import-bl",
+          "title": "Import BL",
+          "icon": "file-text",
+          "summary": "This is the working list of every Import Bill of Lading (Import BL) for the logged-in company.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "This is the working list of every Import Bill of Lading (Import BL) for the logged-in company. An Import BL is the operational record that cargo has been booked to arrive: shipper, consignee, voyage, ports, containers, and ACI details. Nothing later in the system can invoice, discharge, or release cargo without this row. The same list is also the place operators upload Excel files (especially EDI Manifest) to create many BLs at once, and the place they open documents (DO, Release Order, SOC Letter, Arrival Notification, etc.)."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Documentation → Import BL List"
+                ],
+                [
+                  "Route",
+                  "booking.index"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Import BL",
+                  "desc": "Sidebar → Documentation → Import BL List.",
+                  "icon": "file-text"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Search & Locate",
+                  "desc": "Filter by BL / voyage / shipper / consignee / ETA / DO Printed",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose an Action",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Create",
+                    "Edit",
+                    "Delete",
+                    "Export",
+                    "Import"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Enter Details & Save",
+                  "desc": "Read TEU totals → Add New from an Import Quotation (or No Quotation) OR Upload Excel (EDI Manifest is the full create path) → Confirm the BL → After discharge, print documents from the row → Invoice / Movements / Dete…",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Validates",
+                  "tone": "system",
+                  "desc": "Required fields, guards, and business rules are enforced before save.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Ready in System",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Delete only if unused 3. WHAT INFORMATION IS STORED (field-by-field) Field Meaning BL ref no (ref_no) The Bill of Lading number. Unique per company. Shown as…",
+                    "Downstream screens can consume the updated data"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Listing & Search",
+              "type": "text",
+              "content": "Columns, left to right: (select box), #, Quotation No, BL Ref No, Shipper, Consignee, Vessel, Voyage, Leg, ETA, Main Line, Vessel Operator, POL, POD, Transhipment Port, Equipment Type, Qty, BL Creation, F / E, ACID Check, Status, D.O, Attach, Actions ETA prints as dd-mm-yyyy, or \"-\" when the voyage has no ETA row for that port. BL Creation prints the full date and time. \"Attach\" is the DOCUMENTS menu (the bars icon) — not the file attachments. Attachments are a separate red PDF button in the Actions column, shown only when the BL has attachments; it opens all of them merged into one PDF. Equipment Type is a link; it opens an Equipment Summary popup with the per-type counts, total containers and total TEUs for that BL. Selecting rows: Each row has a tick box, and the header tick box selects the page. Selecting the header box also offers \"select every BL matching the current filters, across all pages\". While anything is selected, the ACTIONS column header swaps from the word \"Actions\" to two buttons: Check ACI for Selected (only when the ACI flag is on) Delete Selected (see section 6) Selections survive paging (kept per session) until cleared. Header widget (all filtered rows, not just the current page): Total Bookings / Total Containers / Total TEUs Cancelled BLs are left out of those totals. The same physical container counted on more than one BL is counted once. Filters (can be combined): Quotation No One quotation, or the special \"No Quotation\" option (quotation_id = 0). Import BL REF NO BL number. BL Status Confirm / Draft / Cancelled. Created by User who created the BL (booked_by). Shipper Import shippers. Freight Forwarder Consignee DO Printed Yes = at least one row in do_prints for this BL. No = never recorded as printed. This is the do_prints table, not the print_count number. See 02. Direct / Transhipment shipment_type_filter. POL / POD Vessel / Voyage Multi-select of voyage IDs. Matches voyage_id OR voyage_id_second. Cross switch Next to Vessel / Voyage. Only becomes active when a voyage is also selected. Then the list includes sibling companies that share the same company CODE as the logged-in company, matching the same voyage_no + serial. The voyage dropdown itself still shows only THIS company's voyages. Type IMO or OOG (cargo_type) — BLs that have at least one such container line. Container No ETA From / ETA To"
+            },
+            {
+              "heading": "Creating & Editing",
+              "type": "text",
+              "content": "Manual create rules (Import): Discharge port is required and must differ from load port. Error: \"Load Port The Same Discharge Port\" UCR, if typed, must be exactly 19 digits. Error: \"UCR must be exactly 19 digits.\" Container numbers on the same BL must be unique. Error: \"Container Numbers must be unique\" If a BL ref is typed, it must be unique in the company. Error: \"This Booking No Already Exists\" For Sobek only: every container number must already exist in the line-visible container master. Error: \"Container No: {value} is not Found.\" Missing containers are created for non-Sobek Import (number + type from the form). do_hold can be ticked on create/edit. Edit uses booking.edit when a quotation exists, otherwise booking.noquotation.edit. A short Edit Summary path exists for a limited field set. Five Excel uploads sit on this same screen (Upload dropdown). Templates are in the Templates dropdown. BL Header Creates BL header rows only (BookingImport). Template: documents/summary_booking_template.xlsx Route: importBooking Duplicate ref in the same company is rejected. BL Details Adds container lines onto an EXISTING BL (BookingDetailsImport). Template: documents/booking_import_template.xlsx Route: importBookingDetails Looks up the BL by booking_no in this company. Discharge List Container + booking import (ContainerBookingImport). Template: documents/discharge_list_template.xls Route: booking.container-import Manifest List Older / shorter ship-manifest upload (ManifestImport). Template: documents/manifest_import_template.xlsx Route: importShipManifest Creates Import BLs from a simpler Excel than EDI. EDI Manifest Full create path: vessel header + one row per container, creates Confirm Import BLs, customers, containers, and container lines in one file. Template: documents/edi_manifest_import_template.xlsx Route: invoice.importExtendedManifest Importer: ManifestExtendedImport See 03-edi-manifest-import.txt for every column, every reject reason, and transhipment/transit mapping. All uploads accept .xls / .xlsx (EDI also accepts .csv on the file picker). Failed rows produce a downloadable error Excel rather than a silent skip. Other list actions (not create): Check ACI for selected rows (only if the ACI flag is on). Delete Selected (section 6). Edit — the pencil on every row, opens in a new tab. Merge and Clone: the buttons are currently commented out of the list, so they cannot be reached from this screen even though the merge popup, the merge route and the \"Merged BLs\" / \"Merged\" statuses all still exist. Rows that were merged in the past still display those statuses. Merge sets the parent to status 4 and each child to status 5. Part Load / Rollover / Transhipment assign / WTOR — handled by this controller but not by a button on this list. 5b. EXPORTS AND BULK PRINTS FROM THE TOOLBAR Export dropdown behaviour is not uniform: BL List / Discharge List / Transhipment List / DO Prints / Seals List Submit the CURRENT filter form. No row selection needed; what you filtered is what you get. Manifest List Works on SELECTED rows only (or on select-all). With nothing selected it refuses: \"No Selection - Please select at least one BL draft to export.\" Print dropdown (Print Manifests / DGD Report / Shipment Statement) also uses the current filters, and explicitly sends cross=0 when the Cross switch is off."
+            },
+            {
+              "heading": "Deleting",
+              "type": "text",
+              "content": "There is NO delete button on an individual row of this list. The only way to delete from this screen is: tick one or more rows (or select all pages), then press the trash button that appears in the Actions column header. Confirmation text: \"{n} selected booking(s) will be permanently deleted! This cannot be undone.\" Select-all mode instead warns: \"ALL {n} booking(s) matching the current filters (all pages) will be permanently deleted! This cannot be undone.\" Bulk delete skips (does not delete) a BL when: 1. It has any invoice — either directly on booking_ref, or through an Export BL draft linked to it. 2. It has any movement record. Skipped BLs are named back to the user: \"{n} booking(s) deleted successfully. The following {n} booking(s) could not be deleted because they have invoices or related movements: {refs}\" If nothing could be deleted: \"The following booking(s) cannot be deleted because they have invoices or related movements: {refs}\" If nothing matched at all: \"No bookings were found or accessible.\" Deleted BLs lose their container IMO sub-lines and container lines first, then the BL row itself. The whole batch runs in one transaction. The single-booking delete route (used from other screens) has a different, stricter set of guards: movements → \"Cannot delete this booking. It has related movement records.\" has_bl → \"Can't delete this booking. It has BL.\" invoices → \"Can't delete this booking. It has related invoices.\""
+            },
+            {
+              "heading": "How This Feeds Other Modules",
+              "type": "text",
+              "content": "Priority of consumers (what looks this list up): 1. Movements Discharge / gate / WTOR are posted against this BL's containers and voyage. \"All containers discharged\" on the list is true only when every assigned container has a discharge movement (DCHF / DCHE / DITR / DCHT) on this BL or on the BL's voyage / second voyage. Sobek is treated as already discharged *. A BL with no assigned container_ids is also treated as discharged. This gate feeds DO, Release Order, and Import invoice confirm. 2. Invoices / Debits / Credit notes Created against booking_ref = this BL. Confirmed unpaid invoices (and, on the list, unpaid debits that are not fully credited) block Release Order for non-credit customers. Any invoice at all blocks delete. 3. Detention / Storage / Power Use this BL's containers, voyage ETD/ETA, and free_time from the container line (EDI \"NO. FREE DEMURRAGE DAYS\"). 4. CUSCAR / Nafeza / ACI ACID, importer/exportal tax, consignee code, and ports on this BL are what customs messages send. Failed ACI shows on the list; it does not by itself hide documents. 5. Arrival Notification PDF always from the documents menu (when the menu is unlocked). and you can send it by Email. 6. Release Order / Gate letters Party = receiver if named, else consignee. Credit flag on that party skips payment/free-day checks. 7. DO Print Counter / do_prints See 02-do-print-counter.txt. The DO Printed filter on THIS screen reads do_prints. 8. DOCUMENTS OPENED FROM THIS LIST (where, not the DO counter) Two columns sit after Status: D.O Delivery Order only. Full rules in 02-do-print-counter.txt. Attach (documents menu) Shown only when status is Confirm (1) or Merged-parent (4). If do_hold is on, the whole menu is replaced by a red lock (\"DO On Hold - documents cannot be printed\"). When the menu is open, items are: Cargo Manifest Always (for an unlocked Confirm/Merged-parent row). PDF: booking.showImportManifestPDF Cargo Manifest Excel Always. Route: manifest.excel Gate In / Civil Defense / VGM Letter Hidden when the BL is a Transhipment-in-Egypt booking UNLESS at least one container line is IMO. Gate In opens a terminal/depot picker first. SOC Letter Same transhipment/IMO hide rule as Gate In, AND at least one container must be SOC (line soc = 1 or the container master SOC_COC = SOC). Release Order Same transhipment/IMO hide rule as Gate In. Stops: Stop 1: not all containers discharged \"Not all containers have been Discharged\" Stop 2: party is a credit customer → allowed Stop 3: unpaid invoice/debit (not void, not marked paid, not fully credited) \"Has unpaid invoices — please settle outstanding charges first\" Stop 4: no confirmed invoice yet AND free days have expired (voyage discharge ETD + 4 days to end of that day; if no ETD, free days are treated as still open) \"Free storage period has expired — please settle charges first\" Otherwise a trucker modal opens, then Containerized or Non-Containerized Release Letter. Arrival Notification (PDF)/Email Always on an unlocked Confirm/Merged-parent row. Edit Report Only if an edit-track row exists for the BL. Draft, Cancelled, and Merged-child rows do not get the D.O icon or the documents menu."
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Every Import invoice, discharge movement, Release Order, and customs ACID check points at a row on this list. The most common operational mistake is treating EDI Manifest as a \"just upload\" step: a wrong voyage, a POD/FPOD pair that flips the BL into transhipment/transit, or a Company Code that is not the logged-in company, drops that BL from the file (error Excel) or creates it on the wrong voyage. The second most common mistake is expecting DO / Release Order to print before every container has a discharge movement, or while DO Hold is ticked on the edit form."
+            }
+          ]
+        },
+        {
+          "id": "do-print-counter",
+          "title": "D.O Print Counter",
+          "icon": "hash",
+          "summary": "A Delivery Order (DO) tells the terminal the cargo may be delivered.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "A Delivery Order (DO) tells the terminal the cargo may be delivered. This screen sets how many times a BL may be printed and lets you clear a print so it can be printed again. Two counters exist and they are not the same thing: Print count / Max print Numbers on the BL. The D.O cell shows them as \"print count / max print\" and goes grey when the count has reached the max. Printed / Unprinted Whether a real (non-draft) DO has been printed. This is what the Import list filter \"DO Printed\" uses, and what turns the MLHE / MLHC / NMD menu item from Print into Printed. Resetting \"Printed\" does not zero the print count, and editing the print count does not clear \"Printed\". A BL can show Printed while its count is still 0, or the reverse."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Documentation → D.O Print Counter"
+                ],
+                [
+                  "Route",
+                  "booking.doPrintCounter"
+                ],
+                [
+                  "Feature flag",
+                  "do_print_counter"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open D.O Print Counter",
+                  "desc": "Sidebar → Documentation → D.O Print Counter (do_print_counter flag).",
+                  "icon": "hash"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Search & Locate",
+                  "desc": "On Import BL List, BL must be Confirm (or a merged parent) and every container discharged",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose an Action",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Import",
+                    "Print",
+                    "Reset",
+                    "Search"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Enter Details & Save",
+                  "desc": "DO Hold off and under the print limit → D.O → Draft does not count, Print does → to reprint, open D.O Print Counter, search the BL, reset Printed and/or raise the max",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Validates",
+                  "tone": "system",
+                  "desc": "Required fields, guards, and business rules are enforced before save.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Ready in System",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "other letters open from Attach on the same row",
+                    "Downstream screens can consume the updated data"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Fields stored",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Print count",
+                  "How many times the numeric counter went up. Default 0. Edited on this screen."
+                ],
+                [
+                  "Max print",
+                  "The cap for that BL. The global \"Max Print Number\" writes this onto many BLs at once (section 4)."
+                ],
+                [
+                  "DO Hold",
+                  "Checkbox on the Import BL create/edit form. When on, the D.O column AND the whole Attach menu are locked."
+                ],
+                [
+                  "Printed record",
+                  "Who printed a real DO, and when. The time printed ON the PDF stays the time of the first real print. Draft does not create one of these."
+                ]
+              ]
+            },
+            {
+              "heading": "The Counter Screen",
+              "type": "text",
+              "content": "The screen is empty until you search. Search \"Search by Booking Ref No\" Partial match on the BL number. Each hit shows the print count, the max, and a Printed or Unprinted badge. Print Counter / Max Print, then Save Both numbers are saved exactly as typed. A BL's max may be higher or lower than the global number. Printed badge Click it to reset. Every print record for that BL is deleted. \"Reset {ref}: removed {n} print record(s). You can now reprint the DO.\" The print count is NOT cleared. If the count is already at the max, zero it (or raise the max) as well, or Print stays blocked. Unprinted Nothing to reset. Max Print Number (top left) → Update Required whole number, 0 or more. Writes that max onto every BL whose max is empty or lower than or equal to the new number. BLs that already have a HIGHER max are left alone. \"Global max print count updated successfully. Updated {n} booking(s) to {value}.\" If any were kept: \"{n} booking(s) with higher custom values were preserved.\" There is no separate delete. Reset is the only way to remove print records. The BL itself is not deleted. What a print writes: MLHE / MLHC / NMD: a real Print adds a Printed record and does not increase the print count. Draft writes nothing. The stops in section 5 are enforced on the list. The PDF address itself does not re-check them, so opening a saved link still produces the file and, for a real DO, still counts as a print."
+            },
+            {
+              "heading": "What Stops Each Document",
+              "type": "text",
+              "content": "First failing stop wins. These are on Import BL List. SHARED — D.O column and the Attach menu 1. Status is not Confirm and not \"Confirm + Merged BLs\". Draft, Cancelled, and a BL that was merged into another one: no D.O icon and no Attach menu. 2. DO Hold is ticked on the BL. D.O shows a lock. Attach is replaced by a red lock: \"DO On Hold - documents cannot be printed\". \"Discharged\" means every container on the BL has a discharge movement (DCHF, DCHE, DITR or DCHT), either on this BL or on its voyage / second voyage. A BL with no containers assigned counts as discharged. Sobek is always treated as discharged. TRANSHIPMENT MENU When the BL tranships IN Egypt (Egypt is the transhipment port, not the final POD), Gate In, Civil Defense, VGM Letter, SOC Letter and Release Order all disappear together — unless at least one container is IMO. The menu then only has Cargo Manifest, Cargo Manifest Excel, Arrival Notification, and Edit Report if the BL was edited. That is normal. DELIVERY ORDER Where: column \"D.O\". The counter screen does not print a PDF; it only changes the limits. Only company codes MLHE, MLHC and NMD can print a DO from this list. Any other company code leaves the icon disabled. For those three companies, in order: DO Hold → red lock, \"DO On Hold\" Not discharged → blue anchor, \"Awaiting Discharge\" Otherwise a menu: Draft does not count as a print. Watermarked, labelled DRAFT.{id} Print real Original + Copy. Confirm popup: \"This is a one-time action. Once printed, the Print option will be permanently disabled for this BL.\" Printed Print is disabled, \"Already printed\" Print is also disabled when the print count has reached the max, even if hold is off and the cargo is discharged: \"Cannot print DO - check hold status, invoices and payment\" The cell is grey and shows count/max underneath. Voyage printed on the DO: second voyage when the BL is flagged transhipment, otherwise the first voyage, at the discharge port. CARGO MANIFEST (PDF and Excel) Where: Attach menu. Stops: the two shared stops only. The PDF leaves out Summary Booking rows. Containers that do not fit the first page continue on extra sheets. Print Manifests (top Print dropdown) is the same document for many BLs: it uses the current filters, including Cross, and does not check hold, discharge or the print counter per row. GATE IN Where: Attach menu → Gate In popup. Terminal/Depot is required (Egypt terminals, shown as \"Port - CODE\"). No terminal, no PDF. Stops: shared stops, plus the transhipment menu rule. CIVIL DEFENSE Where: Attach menu. No popup. Stops: shared stops, plus the transhipment menu rule. VGM LETTER (خطاب وزن حاوية) Where: Attach menu → popup. Terminal/Depot is required. Trucker is optional. \"الخط الملاحي (Shipping line)\" appears only for agency MLH and NMD. Stops: shared stops, plus the transhipment menu rule. A container numbered \"000\" is left off the letter. SOC LETTER (خطاب SOC) Where: Attach menu → popup. Hidden completely when no container is SOC (the container line is marked SOC, or the container master says SOC). Addressee (Terminal/Depot) is optional. Leave it on \"-- Use booking terminal --\" to use the BL's terminal. Stops: shared stops, plus the transhipment menu rule. The letter only lists SOC containers, and only those with a real container number (not blank, not \"000\"). If the SOC mark is missing on both the line and the container, the letter opens with an empty table. RELEASE ORDER (Release Letter) Where: Attach menu → \"Release Letter - Select Trucker\". Two buttons: Containerized Release Letter, and Non-Containerized Release Letter. Trucker is optional. Stops, in order: Shared stops (status, DO Hold) Transhipment-in-Egypt menu rule (hidden, unless IMO) Not discharged \"Not all containers have been Discharged\" The receiver (or the consignee, if no receiver is named) is a credit customer → allowed, money checks skipped An invoice or a debit is still unpaid (not void, not marked paid, and not fully covered by a credit note) \"Has unpaid invoices — please settle outstanding charges first\" There is no confirmed invoice yet AND the free days have run out Free days = the discharge-port voyage ETD plus 4 days, through the end of that last day. No ETD on the voyage → treated as still free. \"Free storage period has expired — please settle charges first\" Containers with no real number, or number \"000\", are left off the letter. The storage date printed on it is the end date of the latest Storage (or Extension Storage) invoice; if there is none, it is worked out from the voyage ETA and the storage tariff. Choosing a trucker can be blocked on its own (MLH). These do not disable the PDF button; they stop a new trucker being picked: \"Equipment Type Price Missing\" No trucking price for this BL's equipment, so no new trucker can be assigned. A trucker already on the BL stays. \"Insufficient Balance\" Shows what is available, the shortfall and the balance afterwards. Cancel restores the previous trucker. Confirm keeps the choice; the balance is applied when the container's WTOR or gate-out movement is recorded. \"This trucker has no guarantee yet.\" Asks for Valid From and Valid To. Both are required: \"Please enter both Valid From and Valid To.\" Closing it without saving undoes the trucker pick. Generating the letter saves the chosen trucker on the BL. For MLHE, MLHC and NMD it also creates WTOR movements for the containers, silently, and does not duplicate ones that already exist. ARRIVAL NOTIFICATION (PDF) Where: Attach menu. Stops: the two shared stops only. Uses the second voyage when the BL is transhipment, otherwise the first, at the discharge port. ARRIVAL NOTIFICATION (EMAIL) Where: Attach menu. Shown only when the agency is MSL. Stops: shared stops, plus that MSL-only rule. Needs a valid recipient address and a subject. A bad CC address stops the send: \"Some CC emails are invalid: {list}\" Default CC addresses are added automatically. It can be resent; the BL remembers who sent it and when. EDIT REPORT Where: Attach menu. Shown only when the BL has edit history. Stops: shared stops. No history → the item is absent. DGD REPORT Where: top Print dropdown. Uses the current filters. Does not check hold, discharge or the print counter. Only IMO containers are included, so the report can be empty even when BLs matched. No BL matched the filters: \"No bookings found with the selected filters.\" SHIPMENT STATEMENT Where: top Print dropdown. Same filters, same empty message, and the same lack of hold / discharge / print-counter checks."
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "A print count already at the max (including a max left at 0) blocks the DO even when the cargo is discharged and hold is off. After one real print on MLHE / MLHC / NMD, Print stays disabled until Printed is reset on this screen — and that reset does not lower the print count, so both have to be checked. The usual reason NOTHING on the row will print, DO included, is DO Hold on the BL edit form."
+            }
+          ]
+        },
+        {
+          "id": "edi-manifest-import",
+          "title": "EDI Manifest Import",
+          "icon": "file",
+          "summary": "EDI Manifest is the bulk way to CREATE Confirm Import BLs from a line / agent Excel.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "EDI Manifest is the bulk way to CREATE Confirm Import BLs from a line / agent Excel. One file carries the vessel/voyage once, then one data row per container (several rows may share the same BL number). The importer creates the BL header, finds or creates shipper / consignee / notify, finds or creates containers, and writes every container line (hazmat, OOG, reefer, SOC/COC, freight). It does not update an existing BL. If the BL number already exists in that company, that BL is rejected and later BLs in the file still continue."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Documentation → Import BL List → Upload → EDI Manifest"
+                ],
+                [
+                  "Route",
+                  "invoice.importExtendedManifest"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open EDI Manifest Import",
+                  "desc": "Sidebar → Documentation → Import BL List → Upload → EDI Manifest.",
+                  "icon": "file"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Search & Locate",
+                  "desc": "Filter or search the list to find the right record.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose an Action",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Import"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Enter Details & Save",
+                  "desc": "EDI Manifest (or use the line's EDI file) → Fill row 2 with vessel/voyage/POD/terminal and row 4+ with BL + container lines → Upload → EDI Manifest → Import Ship Manifest → Read the success toast and, if present, down…",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Validates",
+                  "tone": "system",
+                  "desc": "Required fields, guards, and business rules are enforced before save.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Ready in System",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Open Import BL List and confirm voyage, POD/FPOD, Full/Empty, ACID 3. FILE SHAPE (do not shift columns) The importer does NOT use header names. It reads by c…",
+                    "Downstream screens can consume the updated data"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "What Each BL Becomes in the System",
+              "type": "text",
+              "content": "Every accepted BL is created as: shipment_type Import booking_confirm 1 (Confirm) — never Draft movement FCL/FCL payment_kind Collect(THC) f_kind Prepaid if AD=P, Collect if AD=C (FREIGHT) booking_type FULL/EMPTY column (lowercased) ref_no column A commodity all J texts for that BL + HTS from K acid AQ exportal_id AR (shipper tax) importer_id AS (consignee tax) principal_name line found from row-2 LINE NAME booked_by the user who uploaded vessel_name the found vessel id loading_date AW converted to a date pod_collection BB if numeric(used to OWNER account inv.) Parties (find-or-create): Shipper from B + C, tax from AR. Country set from AT (exporter prefix) when that code exists. Consignee from E + F + D (consignee code), tax from AS. Country forced to Egypt (EG) unless the consignee code is the word \"bank\". Notify from G + H. Customer matching is a chain, not a simple lookup, and it searches the WHOLE customer master (it is not limited to your own company's customers): 1. Exact name match. 2. Exact tax-number match. 3. If both exist but point at DIFFERENT customers: - the name-matched customer has no tax yet → the sheet's tax is written onto it; - otherwise the BL is rejected: \"Customer name '{name}' matches '{db name}' (tax: {tax}), but tax number '{tax}' is already assigned to '{other}'. Please reconcile the customer master data or the Excel sheet.\" 4. Name match only → the tax must agree, else: \"Customer '{name}' already exists in the system with tax number '{tax}', but the Excel sheet provides a different tax number '{tax}'...\" A customer with an empty tax gets the sheet's tax written onto it (and is marked as a tax customer). 5. Tax match only → the name must be the same or at least 75% similar, else: \"Tax number '{tax}' is already assigned to customer '{name}' in the system, but the Excel sheet provides a different customer name '{name}'...\" 6. Creating a brand new customer also refuses to reuse a tax already held by someone else: \"Tax number '{tax}' is already assigned to customer '{name}' in the system.\" 7. No exact match at all → fuzzy name matching, with deliberately different strictness: Shipper and Notify are treated as CRITICAL: - if the sheet gives a tax number and nothing matched exactly, fuzzy matching is SKIPPED and a new customer is created; - with no tax number, the name must be 90% similar (and, when an address is given, the address at least 70% similar). Consignee and everything else: 75% name similarity, plus 70% address similarity when an address is supplied. A fuzzy hit reuses the existing customer under its OLD name; the Excel spelling is not saved. 8. Still nothing → a new customer is created with name and code both set to the Excel name, the address, and the tax number. Every resolved customer gets the matching role (Shipper / Consignee / Notify) attached if it does not have it. Bank consignees: when the consignee code is \"bank\" or \"999999999\", the row is treated as a bank. Tax checks are skipped (banks may share tax numbers), a Consignee Bank record is created or reused, linked to the customer, and that bank record — not a normal customer — becomes the BL's consignee. Ports: POL = column I (must exist). POD / FPOD = AU / AV. If a cell is empty the vessel-block POD is used as fallback for the discharge port. POD vs FPOD decides the routing flag (see section 5). Containers: Number L, type M, ISO N, line code O, seal P, packages Q, pack type R, weight S, tare T, DG U/V/AF, temps W/X/Y, OOG Z + AL..AP, freight AA/AB/AC, free days AG, SOC/COC AI (0=COC 1=SOC), part load AJ, reefer AK, operator AY. Containers are GLOBAL master data — they are looked up by container number only, with no company filter. Equipment type is resolved by matching the type name (M) OR the ISO code (N) against Equipment Types. If the container number already EXISTS: It is reused as-is. Its type, tare weight and SOC/COC are NOT updated from the sheet, even when the Excel values differ — the update statement is deliberately switched off in the code. Only the operator-code check runs: if the stored operator code differs from AY, the BL still imports and an operator-code alert is recorded against the voyage for review. If the container number is NEW: It is created with the resolved type, the tare, the SOC/COC value (defaulting to COC), stock status \"not in stock\", and operator code AY — falling back to the container line code (O) when AY is empty. Seal defaults to \"NA\" when P is blank. Temperature unit defaults to C. Watch out: the importer checks that column M is filled, but not that the type actually exists. An unknown type does not produce the clean \"Container Type '{name}' not found in database\" message — the BL fails later with a technical error in the report instead. Treat any odd technical message on a BL as \"check the equipment type and ISO code first\". Dangerous goods (DG): UN NO (V) may hold several UN numbers separated by commas. Each is padded to four digits (7 becomes 0007) and looked up in the system's UN dangerous-goods list. IMO CLASS (U) is taken per UN number from the sheet when given, otherwise from that list. Proper shipping name (AF) is only auto-filled from the list when the sheet leaves it blank; several names are joined with \" // \" and UN numbers with \" , \". A container counts as IMO when a class was resolved. Description of goods: Column J is collected from every row of the BL, blanks and exact duplicates are dropped, and what is left is joined with line breaks into the BL's commodity description. A BL therefore only gets a description from rows that also carry a container number. Same container number twice on the SAME BL: One merged container line (packs and weights summed, is_sub_imo = true) plus one IMO-sub row per Excel line. That is how multi-commodity / multi-UN boxes are stored. BL number starting with \"/\": Treated as a child of the parent without the slash (parent_id set if that parent already exists). If the parent is imported later in the same file, children that were waiting get parent_id filled. total_gross_weight on the BL = sum of S for all its rows."
+            },
+            {
+              "heading": "Transhipment / Transit Written by the File",
+              "type": "text",
+              "content": "Compared after ports are resolved (codes or names). AU POD equals AV FPOD (example: EGALY / EGALY) Direct Import. voyage_id = the found voyage. discharge_port = POD. No transhipment port. is_transhipment = 0. AU POD differs from AV FPOD transhipment_port is set to the original POD. discharge_port becomes FPOD. Then: If original POD country is Egypt is_transhipment = 1 voyage_id = the found voyage This is \"tranship in Egypt, final elsewhere\". If original POD country is NOT Egypt voyage_id is left empty voyage_id_second = the found voyage is_transhipment stays 0 This is the file's \"transit\" case (foreign tranship, final POD from FPOD). Per-BL terminal (AX) overrides row-2 POD TERMINAL when filled. Exporter country (AT) and ACID (AQ) are NOT required when POD differs from FPOD (the file treats that as transhipment for validation). They ARE required when FULL/EMPTY is \"full\" and POD equals FPOD. 6. VALIDATION (what stops a BL — not the whole file) The file is processed BL by BL. A failed BL is skipped; others continue. Failed BLs and their containers are counted as not imported and written to an error Excel. Vessel-level (stops the entire file): Missing Vessel Name / Call Sign / Voyage Number / Port of Discharge / POD Terminal. Per-BL rejects (verbatim / near-verbatim messages): \"BL number is missing in row {n}\" Column A empty. \"Line Code and Company Code are required\" AZ or BA empty. \"You can only upload data to your company ({CODE})\" BA company code must match the logged-in company's code (case-insensitive). Example file BA=MLHE only works when the user is an MLHE company. If you are switched to another line (page-title line switcher), the whole file is rejected BL by BL with this message — switch line first, then upload. \"Company with Line Code '{AZ}' and Company Code '{BA}' not found in database\" No company has that line code together with that value as EITHER its company code or its agency code. Required header fields (empty → \"Required field missing: {name}\"): BL Number, Shipper, Shipper Address, Consignee, Port of Loading, Description of Goods, Line Code, Company Code. Description of Goods is built from column J on rows that also have a container number — a BL with no container row will fail this. \"Consignee Code is required\" Column D empty. Exporter Country Code Required when NOT (POD!=FPOD) AND FULL/EMPTY is full. ACID when FULL/EMPTY is full AND POD equals FPOD: \"ACID is required when booking type is 'full'\" \"ACID must be exactly 19 characters long when booking type is 'full' (provided: {n})\" Example file AQ=7721397921022910018 (19 chars). \"At least one container is required\" Per container: Container Number, Container Type, Packing Type required. Number of Packages and Gross Weight required and must be greater than 0 — except packages are skipped when FULL/EMPTY is empty. \"Container {no}: {field} is required\" \"Container {no}: {field} is required and must be greater than 0\" \"BL number {ref} already exists\" Same ref_no already in that company (all companies checked, not only the current scope). Port / terminal / vessel / voyage / principal / country lookup failures use the \"not found in database\" messages in section 3. Customer / tax clashes: The four messages listed in section 4. Any of them rejects that BL only. 6b. WHAT THE SYSTEM TELLS YOU AFTERWARDS Everything clean: \"All {n} bls were imported successfully! {n} containers imported.\" Some BLs failed: \"Import completed with {n} errors. {n} bls were imported successfully. {n} containers imported, {n} containers not imported.\" plus a link to a downloadable error workbook. Vessel row invalid (nothing was imported at all): \"Import failed: Vessel data validation errors found. Please check the error report.\" Unexpected failure of the whole file: \"Import failed: {technical message}\" The error workbook has one line per problem, carrying the BL number, the error message, and the vessel, voyage, POL, POD, shipper, consignee, line code and company code for that BL so the file can be corrected without hunting for the row. The same message on the same BL is listed once, so one BL with three different problems gives three lines. \"Containers not imported\" counts the container rows of every REJECTED BL, not individual bad containers — one rejected BL with ten boxes adds ten to that number."
+            },
+            {
+              "heading": "How This Feeds Import BL List and Downstream",
+              "type": "rules",
+              "items": [
+                "1. Import BL List The new rows appear as Confirm Import BLs. Voyage / ETA columns follow the list rules in 01-import-bl.txt (Egypt POD vs transhipment port). A file that sets POD != FPOD will show Transhipment port and may swap which voyage column is used.",
+                "2. Customers master New shipper / consignee / notify rows are created when no close name match exists (similarity ~75%, address ~70% when an address is present). Wrong spelling therefore creates a duplicate customer that invoices and Release Order will use.",
+                "3. Containers master Missing numbers are created with type, ISO, tare, SOC/COC, operator, line code. Existing numbers keep their old type.",
+                "4. Movements / DO / Release Order EDI does not write movements. DO and Release Order stay blocked until discharge is posted (see 02). Free demurrage days (AG) become container-line free_time for later detention.",
+                "5. Invoices / ACI / CUSCAR ACID, tax numbers, consignee code, ports, and commodity on the created BL are what customs and invoice screens read. payment_kind is Collect even when AD is Prepaid; only f_kind stores P/C."
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "EDI Manifest is the fastest way to load a whole vessel, and the fastest way to load it wrong. The file never creates a voyage or a terminal — those names/codes must already match Voyage List and Terminals exactly (example: voyage 26LVX20 on vessel ARCHERFISH, terminal ACHCO at EGALY). Company code in column BA must be the logged-in company or every BL is rejected. POD versus FPOD silently flips the BL into transhipment/transit, which then changes the ETA column, the second voyage, and which letters hide on the Attach menu. A duplicate BL number is skipped, not updated, so a corrected EDI file will not repair a BL that already imported."
+            }
+          ]
+        },
+        {
+          "id": "work-order",
+          "title": "Work Order",
+          "icon": "clipboard",
+          "summary": "A Work Order is a simplified EXPORT booking made only to move EMPTY containers on a vessel for the line itself (no customer, no quotation, no B/L).",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "A Work Order is a simplified EXPORT booking made only to move EMPTY containers on a vessel for the line itself (no customer, no quotation, no B/L). It records the route (places and ports), the vessel / voyage, the load terminal and the container lines (type, container number, quantity, pick-up location, VGM). Technically it is a Booking marked as a service booking, which is why: - it never appears in the normal Booking lists and screens, - its number (Work Order Serial) shares the booking number space, - Movement Control and Cost invoices can still pick it."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Documentation → Work Order List"
+                ],
+                [
+                  "Route",
+                  "service-bl.index"
+                ],
+                [
+                  "Feature flag",
+                  "service_bl"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Work Order",
+                  "desc": "Sidebar → Documentation → Work Order List (service_bl flag).",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Search & Locate",
+                  "desc": "Filter or search the list to find the right record.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose an Action",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Create",
+                    "Export",
+                    "Import",
+                    "Save"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Enter Details & Save",
+                  "desc": "Work Order List",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Validates",
+                  "tone": "system",
+                  "desc": "Required fields, guards, and business rules are enforced before save.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Ready in System",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Add New. 2. Leave the serial empty to auto-generate it (or type one). 3. Choose Status (Draft or Confirm), the Vessel / Voyage (Export or All legs), Place of…",
+                    "Downstream screens can consume the updated data"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "Fields stored",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Work Order Serial",
+                  "Optional. If empty, generated as WO + yy + mm + 4-digit counter (e.g. WO26090042). The counter is kept per company in Settings and never repeats a number already used. Must be unique among ALL bookings of the company."
+                ],
+                [
+                  "Status",
+                  "Required: Draft or Confirm (shown as Confirmed / Draft badge in the list)."
+                ],
+                [
+                  "Vessel / Voyage",
+                  "Required. Only this company's voyages with leg Export or All, newest ETA first."
+                ],
+                [
+                  "Place of Acceptance /",
+                  "Required ports. Acceptance must differ from"
+                ],
+                [
+                  "Place of Delivery",
+                  "Delivery."
+                ],
+                [
+                  "POL / POD",
+                  "Required ports. POL must differ from POD."
+                ],
+                [
+                  "Load Terminal",
+                  "Required."
+                ],
+                [
+                  "Attach",
+                  "Optional file."
+                ],
+                [
+                  "Notes",
+                  "Optional."
+                ],
+                [
+                  "Container lines",
+                  "At least one line:"
+                ],
+                [
+                  "Type",
+                  "required on the form"
+                ],
+                [
+                  "Container No",
+                  "optional; only containers in stock are offered, filtered by the selected type"
+                ],
+                [
+                  "Qty",
+                  "whole number, 1 or more Pick Up Location required on the form (Egypt terminals / depots)"
+                ],
+                [
+                  "VGM",
+                  "optional number"
+                ],
+                [
+                  "Fixed values",
+                  "Shipment type Export, booking type Empty, Booked By = the user."
+                ],
+                [
+                  "Total Qty",
+                  "Sum of all line quantities (recalculated on every save and after the Excel upload)."
+                ]
+              ]
+            },
+            {
+              "heading": "Listing, Search & Export",
+              "type": "text",
+              "content": "- Only the user's company work orders, 30 per page, newest first. - Search (multi-select, paste allowed): Work Order Serial, Place of Acceptance, POL, POD, Place of Delivery, Voyage, Terminal, Container No. - Columns: Serial, Status, Place of Acceptance, POL, POD, Place of Delivery, Vessel, Voyage, Load Terminal, Total Qty, Container Details (pop-up with container no, type, qty, VGM, location), Created By. - Buttons: Add New, Download (Excel of the filtered list, one row per container line), Template, Upload."
+            },
+            {
+              "heading": "Creating, Editing & Deleting",
+              "type": "rules",
+              "items": [
+                "Rule Message shown Serial already used by a booking \"This Booking No Already Exists\"",
+                "POL = POD \"Port of Loading and Port of Discharge must be different\"",
+                "Place of Acceptance = Place of \"Place of Acceptance and Place Delivery of Delivery must be different\"",
+                "No container line \"At least one container detail is required\"",
+                "Qty below 1 \"Quantity must be at least 1\" (the form also blocks 0: \"Container QTY value cannot be 0\")",
+                "Container type differs from the \"Container Type/Size mismatch chosen container at row N. Selected container has a different type than specified.\"",
+                "Same container twice \"Container Numbers must be unique\"",
+                "On edit, the serial is saved exactly as typed, and all container lines (and their IMO details) are deleted and re-created from the form. The container list also offers the containers already on the work order.",
+                "Deleting removes the work order and its container lines.",
+                "Success messages: \"Service BL created successfully\" / \"Service BL updated successfully\" / \"Service BL deleted successfully\"."
+              ]
+            },
+            {
+              "heading": "Upload Container Details",
+              "type": "text",
+              "content": "\"Template\" downloads the work order template. Each row ADDS one container line to an existing work order. Columns: booking_no (the Work Order Serial), container_no, qty, seal_no, pickup/return location, vgm. Row rules: - Work order must exist in this company: \"Work Order with number: X not found\" - VGM must be a number: \"VGM must be a valid number\" - With a container number: qty cannot be more than 1: \"Quantity cannot be more than 1 when a specific Container Number is provided\" container must be visible to the company's line: \"Container Number: X not found\" must be in stock: \"Container Number: X is not available (out of stock)\" not already on this work order: \"Container Number: X already exists in this Work Order\" the line's type is taken from the container. - Without a container number: qty from the file (default 1). - Pick-up location matched by terminal code (partial match): \"Pick up location 'X' not found in the Terminals\" Good rows are added and Total Qty is recalculated. Failed rows are listed in a downloadable error report: \"Import completed with N errors. M rows were imported successfully.\" Otherwise: \"All M rows were imported successfully!\""
+            },
+            {
+              "heading": "How This Feeds Other Modules",
+              "type": "rules",
+              "items": [
+                "BOOKINGS Work orders are hidden from every normal booking screen, list and report. Their serial still blocks the same number being used by a booking of the company.",
+                "MOVEMENT CONTROL The booking dropdown in Movement Control (create / edit) includes work orders, so container movements (e.g. gate-out, load) can be recorded against the work order number, and movement lists show it.",
+                "COST INVOICES When selecting B/Ls / bookings for a cost invoice by voyage, the list also offers this company's work orders that are Confirmed (Draft work orders are not offered), so vessel and terminal costs can be charged to them."
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Work orders are how empty repositioning is recorded on a vessel without a customer booking. If a work order is left as Draft, its costs cannot be attached in Cost; if its container lines are wrong, the movements and costs for those boxes point to the wrong work order. Confirm it once the load list is final. FLOWCHARTS (MERMAID) To view a chart, copy the lines BETWEEN its [mermaid] markers into https://mermaidviewer.com/ . The \"word\" chart is a very simple version used only as the User Flow picture in Word; this section is not printed. [mermaid: user] flowchart TD A([Add New work order]) --> B{Serial typed?} B -->|No| C[Auto serial WOyymm0001] B -->|Yes| D{Already used by<br/>a booking?} D -->|Yes| E[Type another serial] E --> B D -->|No| F C --> F[Status, export voyage,<br/>places, ports, terminal] F --> G[Container lines:<br/>type, container, qty, location] G --> H{Ports equal or<br/>container type mismatch?} H -->|Yes| I[Fix the data] I --> F H -->|No| J([Work order saved]) J --> K[Upload container numbers<br/>and seals from Excel] J --> L([Movements and Cost<br/>use the work order]) classDef start fill:#dbeafe,stroke:#1d4ed8,color:#0f172a classDef decision fill:#fef9c3,stroke:#a16207,color:#0f172a classDef error fill:#fee2e2,stroke:#b91c1c,color:#0f172a classDef success fill:#dcfce7,stroke:#15803d,color:#0f172a class A start class B,D,H decision class E,I error class J,L success [/mermaid] [mermaid: word] flowchart TD A([Add New work order]) --> B[Serial auto<br/>or typed] B --> C[Voyage, ports,<br/>terminal, status] C --> D[Container lines] D --> E[Save and confirm] E --> F([Movements and<br/>costs use it]) classDef start fill:#dbeafe,stroke:#1d4ed8,color:#0f172a classDef success fill:#dcfce7,stroke:#15803d,color:#0f172a class A start class F success [/mermaid] [mermaid: technical] flowchart TD CR([service-bl.create]) --> CR1[voyages of company<br/>view keeps legs Export / All<br/>containers in_stock = 1<br/>preview WO + yymm + counter+1] CR1 --> ST([service-bl.store - ServiceBlRequest]) ST --> V1{required: booking_confirm 1 or 3,<br/>ports, voyage, terminal,<br/>containerDetails min 1, qty >= 1} V1 -->|no| E1[/Validation messages/] V1 -->|yes| V2{POL != POD and<br/>acceptance != delivery?} V2 -->|no| E2[/\"... must be different\"/] V2 -->|yes| V3{container type = line type?<br/>container ids unique?} V3 -->|no| E3[/\"Container Type/Size mismatch ...\" / \"Container Numbers must be unique\"/] V3 -->|yes| V4{ref_no filled?} V4 -->|yes| V5{ref_no used by any booking<br/>of company?} V5 -->|yes| E4[/\"This Booking No Already Exists\"/] V5 -->|no| S1 V4 -->|no| G1[Settings row lockForUpdate<br/>serial++ until WOyymmNNNN unused<br/>max 50 tries, save counter] G1 --> S1[Booking::create bl_service_status = 1,<br/>shipment Export, type empty,<br/>total_quantity = sum qty] S1 --> S2[file -> uploads/booking<br/>booking_container_details rows] S2 --> OK([Service BL created successfully]) UP([service-bl.update]) --> U1[same validation, ref_no unique excluding itself<br/>ref_no saved as typed] U1 --> U2[delete IMO + container details<br/>recreate from form] DEL([service-bl.destroy]) --> D1([delete IMO, details, booking]) IM([service-bl.importDetails]) --> I1{WO ref_no found<br/>bl_service_status 1, company?} I1 -->|no| IE[/row error -> error report/] I1 -->|yes| I2{vgm numeric? container:<br/>qty <= 1, visibleToLine, in_stock,<br/>not on WO? location code LIKE?} I2 -->|no| IE I2 -->|yes| I3[create detail, type from container] I3 --> I4[AfterImport: total_quantity = sum qty<br/>flash success or error + report] S1 -.feeds.-> X1[Booking global scope blServiceStatus<br/>hides WO from normal booking queries] S1 -.feeds.-> X2[MovementController create / edit:<br/>bookings incl. work orders<br/>Movements.booking ignores scope] S1 -.feeds.-> X3[CostController getBLList:<br/>WO with booking_confirm 1 or 4<br/>or is_summary, by voyage] classDef start fill:#dbeafe,stroke:#1d4ed8,color:#0f172a classDef decision fill:#fef9c3,stroke:#a16207,color:#0f172a classDef error fill:#fee2e2,stroke:#b91c1c,color:#0f172a classDef success fill:#dcfce7,stroke:#15803d,color:#0f172a classDef external fill:#f3e8ff,stroke:#7e22ce,color:#0f172a class CR,ST,UP,DEL,IM start class V1,V2,V3,V4,V5,I1,I2 decision class E1,E2,E3,E4,IE error class OK,D1 success class X1,X2,X3 external [/mermaid]"
+            }
+          ]
+        },
+        {
+          "id": "rollover",
+          "title": "Rollover",
+          "icon": "activity",
+          "summary": "Rollover moves cargo that was planned on one sailing onto a later (or different) sailing when the original voyage is missed, delayed, or no longer suitable.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "Rollover moves cargo that was planned on one sailing onto a later (or different) sailing when the original voyage is missed, delayed, or no longer suitable. Export Booking supports two business shapes of rollover: A) Whole-booking rollover (by voyage) Keep the same booking number(s). Change the voyage on one or many bookings that currently sit on a selected sailing. Record where they came from (Roll From). Update related draft B/Ls and container movements so yard / ops stay aligned with the new sailing. B) Partial-container rollover (split booking) Keep some containers on the original booking / voyage. Move the selected containers onto a NEW booking with a new reference ending in R1, R2, ... on the destination voyage. Retarget those containers' movements to the new booking and voyage. Confirmed Bills of Lading must not be silently moved off their sailing. A booking with a Confirmed B/L is blocked from rollover."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Documentation → Export Booking"
+                ],
+                [
+                  "Route",
+                  "booking.rollover.getBookings"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Rollover",
+                  "desc": "Sidebar → Documentation → Export Booking.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Search & Locate",
+                  "desc": "A) Whole-booking (by voyage) Filter Export Booking to exactly one Vessel / Voyage",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose an Action",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Export",
+                    "Search"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Enter Details & Save",
+                  "desc": "Click the Voyage column \"Rollover\" button → Choose the new voyage → Tick the eligible bookings (search by booking no if needed) → Confirm Rollover → Bookings stay on the same refs but now show the new voyage; Roll Fro…",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Validates",
+                  "tone": "system",
+                  "desc": "Required fields, guards, and business rules are enforced before save.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Ready in System",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "A new booking appears as <original ref>R1 (or R2...) on the new voyage; remaining containers stay on the original booking.",
+                    "Downstream screens can consume the updated data"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "What Each Mode Changes",
+              "type": "rules",
+              "items": [
+                "Field / object Whole-booking rollover Partial-container Booking ref_no Unchanged New booking = original + R1/R2...",
+                "voyage_id Set to new voyage New booking gets new voyage; original keeps old",
+                "roll_from Set to previous Not set on the voyage_id new booking by this flow",
+                "Containers Stay on same booking Selected detail rows move to the new booking",
+                "total_quantity Unchanged by this flow Original = remaining rows; new = count moved",
+                "Draft B/L voyage_id Updated to new voyage Not cloned / (non-confirmed only) not moved here",
+                "Confirmed B/L Blocks the booking Row action hidden from selection when has_bl = 1",
+                "Movements (Export) Same booking_no; Moved containers: voyage + vessel updated; booking_no → new remark appended booking; voyage + vessel updated; remark appended"
+              ]
+            },
+            {
+              "heading": "Entry Conditions & Eligibility",
+              "type": "text",
+              "content": "A) Voyage \"Rollover\" button (list header) Shown only when the list filter has exactly one voyage selected. Otherwise the normal \"Vessel / Voyage\" header label is shown. If the user clicks without a single voyage selected, the system warns: \"Please select exactly one voyage to perform rollover.\" Bookings offered for that voyage (same company, Export): - Status in Confirmed / Draft / related open statuses used by the list endpoint - Shown with container summary and B/L draft counts - can_rollover = false when any Confirmed B/L exists on the booking (row marked and checkbox replaced with a red block icon: \"Cannot rollover - Confirmed B/L\") - Draft B/L is allowed (row may be highlighted as a warning, but still selectable) Submit only updates bookings that: - Belong to the company - Are still on the current voyage set - Are Export - Have no Confirmed B/L - Were checked by the user - New voyage is different from current voyage If none remain eligible after those checks: \"No eligible bookings found for rollover. Bookings with B/L cannot be rolled over.\" B) Per-row container Rollover icon Shown when ALL of the following are true on that row: - Booking status is Confirmed (or the \"merged/confirmed\" status used as 4 in the list) - Booking has_bl = 0 (no B/L created yet) - Total container qty on the booking is greater than 1 - At least one container is Assigned (Assigned = qty 1 with a real container number; empty / \"000\" slots count as Unassigned) Submit rules on the container screen: - New voyage is required and must not be the booking's current voyage (current voyage is excluded from the dropdown) - At least one container must be selected - Selected containers must belong to this booking - Cannot move ALL containers — at least one must remain: \"Cannot rollover all containers. At least one container must remain in the original booking.\" - Unauthorized company access is rejected"
+            },
+            {
+              "heading": "New Booking Number",
+              "type": "rules",
+              "items": [
+                "Pattern: <original_ref_no>R1 then R2, R3, ... if earlier rollover bookings already exist for that base ref in the same company",
+                "Example: MLHALYLTK08261261 original MLHALYLTK08261261R1 first partial rollover MLHALYLTK08261261R2 second partial rollover from the same base",
+                "The new booking copies commercial / route / party fields from the original (shipper, consignee, ports, quotation link, commodity, status, etc.) and sets total_quantity to the number of containers moved."
+              ]
+            },
+            {
+              "heading": "How This Feeds Movements & B/L",
+              "type": "rules",
+              "items": [
+                "Priority of effects after a successful rollover:",
+                "1. Booking voyage Ops and Documentation lists now show the cargo under the new sailing. Whole-booking mode also stores Roll From so exports / reports can show the previous voyage number.",
+                "2. Draft B/L (whole-booking mode only) Non-confirmed draft B/Ls on the rolled bookings get the new voyage_id so print / Nafeza draft data match the new sailing. Confirmed B/Ls are never updated — those bookings were blocked.",
+                "3. Container movements (Export bookings only) Matching movement rows for the booking(s) (and, in partial mode, only the moved container ids) are updated to: - new voyage_id - new vessel_id from that voyage - optional new booking_no (partial mode) - remark text appended, e.g. \"Rollover changed voyage from VESSEL / 26ABC to VESSEL / 26XYZ.\"",
+                "Import movements and non-export bookings are outside this update helper's scope.",
+                "4. Downstream consumers Anything that keys off booking.voyage_id, draft BL voyage, or movement voyage (equipment dashboards, sailing reports, yard sequences, export Excel \"Roll From\" column) will follow the new sailing after refresh. A Confirmed B/L left behind on the old sailing is exactly why Confirmed B/L blocks rollover."
+              ]
+            },
+            {
+              "heading": "Typical Success Messages",
+              "type": "rules",
+              "items": [
+                "Whole-booking: \"Successfully rolled over N selected booking(s) from 'OLD' to 'NEW'.\" Optionally appends movement and draft B/L update counts.",
+                "Partial-container: \"Successfully rolled over N container(s) from <old ref> to <new ref>. New voyage: <vessel> / <voyage_no>\" Optionally appends movement update count."
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Without rollover, cargo that misses a cut-off stays booked on a sailing that will not carry it — wrong voyage on the booking, wrong draft B/L voyage, and movements that still point at the old vessel. Ops then gate out / load against inconsistent data. The Confirmed B/L hard stop exists so a released / confirmed bill is not quietly moved to another sailing while the paper / customs document still describes the old one. If cargo with a Confirmed B/L must change sailing, the B/L process must be handled first; do not expect Rollover to override it. The most common mistake on partial rollover is trying to move every container: the system refuses that so the original booking is never left empty by this path — use whole-booking rollover when the entire booking should change voyage under the same reference."
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "edi",
@@ -7949,6 +9630,142 @@
       "title": "Accounting",
       "icon": "file-text",
       "modules": [
+        {
+          "id": "invoice-period",
+          "title": "Invoice Period",
+          "icon": "calculator",
+          "summary": "Invoice Period is a read / report screen across every Switch Line that shares the same companies.code as the company you are on.",
+          "sections": [
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "Invoice Period is a read / report screen across every Switch Line that shares the same companies.code as the company you are on. It is not where invoices are created, edited, confirmed or deleted — that stays on Invoice List (or Yard List). Here you: - filter a period (or a BL, invoice number, voyage or type), - see invoices from all sibling lines in one table, - read currency totals for that filtered set, - Print All (one merged PDF), Download ZIP, or Export Excel. Accountants use it for \"everything under this company code this month\" without switching line by line. Credit notes (type C) never appear here."
+            },
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Accounting → Invoice Period"
+                ],
+                [
+                  "Route",
+                  "invoice.company-combined"
+                ],
+                [
+                  "Feature flag",
+                  "invoice_gates"
+                ]
+              ]
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Invoice Period",
+                  "desc": "Sidebar → Accounting → Invoice Period (invoice_gates flag).",
+                  "icon": "calculator"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Search & Locate",
+                  "desc": "Filter or search the list to find the right record.",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3 · DECISION",
+                  "title": "Choose an Action",
+                  "tone": "decision",
+                  "icon": "hash",
+                  "actions": [
+                    "Export",
+                    "Print",
+                    "Search"
+                  ]
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Enter Details & Save",
+                  "desc": "1. Open Accounting",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "System Validates",
+                  "tone": "system",
+                  "desc": "Required fields, guards, and business rules are enforced before save.",
+                  "icon": "activity"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Ready in System",
+                  "tone": "result",
+                  "icon": "info",
+                  "outcomes": [
+                    "Invoice Period. 2. The page shows filters only. The table stays empty until you apply at least one filter and click Filter (an info banner explains this). 3.…",
+                    "Downstream screens can consume the updated data"
+                  ]
+                }
+              ]
+            },
+            {
+              "heading": "What This Screen Shows",
+              "type": "text",
+              "content": "Column / area Meaning Line companies.code and line_code of the invoice's company (so you can see which sibling line owns the row). Invoice No The invoice number on that line. Customer / Tax NO Bill-to customer and tax card number. Bl No Import booking ref or export B/L ref linked to the invoice. Voyage / Vessel From the booking or B/L (second voyage when the booking is marked transhipment). Date Invoice date (this is what the date filters use). Type Shipping invoice type, or \"Yard …\" when on a yard line. payment kind From the linked booking / B/L booking. Currency amounts USD, EGP and any other active currencies. Only the invoice's own currency cell is filled on the row. Invoice Status Draft / Ready To Confirm / Confirm / Void. Payment Status Paid / Partially Paid / UnPaid from the invoice and its valid receipts. Receipts Receipt numbers already applied. Actions Print PDF for that row; optional QB sync. INCLUDED Confirmed and draft invoices (and other non-credit types) for every company id in the same companies.code group as the user. EXCLUDED Credit notes (type C). Invoices on a different company code (e.g. MLHC when you are on MLHE). Yard invoices while you are on a shipping line, and shipping invoices while you are on a yard line."
+            },
+            {
+              "heading": "Company Scope & Yard Rules",
+              "type": "rules",
+              "items": [
+                "WHOSE INVOICES YOU SEE Scope follows Company::idsForCompanyCombined for the signed-in company:",
+                "1) If companies.code is set → every company row with that same code. 2) Else → every company row with the same agency_code.",
+                "With the usual MLH setup (code is set):",
+                "On an MLHE line → only MLHE sibling lines On an MLHC line → only MLHC sibling lines On YARD (code YARD, e.g. YRDALX + YRDSOK) → yard invoices for those yard lines only",
+                "Do not expect MLHE and MLHC together on this screen. Invoice Period groups by company CODE, not by the whole agency.",
+                "SHIPPING LINE (booking_code is not YRD) Rows come from the invoices table for the code group. Totals split by currency (USD / EGP / other active currencies).",
+                "YARD LINE (booking_code = YRD) Switch Line to a yard company first. Rows come from yard_invoices for every yard line under the same code. Shipping invoices are not mixed in.",
+                "BL filters look up B/Ls and bookings on the paired shipping companies:",
+                "YRDALX → companies with code MLHE YRDSOK → companies with code MLHC",
+                "Choosing shipping-only invoice types (Storage, Detention, Power, …) returns no yard rows. Yard keeps invoice / debit style types only."
+              ]
+            },
+            {
+              "heading": "Listing, Search, Totals & Print",
+              "type": "text",
+              "content": "LIST - Empty until at least one filter is applied. - 30 per page, newest date then id first. - Header shows result count and currency totals for the whole filtered set (all pages). FILTERS (any one is enough to load the table) Invoices From / To Date range on invoice date. If From is set and To is empty, To defaults to today. From cannot be after To; To cannot be after today on the form. Invoice Status Draft / Ready To Confirm / Confirm / All. Voyages Voyages from the same company-code group. Selecting a voyage also allows BL search across that group. Invoice Type Multi-select (plus Storage / Detention / Power / Customized / Transit shortcuts). Shipment Type All / Import / Transhipment / Export (options depend on whether the user may see import and/or export invoices). Bl Number Multi; type at least 3 characters to search Import or Export refs across the company code. Invoice No Type at least 3 characters to search; filter matches that number across the company code. QB Sync Status Only when QuickBooks is enabled (Synced / Failed / Not Synced). TOTALS Shipping: for type \"invoice\", charge lines use the VAT-inclusive fields (egp_vat / usd_vat); other types use total_egy / total_amount. Amounts land in EGP, USD or another active currency column by the invoice currency. Yard: EGP-oriented (per line max of egp_vat and total_egy for type invoice; otherwise total_egy). USD / other currency columns stay empty on yard rows. Charge lines on an invoice are snapshots. Changing the master charge catalogue does not rewrite old invoices. PRINT ALL / DOWNLOAD ZIP / EXPORT All three use the current filters plus company_combined=1. Print All One merged PDF of the filtered set. Download ZIP One ZIP of individual PDFs. Export Excel — All Details, or Inv. Breakdown. Up to 20 invoices: Print All / ZIP run immediately. More than 20: background job with a progress card, then download (same idea as receipt and credit-note ZIP). Excel always runs in the background. Toolbar buttons stay disabled until a filter is applied."
+            },
+            {
+              "heading": "How This Feeds Other Modules",
+              "type": "rules",
+              "items": [
+                "INVOICE LIST / YARD LIST Unchanged. Day-to-day create / edit / confirm still happens there, one Switch Line at a time. Invoice Period only reads the same invoice (or yard invoice) rows across the code group.",
+                "RECEIPTS & PAYMENT STATUS Receipt numbers and Paid / Partially Paid / UnPaid on each row come from the invoice's existing receipts. Nothing on this screen creates or edits a receipt.",
+                "QUICKBOOKS When enabled, confirmed rows can be synced or resynced from the Actions column, same idea as Invoice List. The optional QB Sync Status filter only limits which rows appear.",
+                "PRINT / EXCEL JOBS Merged PDF, ZIP and Excel jobs are the shared invoice export / PDF pipeline with company_combined=1 (yard uses the yard variants when you are on a yard line). Filters on the URL are what the job prints or exports.",
+                "OTHER ACCOUNTING SCREENS Credit Note, Cost and single-line Invoice List are separate. This screen does not post, credit or reverse anything."
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Without Invoice Period, period close and management reporting for a multi-line company code means switching line by line and pasting lists together. Totals then disagree because each list only saw one company_id. The hard rule that keeps the numbers trustworthy is the company CODE boundary: MLHE and MLHC (and their yards) stay separate on purpose. If an invoice is \"missing\", first check whether you are on the right Switch Line family, whether a filter is applied, and whether the document is a credit note — those three explain most empty or short results. Treat this screen as the period lens, not the working desk. Fix data on Invoice List or Yard List; come back here to see the combined picture and to print or export the filtered set."
+            }
+          ]
+        },
         {
           "id": "credit-note",
           "title": "Credit Note",
