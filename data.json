@@ -5576,12 +5576,34 @@
           "id": "containers-repairs",
           "title": "Containers Repairs",
           "icon": "box",
-          "summary": "This is the operational + commercial log of repairing a PHYSICAL container at a depot.",
+          "summary": "Log a depot repair. This is what makes the box Damaged or Available.",
           "sections": [
             {
-              "heading": "What is this screen?",
+              "heading": "What happens here",
               "type": "text",
-              "content": "This is the operational + commercial log of repairing a PHYSICAL container at a depot. Each record is one repair job for one container on one Issue Date, with damage lines picked from the Damage List catalogue, amounts / VAT / profits, line confirmation, optional photos, and optional auto movements (Sent To Repair / Received From Repair). It is NOT the Damage List (that is only the price catalogue of damage types). It is NOT Movement Control (movements are created here only when Hold Move is checked). Container List / Equipment Status / Movement exports read this screen's latest repair to decide whether a box shows as Available (AV) or Damaged (DM)."
+              "content": "A container is repaired at a depot. You log that job here: the box, the depot, the day, and the damage lines. The latest job is what Container List uses to show the box as Available or Damaged."
+            },
+            {
+              "heading": "Three different screens",
+              "type": "table",
+              "columns": [
+                "Screen",
+                "It is"
+              ],
+              "rows": [
+                [
+                  "Containers Repairs",
+                  "The repair job"
+                ],
+                [
+                  "Damage List",
+                  "The price list you pick a damage from"
+                ],
+                [
+                  "Movement Control",
+                  "Moves. This screen writes one only if Hold Move is on"
+                ]
+              ]
             },
             {
               "heading": "Access",
@@ -5612,25 +5634,25 @@
                 {
                   "step": 1,
                   "badge": "STEP 1",
-                  "title": "Open Containers Repairs",
-                  "desc": "Sidebar → Container Control → Containers Repairs (repairs flag).",
+                  "title": "Open the list",
+                  "desc": "Container Control → Containers Repairs.",
                   "icon": "box"
                 },
                 {
                   "step": 2,
                   "badge": "STEP 2",
-                  "title": "Search & Locate",
-                  "desc": "Filter the list",
+                  "title": "Find the job",
+                  "desc": "Search by container, BL, depot, or date.",
                   "icon": "search"
                 },
                 {
                   "step": 3,
                   "badge": "STEP 3 · DECISION",
-                  "title": "Choose an Action",
+                  "title": "Pick an action",
                   "tone": "decision",
                   "icon": "hash",
                   "actions": [
-                    "Create",
+                    "Add",
                     "Edit",
                     "Delete",
                     "Export",
@@ -5640,198 +5662,112 @@
                 {
                   "step": 4,
                   "badge": "STEP 4",
-                  "title": "Enter Details & Save",
-                  "desc": "Add Repair (or Edit) → type Container No (line- scoped lookup; set PTI if Reefer) → choose Depot and Issue Date → add damage description lines (amounts, profits, confirmation, payer) → optional Hold Move / Is Sold / h…",
+                  "title": "Save the job",
+                  "desc": "Container, depot, issue date, damage lines. Tick Hold Move if the box should leave for repair.",
                   "icon": "clipboard"
                 },
                 {
                   "step": 5,
                   "badge": "STEP 5 · SYSTEM CHECK",
-                  "title": "System Validates",
+                  "title": "Finish the job",
                   "tone": "system",
-                  "desc": "Required fields, guards, and business rules are enforced before save.",
+                  "desc": "Confirm every line and fill the repair date. Until then the box stays Damaged.",
                   "icon": "activity"
                 },
                 {
                   "step": 6,
                   "badge": "RESULT",
-                  "title": "Ready in System",
+                  "title": "Box is Available",
                   "tone": "result",
                   "icon": "info",
                   "outcomes": [
-                    "from the list: view Cost/Invoice summary, manage Before/After attachments, open EIR or EOR PDF, Export / Template+Upload, or Delete.",
-                    "Downstream screens can consume the updated data"
+                    "Received From Repair is created",
+                    "Container List shows Available"
                   ]
                 }
               ]
             },
             {
-              "heading": "Fields stored",
+              "heading": "The list",
+              "type": "rules",
+              "items": [
+                "Your company only. 30 per page. Newest first.",
+                "Search works for container, BL, depot, confirmation (Rejected / Confirmed / Pending / Sold), and the two date ranges.",
+                "Created by is on the screen. The search ignores it.",
+                "Export downloads the rows you filtered. No rows: \"No data available for export\".",
+                "EIR and EOR are hidden on a Sold job, and hidden for Sobek."
+              ]
+            },
+            {
+              "heading": "Save, edit, delete",
+              "type": "rules",
+              "items": [
+                "One job per container per issue date. A second one on the same day is rejected.",
+                "Edit wipes the damage lines and saves what is on the form.",
+                "Photos are added from the list: Before or After. The edit form does not take files.",
+                "Delete removes the job, its photos, its lines, and its auto movements.",
+                "A container that still has a repair cannot be deleted from Container List."
+              ]
+            },
+            {
+              "heading": "Import",
+              "type": "rules",
+              "items": [
+                "Upload the template. One row creates the job header only. No damage lines.",
+                "A missing container can be created if the number check digit is valid. The depot must already exist.",
+                "Hold Move on a row still sends the box to repair, same as a normal save.",
+                "A bad row is skipped and named by row number. Good rows still save."
+              ]
+            },
+            {
+              "heading": "Photos and PDFs",
+              "type": "rules",
+              "items": [
+                "Photos live on the list: Before Repair and After Repair.",
+                "EIR is the receipt. No prices.",
+                "EOR is the estimate. With prices, customer, and payer.",
+                "Both PDFs hide when the job is Sold, and for every Sobek company."
+              ]
+            },
+            {
+              "heading": "What happens to the box",
               "type": "table",
               "columns": [
-                "Field",
-                "Meaning"
+                "You do this",
+                "What happens"
               ],
               "rows": [
                 [
-                  "Repair No",
-                  "Display only: {company line_code}-R-{id} (e.g. MLH-R-42). Used on the list and on EIR/EOR PDFs as Job Order #."
+                  "Hold Move off",
+                  "No movement is created."
                 ],
                 [
-                  "Container No",
-                  "Required. Typed (not a free dropdown). Must exist and be visible to this company's line (unclaimed containers still allowed; boxes claimed by another known line are hidden). Lookup messages: \"Container code is required.\" / \"Container not found.\""
+                  "Hold Move on",
+                  "Sent To Repair, on the issue date. The box shows Damaged."
                 ],
                 [
-                  "PTI",
-                  "Shown only when the container's equipment category is Reefer. Tested (1) / Non Tested (0) / blank."
+                  "Every line Confirm, and Repair Date filled",
+                  "Received From Repair. The box shows Available."
                 ],
                 [
-                  "Depot",
-                  "Required. Terminals of type Depot only."
-                ],
-                [
-                  "Bl No",
-                  "Optional free text (related B/L reference)."
-                ],
-                [
-                  "Invoice No",
-                  "Optional free text (depot / supplier invoice reference — not a system Invoice document)."
-                ],
-                [
-                  "Issue Date",
-                  "Required. Unique together with Container + company: one repair per container per issue date."
-                ],
-                [
-                  "Repair Date",
-                  "Optional. Must be on or after Issue Date. Needed (together with Confirmed) before a Received From Repair movement is created."
-                ],
-                [
-                  "Currency",
-                  "Required. Form offers EGP / USD."
-                ],
-                [
-                  "Conversion /",
-                  "Optional. Form effectively offers \"Same\""
-                ],
-                [
-                  "Exchange Rate",
-                  "(value 0); rate defaults to 1. Used when displaying converted totals on EOR / export."
-                ],
-                [
-                  "Discount (header)",
-                  "Optional amount + %. Stored as container_discount_amount / container_discount_percentage. When header discount amount > 0, list PDF/export apply the header % to line totals; otherwise each line's own discount is used."
-                ],
-                [
-                  "Customer Name",
-                  "Optional agency customer."
-                ],
-                [
-                  "Contact Person",
-                  "Shown on the form and validated, but NOT saved on the repair header. EOR PDF reads contact person from the linked Customer master instead."
-                ],
-                [
-                  "Remarks",
-                  "Optional notes."
-                ],
-                [
-                  "Hold Move",
-                  "Checkbox (default off). When on, the system auto-creates repair movements (see section 7). Help text: Create \"SNTR\" movement automatically when repair is pending."
+                  "Any line still Pending",
+                  "The whole job stays Pending. No return movement. The box stays Damaged."
                 ],
                 [
                   "Is Sold",
-                  "Checkbox (default off). Form field is named isSold; stored as is_sold. Overrides the list badge to Sold and hides EIR/EOR. Does NOT create or remove movements."
+                  "Badge says Sold. PDFs hide. The box status does not change."
                 ],
                 [
-                  "Repair Description",
-                  "Required on the form. Stores the Damage List row id (looked up for display / PDF)."
-                ],
-                [
-                  "Repair Type / Size",
-                  "Taken from the Damage List (repair_type / unit_type); shown read-only."
-                ],
-                [
-                  "Fresh / Old (F/O)",
-                  "Optional Fresh or Old flag on the damage."
-                ],
-                [
-                  "Rate / Qty",
-                  "Optional. Rate x Qty can drive Depot Amount on the form."
-                ],
-                [
-                  "Depot Amount",
-                  "Depot charge for the line (stored as amount)."
-                ],
-                [
-                  "Depot Vat",
-                  "Checkbox. If on: VAT = round(Depot Amount x 14%, 2); Depot Total = Amount + VAT."
-                ],
-                [
-                  "Line Profit /",
-                  "Optional amounts and optional % helpers."
-                ],
-                [
-                  "Agency Vat",
-                  "Checkbox. If on: VAT = round( (Depot Total + Line Profit + Agency Profit) x 14%, 2)."
-                ],
-                [
-                  "Total",
-                  "Depot Total + Line Profit + Agency Profit + Agency VAT. Discount is stored separately and is NOT subtracted from this stored Total."
-                ],
-                [
-                  "Discount",
-                  "Optional amount and/or % on the line."
-                ],
-                [
-                  "Payer",
-                  "Optional. From active repair_payers list (status = 1). Header payer is not used."
-                ],
-                [
-                  "Line Confirm",
-                  "Per line: Pending (2, default) / Confirm (1) / Rejected (0)."
-                ],
-                [
-                  "- No description lines",
-                  "→ Pending (2)"
-                ],
-                [
-                  "- ANY line still Pending",
-                  "→ Pending (2)"
-                ],
-                [
-                  "- ALL lines Rejected",
-                  "→ Rejected (0)"
-                ],
-                [
-                  "of Confirm + Rejected)",
-                  "→ Confirm (1)"
+                  "Delete the job",
+                  "Its Sent To Repair and Received From Repair are removed too."
                 ]
               ]
             },
             {
-              "heading": "Listing, Search & Export",
-              "type": "text",
-              "content": "- This company's repairs only, 30 per page, newest first. - Filters that actually apply: Container No (multi), BL No (multi), Depot, Line Confirmation (Rejected / Confirmed / Pending / Is sold), Issue From–To, Repair From–To. - \"Created by\" appears in the filter area but is NOT applied by the filter. - Columns: #, Repair No, Container No, Eq.Type, Depot, Bl No, Invoice No, Issue Date, Repair Date, Line Confirm, Attach, EIR/EOR (hidden for Sobek companies and when Sold), Actions. - Buttons: Add Repair, Template, Upload, Export. - Export: filtered list to container_repairs.xlsx. Empty set: \"No data available for export\"."
-            },
-            {
-              "heading": "Creating, Editing & Deleting",
-              "type": "text",
-              "content": "Rule Message shown Same container + same issue date \"This container already has a (this company), create or edit repair record with the same issue date.\" Container missing \"Please select a container number.\" / \"The selected container is invalid or does not exist.\" Depot missing \"Please select a depot.\" Issue date missing / bad \"Issue date is required.\" / \"Please enter a valid issue date.\" Repair date before issue date \"Repair date must be on or after the issue date.\" Currency missing \"Please select a currency.\" Exchange rate <= 0 \"Exchange rate must be greater than 0.\" Damage type missing on a line \"Please select a damage type for each repair description.\" Bad description row on update \"Error processing repair description #N. Please check the data and try again.\" Attachment on create Multi-file: pdf/jpg/jpeg/png/ doc/docx/xls/xlsx, max 5MB each. No Before/After stage on create (treated as Before later). On edit, all description lines are deleted and re-created from the form. Edit does not use the multi-attachment create field (manage attachments from the list modal instead). Success: Create → translation key \"Container Repair.created\" (often shown as that key if the language file is empty) Update → \"Container Repair Updated Successfully\" Delete → \"Container Repair and all related data deleted successfully\" Delete confirm: \"Are you sure you want to delete this item?\" Delete also removes: auto SNTR/RCVR for this repair (if Hold Move was on), all attachment files, all description rows, then the repair itself. Container List will not delete a container that still has repairs: \"Cannot delete this container because it has related repair records\"."
-            },
-            {
-              "heading": "Import",
-              "type": "text",
-              "content": "IMPORT Template: documents/container_repairs_template.xlsx Columns used: container_no, container_type, depot, issue_date, repair_date, bl_no, invoice_no, pti, hold_move, line_confirmation, remarks. Defaults: currency USD, rate 1, conversion Same. Import can create a missing container type and container (ISO-6346 check digit validated). It does NOT create description lines. Hold Move on an imported row still triggers the same movement rules as create. Typical row errors: \"Row N: Container No is required\" \"Row N: Invalid container number format or check digit for 'X'\" \"Row N: Container Type is required\" / \"Depot is required\" / \"Depot 'X' not found\" \"Row N: Invalid or missing issue date for container X\" \"Row N: Container X already has a repair record with issue date Y\" Success: \"Container Repair Imported Successfully. Imported N records.\" Partial: \"Import completed with errors: …\" ATTACHMENTS (list modal) Before Repair (stage 0, default) and After Repair (stage 1). Upload / move between stages / delete. Same file types, max 5MB. Messages: \"Attachment uploaded successfully\" / \"Attachment moved successfully\" / \"Attachment deleted successfully\". PDFs (hidden when Sold; hidden entirely for Sobek) EIR — Equipment Interchange Receipt: job #, issue date, BL, depot, container specs, damage lines (description / F/O / size). NO money, NO invoice, NO customer block. EOR — Estimate of Repair: adds repair date, invoice no, customer / contact (from Customer master), payer, repair type, qty, amounts, discount / total / currency. Optional USD→EGP conversion when conversion = 1."
-            },
-            {
-              "heading": "How This Feeds Other Modules",
-              "type": "text",
-              "content": "DAMAGE LIST Description dropdown = damages for the chosen depot PLUS General damages (depo_id = \"all\"). Rates/types come from that catalogue. MOVEMENT CONTROL (Hold Move only) Activities matched by name: \"Sent To Repair\" (SNTR) and \"Received From Repair\" (RCVR). Remarks: Auto-generated movement for (Repair No: R-{id}) Movement date = Issue Date or Repair Date at 12:00:00 Terminal = the repair's Depot; container status Empty. After create/update/delete → container stock status recalculated. Priority rules: 1. Hold Move OFF → no auto movements (and turning it off removes this repair's SNTR + RCVR). 2. Hold Move ON → always create/update SNTR on Issue Date. 3. RCVR only when header Line Confirmation = Confirm (1) AND Repair Date is filled; otherwise any RCVR for this repair is removed. 4. Delete with Hold Move ON → remove this repair's SNTR (and RCVR if a repair date existed). These SNTR/RCVR rows are protected from normal edit/delete in Movement Control — they belong to this workflow. CONTAINER LIST / EQUIPMENT STATUS / MOVEMENT EXPORTS (AV vs DM) Latest repair for the container (newest created): - No repair, OR repair is Confirm AND has Repair Date → AV - Otherwise → DM Movement display also forces DM when the latest move is SNTR; otherwise it follows the repair flag above. COST / INVOICE MODULES Repairs do NOT create Invoice or Cost documents. The descriptions modal \"Cost Breakdown\" / \"Invoice Summary\" is on-screen only (sums non-rejected lines; VAT line is Agency VAT at 14%). CUSTOMERS Optional customer_id on the repair; customer merge keeps the link. Contact person on EOR comes from the Customer master."
-            },
-            {
-              "heading": "Why it matters",
+              "heading": "Two things people miss",
               "type": "callout",
-              "style": "info",
-              "content": "A wrong Hold Move or missing Repair Date leaves a box stuck as Damaged (DM) on Container List / Equipment Status, or creates a Sent To Repair movement with no Received From Repair when the job is finished. A Pending description line keeps the whole job Pending, so RCVR never fires even if a repair date is filled. Is Sold hides EIR/EOR and overrides the confirmation badge without clearing movements — so marking Sold does not by itself put the box back to Available. The most common operational mistake is Confirming lines without setting Repair Date (or turning Hold Move on too late), which leaves SNTR/DM in place after the physical repair is done."
+              "style": "warning",
+              "content": "Confirm the lines and fill the repair date, or the box stays Damaged. This screen does not create an invoice. The cost popup only adds up the lines."
             }
           ]
         },
