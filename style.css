@@ -352,7 +352,6 @@ table.doc-table td{
 table.doc-table td:first-child{
   color:var(--text);
   font-weight:600;
-  white-space:nowrap;
 }
 table.doc-table tr:hover td{ background:rgba(255,255,255,0.025); }
 

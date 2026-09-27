@@ -2742,20 +2742,24 @@
               ],
               "rows": [
                 [
-                  "Customer already has an open record (stage No Respond or Negotiation)",
-                  "Cannot create new CRM: This customer already has an active record (Contacted, Negotiation, or No Respond). On edit: Cannot update CRM: … another active record …"
+                  "Open record already exists",
+                  "Cannot create new CRM: This customer already has an active record (No Respond or Negotiation)."
                 ],
                 [
-                  "“New” customer without a name",
-                  "Standard required message."
+                  "Another open record on edit",
+                  "Cannot update CRM: This customer already has another active record (No Respond or Negotiation)."
                 ],
                 [
-                  "Company / customer name already used (prospect name unique in CRM; “new” / prospect name must not already exist as a Customer)",
-                  "Standard already-been-taken message."
+                  "New customer with no name",
+                  "Company name is required."
+                ],
+                [
+                  "Duplicate Customer or CRM name",
+                  "This name has already been taken."
                 ],
                 [
                   "Next Follow Up not after Last Contact",
-                  "Standard must-be-a-date-after message."
+                  "Next Follow Up must be a date after Last Contact."
                 ]
               ]
             },
