@@ -7889,6 +7889,806 @@
           ]
         },
         {
+          "id": "export-booking",
+          "title": "Export Booking",
+          "icon": "clipboard",
+          "summary": "An Export Booking represents an approved container slot reservation on an outbound vessel for export cargo.",
+          "sections": [
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Sidebar → Documentation → Export Booking List"
+                ]
+              ]
+            },
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "An Export Booking represents an approved container slot reservation on an outbound vessel for export cargo. It links an Export Quotation (or a No-Quotation booking) to shipping line operators, shippers, consignees, forwarders, notify parties, load/discharge ports, vessel/voyage, load terminals, and detailed container line items (container type, quantity, stock container numbers, seal numbers, gross weight, IMO hazmat classification, reefer settings, and out-of-gauge dimensions). Export bookings serve as the core operational record that triggers container pick-up, movement gate-out, Container Release Orders (CRO), Nafeza customs export registration, and downstream Bill of Lading (B/L) Draft creation."
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Documentation → Export Booking List → Click Add Export Booking",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Select an approved Export Quotation (or select \"0\" for No Quotation)",
+                  "icon": "search",
+                  "tone": "decision"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3",
+                  "title": "Complete Header",
+                  "icon": "hash",
+                  "desc": "Shipper, Consignee, Forwarder, Notify Party, Principal Line, Outbound Vessel/Voyage, Place of Acceptance, POL, POD, Place of Delivery, and Load Terminal."
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Add Container Lines",
+                  "icon": "clipboard",
+                  "desc": "Container Type, Quantity, Stock Container Number (must be in stock for export), SOC/COC flag, Seals, Gross Weight, VGM, Activity Location, and any Hazmat/Reefer/OOG parameters."
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "Save booking as Draft or Confirmed",
+                  "icon": "activity",
+                  "tone": "system"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Optional",
+                  "icon": "info",
+                  "desc": "Register Nafeza UCR number (19 digits) and synchronize export customs status. Proceed to issue Container Release Order (CRO) to trucker, record Movement Gate-Out, or generate Export B/L Draft.",
+                  "tone": "result"
+                }
+              ]
+            },
+            {
+              "heading": "Fields stored",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Booking Ref No (ref_no)",
+                  "Optional/Required string. Unique booking serial per company. If provided manually, checked for duplicates."
+                ],
+                [
+                  "Quotation Ref (quotation_id)",
+                  "Required choice. Select approved Export Quotation or 0 for No Quotation booking."
+                ],
+                [
+                  "Shipper / Customer (customer_id)",
+                  "Required. Registered customer with Shipper role (role_id 1)."
+                ],
+                [
+                  "Consignee (customer_consignee_id)",
+                  "Required. Registered customer with Consignee role (role_id 2)."
+                ],
+                [
+                  "Forwarder (ffw_id)",
+                  "Optional / inherited from quotation. Customer with Freight Forwarder role (role_id 6)."
+                ],
+                [
+                  "Notify Party (customer_notifiy_id)",
+                  "Optional. Customer with Notify Party role (role_id 3)."
+                ],
+                [
+                  "Receiver Customer (reciver_customer)",
+                  "Optional. Party designated to receive release order / delivery documentation."
+                ],
+                [
+                  "Principal Line (principal_name)",
+                  "Required shipping line operator (Lines master table)."
+                ],
+                [
+                  "Vessel / Voyage (voyage_id)",
+                  "Required. Outbound vessel voyage filtered by company and port of loading."
+                ],
+                [
+                  "Place of Acceptance (place_of_acceptence_id)",
+                  "Required port (Ports master table). Must differ from Place of Delivery."
+                ],
+                [
+                  "POL (load_port_id)",
+                  "Required port of loading. Must differ from Port of Discharge (POD)."
+                ],
+                [
+                  "POD (discharge_port_id)",
+                  "Required port of discharge. Must differ from Port of Loading (POL)."
+                ],
+                [
+                  "Place of Delivery (place_of_delivery_id)",
+                  "Required port of final delivery. Must differ from Place of Acceptance."
+                ],
+                [
+                  "Load Terminal (terminal_id)",
+                  "Required terminal at Port of Loading (Terminals master table)."
+                ],
+                [
+                  "Discharge Terminal (discharge_terminal_id)",
+                  "Optional terminal at Port of Discharge."
+                ],
+                [
+                  "Transhipment Port (transhipment_port)",
+                  "Optional transhipment port for multi-leg export routes."
+                ],
+                [
+                  "Payment Kind (payment_kind)",
+                  "Prepaid or Collect. Auto-resolved from quotation rate structure."
+                ],
+                [
+                  "Freight Term (freight_term)",
+                  "Optional freight clause (CY/CY, Door/CY, etc.)."
+                ],
+                [
+                  "Commodity Code (commodity_code)",
+                  "Optional tariff commodity classification code."
+                ],
+                [
+                  "Commodity Description (commodity_description)",
+                  "Optional plain text cargo description."
+                ],
+                [
+                  "Nafeza UCR (ucr)",
+                  "Optional 19-digit Egyptian Customs export registration code (regex: /^\\d{19}$/)."
+                ],
+                [
+                  "Bayan No (exportal_id)",
+                  "Optional Egyptian export clearance declaration serial."
+                ],
+                [
+                  "Booking Status (booking_confirm)",
+                  "Required status integer: Draft (0), Confirmed (1), Cancelled (2), Hold (3), Ready to Confirm (4)."
+                ],
+                [
+                  "Container Details",
+                  "At least one container line row: - Type (container_type): Required equipment type ID. - Container No (container_id): Required/Optional master container ID. For export bookings, must be in stock (in_stock = 1). - Qty: Required line quantity (default 1). - SOC / COC: Shipper Owned Container (soc=1) or Carrier Owned Container (coc=1). - Weight: Gross cargo weight per container. - Seal No (seal_no): Optional container seal identifier. - Free Time: Demurrage/detention free days count. - Activity Location: Terminal/depot location for pick-up. - IMO Details: IMO Class, UN Number, Packing Group (if hazmat). - Reefer Details: Temperature (C), Humidity (%), Ventilation (CBM/hr). - OOG Details: Over-height, Over-width, Over-length dimensions (cm)."
+                ],
+                [
+                  "Total Quantity (total_quantity)",
+                  "Calculated sum of container line quantities. Auto-recalculated on save."
+                ]
+              ]
+            },
+            {
+              "heading": "Listing, search & export",
+              "type": "rules",
+              "items": [
+                "Displays 30 bookings per page, ordered newest first (id desc).",
+                "Multi-field Search: Quotation Ref, Booking Ref No, Shipper, Consignee, Forwarder, Voyage, POL, POD, Container Number, Nafeza UCR.",
+                "List Columns: Booking Ref, Quotation Ref, Status Badge (Draft/Confirmed/Cancelled), Shipper, Consignee, Forwarder, Voyage / Vessel, POL, POD, Total Qty, Nafeza Status, Actions.",
+                "Actions Available: Edit, Delete, Generate B/L Draft, Clone, Part Load, Rollover, Merge Bookings, CRO, Activity Logs."
+              ]
+            },
+            {
+              "heading": "Creating, editing & deleting",
+              "type": "table",
+              "columns": [
+                "Rule",
+                "Message shown"
+              ],
+              "rows": [
+                [
+                  "Duplicate booking reference number",
+                  "\"This Booking No Already Exists\""
+                ],
+                [
+                  "POL equals POD",
+                  "\"Load Port The Same Discharge Port\""
+                ],
+                [
+                  "Place of Acceptance equals Place of Delivery",
+                  "\"Place of Acceptance and Place of Delivery must be different\""
+                ],
+                [
+                  "Invalid UCR format",
+                  "\"UCR must be exactly 19 digits.\""
+                ],
+                [
+                  "Container not available in stock (Export requirement)",
+                  "\"This container is not available to use (not in stock)\""
+                ],
+                [
+                  "Container code not found in master",
+                  "\"Container No: X is not Found.\""
+                ],
+                [
+                  "Duplicate container code in form",
+                  "\"Container Numbers must be unique\""
+                ]
+              ]
+            },
+            {
+              "heading": "Creating, editing & deleting — notes",
+              "type": "rules",
+              "items": [
+                "On Edit: Header fields and container line items (including IMO/Reefer details) are updated. Existing movements registered against the booking lock vessel/voyage editing.",
+                "On Delete: Bookings associated with an existing B/L Draft, issued Invoices, or recorded Movement Gate-Out events cannot be deleted. Deleting removes booking container lines and attachments."
+              ]
+            },
+            {
+              "heading": "Special actions & Nafeza integration",
+              "type": "rules",
+              "items": [
+                "PART LOAD (booking.partLoad)",
+                "Allows splitting a confirmed export booking into parent and child bookings when containers are shipped on separate vessels or bills of lading.",
+                "Child bookings retain parent reference numbers and update container quantities accordingly.",
+                "ROLLOVER (booking.rollover)",
+                "Transfers assigned containers from an original vessel voyage to a new vessel voyage when cargo misses a feeder connection or vessel cut-off date.",
+                "MERGE BOOKINGS (booking.merge)",
+                "Combines container details from two or more export bookings into a single parent export booking.",
+                "NAFEZA EXPORT HUB INTEGRATION",
+                "Verifies UCR number with the Egyptian Customs Authority (Nafeza API).",
+                "Tracks Nafeza status lifecycle: Pending -> UCR Verified -> Booking Confirmed -> Empty Containers Sent -> Draft BOL -> Final BOL -> Manifest Uploaded."
+              ]
+            },
+            {
+              "heading": "How this feeds other modules",
+              "type": "rules",
+              "items": [
+                "EXPORT B/L DRAFT (BlDraftController@create)",
+                "Requires a Confirmed export booking (booking_confirm = 1 or 4) with assigned, valid container numbers (container_id != null/000).",
+                "Inherits Shipper, Consignee, Forwarder, Notify Party, Voyage, POL, POD, and container breakdown directly into the B/L draft.",
+                "MOVEMENT CONTROL (MovementController)",
+                "Booking reference numbers are selected when recording Gate-Out Empty, Gate-In Full, and Vessel Loading movements.",
+                "Movement lists display booking details and container pick-up terminals.",
+                "CONTAINER RELEASE ORDER (CROController)",
+                "Confirmed export bookings feed CRO generation, allowing truckers to collect empty containers from designated depots.",
+                "INVOICING & DEBIT NOTES (InvoiceController)",
+                "Export freight invoices, THC, and documentation charges link directly to booking_ref.",
+                "Unpaid invoices block Delivery Orders and DO release processes downstream.",
+                "CUSCAR & EXPORT MANIFEST (ManifestController)",
+                "Transmits export container details, seals, gross weights, and UCR numbers to port authorities and customs EDI systems."
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Export bookings are the operational starting point for all outbound shipments. Errors in POL/POD selections, container stock availability, or invalid 19-digit Nafeza UCR numbers result in container gate-in rejection at port gates, vessel loading delays, customs fines, and erroneous freight billing."
+            }
+          ]
+        },
+        {
+          "id": "part-load",
+          "title": "Part Load",
+          "icon": "layers",
+          "summary": "Part load lets more than one shipper share cargo that started on one export booking — typically the same physical box(es) split by quantity / weight across related bookings.",
+          "sections": [
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Sidebar → Documentation → Export Booking"
+                ],
+                [
+                  "Route",
+                  "load modal: booking.partLoadData"
+                ],
+                [
+                  "Route",
+                  "submit: booking.partLoad"
+                ],
+                [
+                  "Route",
+                  "GET /booking/{booking}/part-load"
+                ],
+                [
+                  "Route",
+                  "POST /booking/{booking}/part-load"
+                ],
+                [
+                  "Note",
+                  "There is no separate menu item named \"Part Load\". The feature lives on the Export Booking list as a per-row action (layer-group icon) that opens a modal. This document covers BOOKING part load only. Bill of Lading Draft has a different \"part load\" (refs ending PL1 / PL2) — see section 8."
+                ]
+              ]
+            },
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "Part load lets more than one shipper share cargo that started on one export booking — typically the same physical box(es) split by quantity / weight across related bookings. Export Booking does this by creating a CHILD booking from a PARENT: - Parent keeps some container slots. - Child gets a new booking number, a different shipper, and the quantity of slots you move across. - The family is linked by booking.parent_id (child → parent). Assigned containers you tick are MOVED to the child (not copied at create time). Empty / unassigned slots fill the rest of the quantity. Later, when yard uploads GOMT or SNTS movements, the same container number can be assigned across the whole family (see section 6)."
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Documentation → Export Booking",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "On an eligible row, click the Part Load action",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3",
+                  "title": "The modal loads",
+                  "icon": "hash",
+                  "desc": "choose the child Shipper, set Quantity (1 … parent quantity), and optionally tick assigned containers to move (total assigned selected cannot exceed Quantity)."
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Submit. A new Draft booking appears with its own ref_no,",
+                  "icon": "clipboard",
+                  "desc": "parent_id pointing at the original, and the moved slots."
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "On the list, the parent shows \"Part Loaded bookings: …\" and the child shows \"Part Load of {parent ref}\"",
+                  "icon": "activity",
+                  "tone": "system"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "There is no separate \"mark as part load\" step and",
+                  "icon": "info",
+                  "desc": "no dropdown to attach an existing booking. The child is always CREATED from the parent.",
+                  "tone": "result"
+                }
+              ]
+            },
+            {
+              "heading": "What changes",
+              "type": "table",
+              "columns": [
+                "Field / object",
+                "Parent",
+                "Child"
+              ],
+              "rows": [
+                [
+                  "ref_no",
+                  "Unchanged",
+                  "New number (system)"
+                ],
+                [
+                  "parent_id",
+                  "Stays empty",
+                  "Set to parent booking id"
+                ],
+                [
+                  "customer_id",
+                  "Unchanged",
+                  "Chosen shipper"
+                ],
+                [
+                  "booking_confirm",
+                  "Unchanged",
+                  "Always Draft (value 3)"
+                ],
+                [
+                  "has_bl",
+                  "Must be 0 to start",
+                  "Starts as 0"
+                ],
+                [
+                  "total_quantity",
+                  "Recalculated = remaining container slots",
+                  "= qty moved"
+                ],
+                [
+                  "Container detail rows",
+                  "Selected assigned rows and enough unassigned qty leave the parent",
+                  "Receives those rows / split slots"
+                ],
+                [
+                  "detail.part_load (text on the line)",
+                  "—",
+                  "Remark text: \"This booking is part loaded on booking {parent ref}\""
+                ],
+                [
+                  "Movements for moved assigned containers",
+                  "booking_no retargeted to the child; remark may note part load",
+                  "Same movements now under child"
+                ],
+                [
+                  "Family link",
+                  "children() relation",
+                  "isPartLoadChild()"
+                ]
+              ]
+            },
+            {
+              "heading": "What changes — notes",
+              "type": "rules",
+              "items": [
+                "Assigned vs unassigned on a container line:",
+                "Assigned qty = 1 AND a real container_id (not empty / 000) Unassigned empty / 000 container_id, or qty greater than 1",
+                "Only assigned lines can be ticked in the modal. The remainder of Quantity is taken from unassigned slots (whole rows moved, or a row split when only part of its qty is needed)."
+              ]
+            },
+            {
+              "heading": "Entry conditions & eligibility",
+              "type": "rules",
+              "items": [
+                "The Part Load button appears only when ALL of these are true (Booking::isEligibleForPartLoad):",
+                "shipment_type is Export",
+                "booking_confirm is Draft (3) or Confirmed (1 or 4) — Cancelled (2) is blocked",
+                "has_bl = 0 (no Bill of Lading yet)",
+                "parent_id is empty (a child cannot spawn another child)",
+                "at least one container quantity on the booking",
+                "booking belongs to the user's company",
+                "On submit, common refusals include:",
+                "Quantity below 1 or above the parent quantity",
+                "Selected assigned containers more than Quantity",
+                "Selected line not on this booking, or not assigned",
+                "Not enough unassigned slots left for the remaining quantity",
+                "Invalid / non-shipper customer",
+                "System cannot generate a free child ref_no",
+                "Confirmed parents WITHOUT a B/L are allowed. The child is always saved as Draft. Parents that already have a B/L are blocked on purpose so paper / customs documents are not quietly split here."
+              ]
+            },
+            {
+              "heading": "List indicators",
+              "type": "rules",
+              "items": [
+                "Under the booking Ref No column:",
+                "Child row \"Part Load of {parent ref_no}\" Parent row \"Part Loaded bookings: {child refs…}\" (cancelled children are omitted)",
+                "The Part Load action stays hidden on ineligible rows (including every child and every booking that already has a B/L)."
+              ]
+            },
+            {
+              "heading": "How this feeds movements & yard",
+              "type": "rules",
+              "items": [
+                "CREATE CHILD (BookingPartLoadService) Movements that already exist for containers MOVED to the child are retargeted to the child's booking id, with a part-load remark when needed.",
+                "MOVEMENT EXCEL UPLOAD (GOMT / SNTS only) Gate-out empty codes GOMT and SNTS are special for part-load families:",
+                "The same container may appear on more than one booking in the family without the usual \"duplicate movement\" failure.",
+                "The movement row is kept on the family root (parent) where appropriate.",
+                "Assigning the container fans out to empty slots on the parent AND on sibling children that still need that box — so one physical container can show as Assigned on every related booking that still had an open slot.",
+                "A sibling with no open slot is skipped; the primary booking in the row still fails if it has nowhere to put the box.",
+                "Other movement codes keep the normal one-booking / one-container rules. Import discharge collapse can also carry sibling booking refs in remarks when part-load families are involved.",
+                "There is no booking screen to unlink a child or merge slots back onto the parent."
+              ]
+            },
+            {
+              "heading": "How this feeds other modules",
+              "type": "rules",
+              "items": [
+                "EXPORT BOOKING LIST Parent and child stay separate bookings. Filters, confirm, edit and B/L creation work per booking as usual.",
+                "B/L DRAFT Each booking in the family can get its own draft B/L once it is confirmed and containers are assigned — still one B/L per booking. That is not the same as BL Draft \"part load\" (PL1/PL2).",
+                "CONTAINER / EQUIPMENT VIEWS After GOMT/SNTS fan-out, Assigned counts on parent and children can all show the same container number. That is expected for part-load families.",
+                "INVOICE / DOCUMENTATION Child bookings carry their own shipper and quantity. Billing and documents follow whichever booking / B/L you open — they do not auto-merge the family."
+              ]
+            },
+            {
+              "heading": "Not the same as BL draft part load",
+              "type": "table",
+              "columns": [
+                "Feature",
+                "Booking Part Load",
+                "BL Draft Part Load"
+              ],
+              "rows": [
+                [
+                  "Where",
+                  "Export Booking list",
+                  "B/L Draft"
+                ],
+                [
+                  "Link",
+                  "booking.parent_id",
+                  "Same booking_id; refs …PL1, …PL2"
+                ],
+                [
+                  "What you get",
+                  "New BOOKING (child)",
+                  "Extra B/Ls for shippers on ONE booking"
+                ],
+                [
+                  "Restore / undo",
+                  "None on booking",
+                  "Restore / delete PL siblings exist"
+                ],
+                [
+                  "Flag",
+                  "Family via parent_id",
+                  "bl_drafts.part_load"
+                ]
+              ]
+            },
+            {
+              "heading": "Not the same as BL draft part load — notes",
+              "type": "text",
+              "content": "Do not use this document for the B/L Draft PL1/PL2 screens (bldraft.partload / processPartload / restorePartload)."
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Without booking part load, two shippers who share one physical container would either fight over a single booking or force fake duplicate boxes. Parent/child keeps each shipper's commercial booking while yard can still gate out one container for the family. The hard stops matter: - No B/L yet on the parent — so a released bill is not split behind the scenes. - Child is always Draft — ops finish confirm / assign / B/L on the child on purpose. - GOMT/SNTS fan-out — so movements Excel does not reject the second booking in the family, and empty sibling slots get the same container when the gate-out is uploaded. The most common confusion is mixing this with BL Draft part load (PL1/PL2), or expecting an \"attach existing booking\" dropdown. In Export Booking, Part Load always means: create a child from this parent and move quantity across."
+            }
+          ]
+        },
+        {
+          "id": "export-bl",
+          "title": "Export BL",
+          "icon": "file-text",
+          "summary": "A Bill of Lading (B/L) Draft is the official legal contract of carriage and transport document generated from an approved Export Booking.",
+          "sections": [
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Sidebar → Documentation → Export B/L Draft"
+                ]
+              ]
+            },
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "A Bill of Lading (B/L) Draft is the official legal contract of carriage and transport document generated from an approved Export Booking. It establishes the freight contract between the shipping line and the shipper, itemizing assigned container numbers, seal numbers, package breakdown (package count, package type), gross weight, net weight, volumetric measurement (CBM), commodity description, marks and numbers, payment terms (Prepaid/Collect), and B/L issue details. The B/L Draft screen controls the validation, editing, printing (Unified PDF, Shipping Order, Freight Manifest, CSTAR), B/L splitting, and automated customs waypoint submission (Nafeza BOL sync) for outbound export cargo."
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Documentation → Export B/L Draft → Click Select Booking",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Choose a Confirmed Export Booking (must have assigned container numbers and no existing B/L Draft)",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3",
+                  "title": "Complete B/L Header",
+                  "icon": "hash",
+                  "desc": "B/L Reference (matches booking ref), Shipper, Consignee, Notify Party, Additional Notify, Voyage, POL, POD, Payment Kind (Prepaid/Collect), Date of Issue, and Number of Originals."
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Complete Container Breakdown",
+                  "icon": "clipboard",
+                  "desc": "Seal No, Packages Count & Type, Gross Weight (kg), Net Weight (kg), Measurement (CBM), Description of Goods, and Marks & Numbers for each container."
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "Save B/L Draft (status is forced to Draft / bl_status = 0 on creation)",
+                  "icon": "activity",
+                  "tone": "system"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Update B/L Draft to mark Status as Confirmed (bl_status =",
+                  "icon": "info",
+                  "desc": "1) once cargo details are final. Generate and print line-specific Unified B/L PDF (Original, Waybill, Copy), Shipping Order PDF, or Freight Manifest XML/PDF.",
+                  "tone": "result"
+                }
+              ]
+            },
+            {
+              "heading": "Fields stored",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "B/L Ref No (ref_no)",
+                  "Required string. B/L reference number matching the source export booking ref_no. Checked for duplicates on creation."
+                ],
+                [
+                  "Booking ID (booking_id)",
+                  "Required integer linking to the source export booking record."
+                ],
+                [
+                  "Customer / Shipper (customer_id)",
+                  "Required customer with Shipper role (role_id 1)."
+                ],
+                [
+                  "Consignee (customer_consignee_id / customer_consignee_details)",
+                  "Required customer or text details for the Consignee."
+                ],
+                [
+                  "Notify Party (customer_notifiy_id / customer_notifiy_details)",
+                  "Required customer or text details for the primary Notify Party."
+                ],
+                [
+                  "Additional Notify (additional_notify_id / additional_notify_details)",
+                  "Optional customer or text details for a secondary Notify Party."
+                ],
+                [
+                  "Voyage / Vessel (voyage_id)",
+                  "Required export voyage ID. Locked once container movements are recorded against the booking."
+                ],
+                [
+                  "POL (load_port_id)",
+                  "Required port of loading. Must differ from Port of Discharge (POD)."
+                ],
+                [
+                  "POD (discharge_port_id)",
+                  "Required port of discharge. Must differ from Port of Loading (POL)."
+                ],
+                [
+                  "Place of Acceptance / Delivery (place_of_acceptence_id / place_of_delivery_id)",
+                  "Optional origin place of acceptance and final destination delivery ports."
+                ],
+                [
+                  "B/L Kind (bl_kind)",
+                  "Required B/L type string: Draft, Waybill, Original, Copy. On create, forced to \"Draft\"."
+                ],
+                [
+                  "B/L Status (bl_status)",
+                  "Required status integer: Draft (0), Confirmed (1), Hold (3). On create, forced to Draft (0)."
+                ],
+                [
+                  "Payment Kind (payment_kind)",
+                  "Required payment terms: Prepaid or Collect."
+                ],
+                [
+                  "Date of Issue (date_of_issue)",
+                  "Required B/L issue date."
+                ],
+                [
+                  "Number of Originals (number_of_original)",
+                  "Required integer count of original B/L copies issued (default 3)."
+                ],
+                [
+                  "Declared Value (declerd_value)",
+                  "Optional declared cargo value string for ad valorem freighting."
+                ],
+                [
+                  "Commodity Code",
+                  "Optional tariff commodity code (auto-resolved from booking or line selection)."
+                ],
+                [
+                  "B/L Container Detail Rows",
+                  "One row per assigned container: - Container ID (container_id): Required master container ID. Must be assigned (cannot be 000 / unassigned). - Seal No (seal_no): Container seal number. - Packages (packs): Integer package count. - Package Type (pack_type): Package code (e.g. Cartons, Pallets, Drums, Bags). - Gross Weight (gross_weight): Cargo gross weight in kg. - Net Weight (net_weight): Cargo net weight in kg. - Measurement (measurement): Volumetric cubic measurement (CBM). - Description (description): Plain text description of goods."
+                ]
+              ]
+            },
+            {
+              "heading": "Listing, search & TEU summary",
+              "type": "rules",
+              "items": [
+                "Displays 30 B/L drafts per page, ordered newest first (id desc).",
+                "Filters Available: B/L Reference No, Booking Reference No, Shipper/Customer, Consignee, Voyage, POL, POD, Created By, Container Type.",
+                "Global TEU Breakdown: Calculates total unique container counts, TEU summary (20' vs 40'), and total valid B/L count across all matching filtered records.",
+                "List Actions: Edit, Show B/L, Print Unified PDF, Print CSTAR, Print Shipping Order, Split B/L, Freight Manifest, Delete."
+              ]
+            },
+            {
+              "heading": "Creating, editing & deleting",
+              "type": "table",
+              "columns": [
+                "Rule",
+                "Message shown"
+              ],
+              "rows": [
+                [
+                  "Unassigned containers in booking",
+                  "\"No assigned container numbers for this BL. Please assign container numbers to the booking first.\""
+                ],
+                [
+                  "Duplicate container in B/L form",
+                  "\"Container Numbers Must be unique\""
+                ],
+                [
+                  "Duplicate B/L reference number",
+                  "\"This BL reference number already exists. Please refresh the page.\""
+                ],
+                [
+                  "Draft status requires Draft BL kind",
+                  "\"When BL Status is Draft, BL Type must be Draft.\""
+                ],
+                [
+                  "Load Port equals Discharge Port",
+                  "\"Load Port The Same Discharge Port\""
+                ]
+              ]
+            },
+            {
+              "heading": "Creating, editing & deleting — notes",
+              "type": "rules",
+              "items": [
+                "On Edit: Details, weights, package counts, descriptions, and B/L status are updated. If B/L status is changed from Draft (0) to Confirmed (1), B/L Kind can be updated to Original or Waybill.",
+                "On Delete: Removing a B/L draft resets the source booking's has_bl flag to 0, allowing a new B/L to be generated if needed. B/Ls linked to issued invoices or recorded movements cannot be deleted."
+              ]
+            },
+            {
+              "heading": "Printing & financial gates",
+              "type": "rules",
+              "items": [
+                "PRINT COUNTER LIMIT",
+                "B/L original printing is tracked in bl_print_counter. Max 3 original prints permitted per B/L (\"Print limit exceeded\").",
+                "FINANCIAL PRINT GATE (printGateStatus)",
+                "Before printing Original B/L or Waybill PDFs, the system evaluates financial clearance (bldraft.printGateStatus).",
+                "Printing is blocked if: a) Unpaid export freight invoices or debit notes exist for the shipper/booking. b) Container storage or demurrage charges exceed covered invoice amounts. c) B/L Status is set to Hold (3)."
+              ]
+            },
+            {
+              "heading": "Special actions & Nafeza waypoint sync",
+              "type": "rules",
+              "items": [
+                "SPLIT B/L (bldraft.split)",
+                "Allows dividing container lines from a single B/L draft into multiple child B/Ls.",
+                "Blocked if any assigned container is already loaded on board a vessel (Movements::loadedContainerIds).",
+                "FREIGHT MANIFEST (bldraft.manifest)",
+                "Exports official vessel freight manifest XML and PDF documents for customs and port authorities.",
+                "NAFEZA BOL WAYPOINT SYNC",
+                "Automatically triggers Nafeza BOL API waypoints upon B/L save or update:",
+                "Draft BOL (submits draft B/L details to customs portal).",
+                "Final BOL (submits confirmed B/L when bl_status = 1).",
+                "Split BOL / Merge BOL (submits split or merged B/L declarations).",
+                "Updates nafeza_sync_status and logs response errors without blocking B/L save."
+              ]
+            },
+            {
+              "heading": "How this feeds other modules",
+              "type": "rules",
+              "items": [
+                "INVOICING & DEBIT NOTES (InvoiceController)",
+                "Freight invoices and debit notes link directly to bldraft_id.",
+                "Unpaid B/L invoices block PDF printing and downstream Delivery Order release.",
+                "MOVEMENT CONTROL (MovementController)",
+                "Container loading movements lock B/L vessel/voyage editing and block B/L split operations.",
+                "CUSTOMS & EDI MANIFESTS (ManifestController)",
+                "Supplies cargo package counts, gross weights, measurements, seal numbers, and commodity descriptions to export customs manifest files.",
+                "NAFEZA CUSTOMS PORTAL (NafezaWaypointService)",
+                "Transmits B/L draft and final waypoints to Egypt's Nafeza Single Window system for export cargo clearance."
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "The Bill of Lading is the primary document of title in ocean transport. Errors in container numbers, seal numbers, gross weights, or cargo descriptions cause severe customs penalties at destination ports, container discharge holds, and commercial disputes over freight payment and title release."
+            }
+          ]
+        },
+        {
           "id": "work-order",
           "title": "Work Order",
           "icon": "clipboard",
@@ -9707,6 +10507,323 @@
           ]
         },
         {
+          "id": "receipt-list",
+          "title": "Receipt List",
+          "icon": "file-text",
+          "summary": "A Receipt is the proof that a customer PAID money against one or more confirmed Invoices.",
+          "sections": [
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Sidebar → Accounting → Receipt List"
+                ],
+                [
+                  "Route",
+                  "name (list: receipt.index"
+                ],
+                [
+                  "Feature flag",
+                  "receipt_gates"
+                ],
+                [
+                  "Note",
+                  "the company."
+                ]
+              ]
+            },
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "A Receipt is the proof that a customer PAID money against one or more confirmed Invoices. This screen lists every receipt of the company and is also the starting point for creating new ones. There are two kinds: SINGLE RECEIPT One receipt pays ONE invoice (partially or fully). BULK RECEIPT One payment pays SEVERAL invoices of the same customer at once. The payment is split (\"allocated\") invoice by invoice, and every covered invoice must be paid IN FULL. Receipts are what flip an invoice from Unpaid to Paid, what move the customer's Credit / Debit balances, what appear on the customer statement, and what get pushed to QuickBooks as a Receive Payment. The same screen works for normal (agency) companies and for Yard companies - the only difference is that a Yard receipt pays a Yard Invoice (always in EGP) instead of a regular Invoice."
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Filter the list",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Create Single (pick one invoice) or Bulk (pick customer / BL / booking, tick invoices)",
+                  "icon": "search",
+                  "tone": "decision"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3",
+                  "title": "Enter payment lines (bank deposit / transfer / cheque / cash / visa / customer-credit matching)",
+                  "icon": "hash"
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Choose Split or Combined receipt",
+                  "icon": "clipboard",
+                  "tone": "decision"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "Save",
+                  "icon": "activity",
+                  "tone": "system"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Receipt number is generated, invoice(s) become Paid, customer credit/debit updates",
+                  "icon": "info",
+                  "desc": "Later: Show/Print, complete missing bank serial / payment date, set QB Deposit Account, Sync to QuickBooks Reject only if the receipt was wrong.",
+                  "tone": "result"
+                }
+              ]
+            },
+            {
+              "heading": "Fields stored",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Receipt No",
+                  "Auto-generated, never typed by the user. See section 8 for the numbering rules."
+                ],
+                [
+                  "Invoice / Yard Invoice",
+                  "Single receipt: the ONE invoice paid. Bulk receipt: the list of invoices paid (see section 7 for how bulk is stored). The list shows the invoice numbers; if a bulk receipt covers more than 2 invoices it shows an \"N Invoices\" badge that opens the full list."
+                ],
+                [
+                  "BL No",
+                  "Taken from the invoice's BL (or, for invoices without BL, from the Booking). Bulk receipts show all distinct BL/Booking refs comma-separated."
+                ],
+                [
+                  "Customer",
+                  "Bulk receipts store the customer directly. Single receipts read it from the invoice."
+                ],
+                [
+                  "Date",
+                  "The date the receipt record was created (not the payment date)."
+                ],
+                [
+                  "Payment Date",
+                  "The date the money actually moved (bank date, cash date, visa date). Stored per payment line."
+                ],
+                [
+                  "Payment Methods",
+                  "Bank Deposit, Bank Transfer, Bank Cheque, Cash, Visa, Matching. A receipt can hold several. \"Matching\" = paid out of the customer's existing CREDIT balance (no new money received)."
+                ],
+                [
+                  "Total",
+                  "What the receipt is meant to cover: the invoice remaining amount (single) or the sum of the allocations of the covered invoices (bulk)."
+                ],
+                [
+                  "Paid",
+                  "What was actually received on this receipt, in the PAYMENT currency (see cross-currency below)."
+                ],
+                [
+                  "Currency",
+                  "Payment currency. Same as the invoice currency unless the customer paid in EGP."
+                ],
+                [
+                  "Exchange Rate",
+                  "Only for cross-currency receipts (see section 5)."
+                ],
+                [
+                  "Bank / Bank Serial",
+                  "Company bank account used, plus the deposit / transfer serial (or cheque number + cheque bank)."
+                ],
+                [
+                  "Visa Serial",
+                  "POS slip number for Visa payments."
+                ],
+                [
+                  "Notes",
+                  "Free text."
+                ],
+                [
+                  "QB Deposit To",
+                  "The QuickBooks account the money lands in. Shown only when QuickBooks is enabled."
+                ],
+                [
+                  "QB Status",
+                  "Synced / Pending / Failed / Not Synced. Shown only when QuickBooks is enabled."
+                ],
+                [
+                  "Status",
+                  "Valid or Rejected. Rejected receipts stay on the list but no longer count as payment."
+                ],
+                [
+                  "User",
+                  "Who created the receipt."
+                ]
+              ]
+            },
+            {
+              "heading": "Listing & search",
+              "type": "rules",
+              "items": [
+                "Paginated, 30 per page, newest first (by id).",
+                "Visibility: a normal company sees only its own receipts. Companies with code MLHC or MLHE see the receipts of ALL lines that share the same company code.",
+                "A Yard company only sees Yard receipts; a normal company only sees regular-invoice receipts. The two never mix on one list.",
+                "Filters: Receipt No exact match. Customer customer of the invoice. Invoice exact invoice (Yard company: yard invoice). BL No matches the BL of the invoice OR the receipt. From / To Date on the receipt creation date. Created By only users who have at least one VALID receipt are offered. Receipt Status Valid / Rejected. QB Sync Status (only if QuickBooks is on) Synced = has a QB transaction id. Failed = last sync failed. Pending = linked invoice(s) are NOT yet synced to QB (so the receipt cannot go yet). Not Synced = linked invoice(s) ARE synced and the receipt is ready to be sent. Currency, Branch (MLH companies only) Currency = currency of the linked invoice(s). Branch = receipt number starts with Sok / Alx / Cai / APT.",
+                "Other list actions: Export to Excel (keeps the current filters), \"Print all\" (builds a ZIP of PDFs for all filtered receipts, with progress bar and cancel), Show/Print a single receipt.",
+                "Known limitation (Yard companies): Yard BULK receipts are not linked to a single yard invoice, so the Customer, Invoice and BL filters will not find them. Find them by Receipt No, date or status instead.",
+                "Known limitation (regular companies): a bulk receipt is linked to the FIRST invoice of the batch for filtering. Filtering by Invoice only finds a bulk receipt when you pick that first invoice."
+              ]
+            },
+            {
+              "heading": "Creating a single receipt",
+              "type": "rules",
+              "items": [
+                "STEP 1 - Choose the invoice. Only invoices that are Confirmed, not a Credit Note, and still Unpaid are offered. (Yard company: confirmed, unpaid, non credit note yard invoices.) MLHC / MLHE additionally only offer invoices that are already synced to QuickBooks. Messages: \"Please select an invoice.\" / \"Invoice not found.\" / \"Yard invoice not found or not confirmed.\"",
+                "STEP 2 - Amount to collect. The system calculates it as: Invoice gross total (charges - discount + VAT - tax withholding)",
+                "Confirmed credit notes issued against the invoice",
+                "Valid receipts already paid on the invoice If nothing is left the screen refuses with: \"Sorry You Cant Create Receipt for this invoice its already Paid\". An EGP invoice is calculated in the EGP column, a USD/EUR invoice in its own currency column.",
+                "STEP 3 - Enter payment lines. Any mix of: Bank Deposit / Bank Transfer / Cheque - each line has its own amount, bank (cheques have no company bank), serial or cheque number, and payment date. Several lines allowed. Cash - one amount + cash payment date. Visa - one amount + visa serial + visa payment date. Matching - consume the customer's existing credit balance. Bank list offered = active banks of the company in the INVOICE currency (MLH companies see all currencies). QB Deposit To list = QB accounts of type \"receipts\" or \"all\" for that currency.",
+                "STEP 4 - Choose the receipt mode. SPLIT (default for single) One separate receipt per payment line: one per bank line, one for cash, one for visa. Each gets its own receipt number and prefix. Matching is attached to the FIRST receipt created; if the customer paid by matching only, a matching-only receipt with Paid = 0 is created. COMBINED One receipt holding all the lines. Its amounts are added up per method; bank, serial and cheque number shown on the receipt are those of the FIRST bank line (every bank line is still saved in full as a payment row).",
+                "CROSS-CURRENCY (paid in EGP for a USD/EUR invoice)",
+                "Receipt currency may only be the invoice currency or EGP: \"Receipt currency must be the invoice currency or EGP.\"",
+                "Exchange rate is required and must be > 0: \"Exchange rate is required for cross-currency receipts.\"",
+                "Conversion = EGP amount / rate, rounded to 2 decimals. The invoice is settled with the converted amount.",
+                "Matching (customer credit) is NOT allowed: \"Customer credit matching is not available for cross-currency receipts.\"",
+                "VALIDATIONS ON SAVE (in the order they fire)",
+                "Invoice must exist (see step 1 messages).",
+                "Currency / exchange rate rules above.",
+                "Matching amount must not exceed the customer's credit in the invoice currency: \"Matching Amount Is Bigger Than Customer Credit EGP\" \"Matching Amount Is Bigger Than Customer Credit EUR\" \"Matching Amount Is Bigger Than Customer Credit\" (USD)",
+                "\"Total payment on receipt cannot be equal zero\" - cash + visa + bank lines + matching must be more than zero.",
+                "Receipt number must be generatable (see section 8), e.g. \"User branch is not configured. Assign a branch in user settings.\" If this fails the receipts just created in this save are deleted and nothing is kept.",
+                "WHAT SAVING DOES TO THE CUSTOMER AND THE INVOICE",
+                "Matching used is deducted from the customer's Credit.",
+                "The customer's existing Debit (in the same currency) is reduced by what was paid, never below zero.",
+                "OVERPAYMENT (paid more than the amount due): the extra becomes customer CREDIT, with a history row linked to the last receipt. Cross-currency overpayment is credited in EGP at the receipt rate.",
+                "UNDERPAYMENT on the FIRST receipt of an invoice: the shortfall is booked as customer DEBIT. Underpayment on a later receipt of the same invoice adds no new debit (the earlier shortfall already covers it).",
+                "The invoice is marked PAID only when paid (in invoice currency) is greater than or equal to the amount due. Otherwise it stays Unpaid and can receive further single receipts until settled."
+              ]
+            },
+            {
+              "heading": "Creating a bulk receipt",
+              "type": "rules",
+              "items": [
+                "STEP 1 - Select. Pick a currency (default USD; Yard = EGP only), then a Customer, a BL, or a Booking (invoices without a BL). Only Confirmed, non credit-note, Unpaid invoices in that currency are offered.",
+                "STEP 2 - Review. The system lists the chosen invoices, oldest first, each with its remaining amount, credit notes applied and tax withholding. Rules at this step: \"Please select at least one invoice.\" \"All selected invoices must be the same currency.\" \"All selected invoices are already fully paid.\" If only ONE invoice is left after removing paid ones, the user is redirected to the SINGLE receipt screen instead.",
+                "STEP 3 - Payment lines, receipt mode and cross-currency work exactly like a single receipt (bank / cheque / cash / visa / matching, EGP allowed with an exchange rate). Bulk default mode is COMBINED. COMBINED one receipt, all lines, allocated across all invoices. SPLIT one receipt per payment line; every invoice allocation is shared between the receipts in proportion to each receipt's share of the total paid (so each split receipt carries a slice of every invoice).",
+                "VALIDATIONS ON SAVE",
+                "\"No invoices selected.\" / \"Customer not found.\"",
+                "Currency / exchange rate rules (same as single).",
+                "Full-coverage rules (regular companies):",
+                "\"One or more selected invoices could not be found.\" (also raised when an invoice belongs to a company the user cannot access.)",
+                "\"Partial bulk receipt is not allowed. Each covered invoice must be paid in full.\" - an allocation that is smaller than the invoice remaining (0.02 tolerance) is rejected. An invoice can be left out (allocation 0) but never part-paid.",
+                "\"Allocated amount cannot exceed the selected invoice remaining amount.\"",
+                "\"Payment amount must fully cover at least one selected invoice.\"",
+                "\"Covered invoice total cannot exceed the payment amount.\" - payment (+ matching) must be at least the sum of allocations.",
+                "Matching amount vs customer credit (same three messages as single). Matching is consumed once, by the first split receipt (or the single combined receipt).",
+                "\"Total payment on receipt cannot be equal zero\".",
+                "Yard bulk only: \"Yard invoices not found.\" and \"Please allocate payment to at least one invoice.\" (Yard bulk does NOT apply the full-coverage rules of point 3 - see risks below.)",
+                "WHAT SAVING DOES",
+                "Receipt is created with Is Bulk = yes and Total = sum of allocations of the covered invoices.",
+                "Each covered invoice is linked to the receipt together with the amount allocated to it. Invoices with allocation 0 are not linked and stay Unpaid.",
+                "Each covered invoice is marked PAID when its allocation reaches its remaining amount (0.02 tolerance).",
+                "If the customer paid MORE than the sum of allocations, the excess becomes customer CREDIT (EGP for Yard and for cross-currency receipts, otherwise USD/EUR) with a history row linked to the last receipt created.",
+                "There is no \"shortfall\" case: a bulk payment that is too small is simply refused (point 3) - bulk never creates customer debit."
+              ]
+            },
+            {
+              "heading": "Single vs bulk - how they are told apart",
+              "type": "rules",
+              "items": [
+                "Every receipt is one of four kinds. The system works this out from three facts: Is Bulk, Invoice link, Yard Invoice link.",
+                "Single regular Is Bulk = no, points to one Invoice. Single yard Is Bulk = no, points to one Yard Invoice. Bulk regular Is Bulk = yes, invoices held in a link table with the amount allocated to each. The receipt also points to the FIRST invoice of the batch (this is what makes it a \"regular\" bulk and what the list filters use). Bulk yard Is Bulk = yes, no direct invoice link; yard invoices held in the same link table.",
+                "This classification decides: which invoices to show on the list, how the paid amount of an invoice is calculated, which entity is sent to QuickBooks (invoice vs yard invoice), and which invoices are re-opened when the receipt is rejected.",
+                "How a receipt counts towards an invoice's \"paid\" figure: Single receipt -> its full Paid amount (converted to the invoice currency if it was paid in EGP) + Matching. Bulk receipt -> only the amount ALLOCATED to that invoice."
+              ]
+            },
+            {
+              "heading": "Receipt numbering",
+              "type": "rules",
+              "items": [
+                "Standard companies: \"PREFIX/ number / YY\", one running counter per company, incremented atomically when the receipt is saved. Prefix depends on the payment method(s) on the receipt: RB bank deposit / bank transfer only RCH cheque only RC cash only RPOS visa only R any mix, or matching only In SPLIT mode each receipt gets the prefix of its own method.",
+                "Branch-serial companies (MLHE and the groups configured for it): the number is built from the user's BRANCH + the payment currency letter + the year, from a counter shared by the whole company group. The user must have a branch assigned or the receipt cannot be saved. For a cross-currency receipt the letter follows the EGP payment currency, not the invoice currency."
+              ]
+            },
+            {
+              "heading": "Show, print and edit",
+              "type": "rules",
+              "items": [
+                "SHOW / PRINT Opens a printable receipt with the amount written in words in the payment currency. The whole list can be exported to Excel or printed as a ZIP of PDFs. When an administrator activates the \"lock receipts\" system lock, printing/PDF/ZIP are disabled and the Create button is greyed out.",
+                "EDIT DETAILS Amounts, currencies, invoices and the total can NOT be edited on a saved receipt. Two limited edits exist: (a) QUICK EDIT from the list - the pencil button appears only when something is missing: a bank deposit/transfer without serial or payment date, a visa without serial or payment date, or any other receipt without a payment date. It only fills fields that are still EMPTY (deposit serial, visa serial, payment date) - it never overwrites existing values. (b) FULL EDIT page - can change, per payment row: amount, bank, serial, payment date, cheque no / cheque bank; also cash, visa, notes. The Paid figure is then recalculated from the payment rows + visa + cash + matching. It does NOT re-check the invoice status or the customer credit/debit - so changing an amount here does not re-balance anything. QB DEPOSIT ACCOUNT can be set/changed from the list until the receipt is synced to QuickBooks.",
+                "REJECT (the only \"delete\") Receipts are never physically deleted. Rejecting sets Status = Rejected and:",
+                "Single receipt: its invoice goes back to Unpaid.",
+                "Bulk receipt: ALL its covered invoices go back to Unpaid.",
+                "Already rejected: \"Receipt is already rejected.\"",
+                "Before confirming, the screen warns which OTHER valid receipts share the same invoice(s) (they stay valid).",
+                "The reject button is only shown to a short fixed list of named administrators, and only on Valid receipts.",
+                "Rejecting does NOT undo the customer's Credit/Debit movements (matching used, overpayment credit, underpayment debit). Those balances must be corrected manually if needed.",
+                "Rejecting does not remove the receipt from QuickBooks."
+              ]
+            },
+            {
+              "heading": "QuickBooks sync",
+              "type": "rules",
+              "items": [
+                "(Only when QuickBooks is enabled for the company.) The sync button appears on Valid receipts only when EVERY invoice covered by the receipt already has an active QuickBooks mapping, otherwise the receipt has to wait (\"Pending\" in the filter).",
+                "Not synced -> \"Sync\" button queues it.",
+                "Failed -> \"Retry\" button.",
+                "Synced -> green badge with the QB transaction id; no more changes to Deposit Account. \"Receipt already synced to QuickBooks (TxnID: ...)\" is shown if sync is clicked twice. Queueing picks the company code from the invoice (single or yard) or from the first covered invoice (bulk), and sends the main payment method as: Bank Transfer, Bank Deposit, Bank Check, Cash, Credit (matching) - first one that has an amount wins; visa/other default to \"Check\". Message: \"Receipt queued for QuickBooks sync. Transaction will be synced shortly.\""
+              ]
+            },
+            {
+              "heading": "How this feeds other modules - the real business logic",
+              "type": "rules",
+              "items": [
+                "INVOICES / YARD INVOICES",
+                "Priority 1: the Paid flag. An invoice appears on the \"select invoice\" and \"bulk select\" screens only while its flag is Unpaid. Saving a receipt (single or bulk) is what turns it Paid; rejecting the receipt turns it back to Unpaid.",
+                "Priority 2: the paid amount. Only Valid receipts count - single ones by their paid amount, bulk ones by their allocation. A Rejected receipt is ignored everywhere. Because \"amount due\" = gross - credit notes - valid receipts, a confirmed CREDIT NOTE issued after a receipt reduces what is still payable and can make a partly-paid invoice fully covered.",
+                "CUSTOMER BALANCES Credit (per currency): increased by overpayments, decreased by Matching. Debit: increased by underpayment on the first receipt of a single invoice, decreased by every payment. Every automatic movement is logged against the receipt in the customer history.",
+                "CUSTOMER STATEMENT / INVOICE LIST / EXPORTS Read the receipts (valid only) of each invoice to show paid / outstanding.",
+                "QUICKBOOKS Each receipt becomes one Receive Payment; invoices must be in QB first, and the Deposit To account decides which QB account is debited.",
+                "BANKS A bank account referenced by any receipt cannot be deleted."
+              ]
+            },
+            {
+              "heading": "Inconsistencies to know about",
+              "type": "rules",
+              "items": [
+                "These are real behaviours of the current code that juniors often hit:",
+                "Bulk (regular) \"remaining\" is computed from the invoice net total after credit notes but does NOT subtract single receipts already paid on the same invoice. Yard bulk does subtract them. A partly-paid regular invoice should therefore be paid with a single receipt, not in a bulk.",
+                "Yard bulk skips the \"each invoice paid in full / not above remaining\" checks - the user can allocate any amount.",
+                "Single receipt Save does not re-check that the invoice is still Unpaid or that it is synced to QuickBooks (MLHC/MLHE) - those are only enforced when the invoice is picked. Two users working on the same invoice can both save.",
+                "Single: rejected receipts of the same invoice are counted as \"old receipts\" when deciding whether an underpayment creates debit; the Yard path counts valid ones only.",
+                "Underpayment debit for a EUR invoice is stored in the USD debit column (credit has a separate EUR column, debit does not).",
+                "Customer credit/debit and matching are changed BEFORE the receipt number is generated and there is no single transaction around the whole save. If numbering fails, the receipts are removed but the customer balances are not restored.",
+                "Bulk matching-only receipts store the matched amount as Paid AND as Matching, while a single matching-only receipt stores Paid = 0 and Matching = amount.",
+                "The \"lock receipts\" system lock only greys out the Create button and blocks printing; it is not enforced on the save routes.",
+                "Full Edit and Quick Edit save without any validation of amounts (negative, zero, larger than the invoice, etc.) and never re-balance customer credit/debit or the invoice Paid flag.",
+                "Reject on one of several SPLIT receipts of the same invoice resets the invoice to Unpaid even if other valid receipts still cover it - always read the warning list before rejecting."
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Receipts are the only thing that moves an invoice from Unpaid to Paid and the only thing that creates customer Credit and Debit balances automatically. A wrong payment date/serial breaks bank reconciliation, a wrong Deposit To account posts money to the wrong QuickBooks account, and a receipt rejected without fixing the customer balance leaves phantom credit. The most common real mistake is paying a partly-paid invoice through a Bulk receipt (or leaving the exchange rate of a cross-currency receipt wrong), which silently over- or under-states what the customer owes."
+            }
+          ]
+        },
+        {
           "id": "credit-note",
           "title": "Credit Note",
           "icon": "file-text",
@@ -9922,6 +11039,190 @@
               "type": "callout",
               "style": "info",
               "content": "Credit notes directly change what customers owe, their credit balance, and whether storage / detention can be invoiced again. Always create them from the original invoice so the system can check the remaining amounts. Once a newer credit note exists on the same charges, older ones are frozen."
+            }
+          ]
+        },
+        {
+          "id": "customer-statement",
+          "title": "Customer Statement",
+          "icon": "calculator",
+          "summary": "The Customer Statement screen provides a consolidated financial ledger of all transaction activity for a customer across invoices, receipts, credit notes, and refunds.",
+          "sections": [
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Sidebar → Accounting → Customer Statement List"
+                ]
+              ]
+            },
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "The Customer Statement screen provides a consolidated financial ledger of all transaction activity for a customer across invoices, receipts, credit notes, and refunds. It summarizes total invoiced amounts, collected payments, tax withholdings (tax discount / tax hold), matching statuses, and remaining open balances in both USD and the company's base currency (EGP). Accountants and credit control teams use it to review customer account balances, reconcile payments against invoices, audit tax withholdings, and export official statements of account."
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Open Accounting → Customer Statement List",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Select a Customer from the filter dropdown (search by customer name)",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3",
+                  "title": "Optionally filter by B/L Number, Invoice No, or Voyage",
+                  "icon": "hash",
+                  "tone": "decision"
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Click \"Filter\"",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "The screen displays a paginated table (30 records per page)",
+                  "icon": "activity",
+                  "desc": "showing the customer's financial statement grouped by customer.",
+                  "tone": "system"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Review the statement table",
+                  "icon": "info",
+                  "desc": "invoices, receipt numbers, tax hold amounts, running balances, vessel/voyage information, and payment statuses. Click \"Export\" to start a background Excel export. A real-time progress card displays generation progress and automatically downloads CustomerStatements.xlsx when complete.",
+                  "tone": "result"
+                }
+              ]
+            },
+            {
+              "heading": "Fields stored",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Customer",
+                  "Required filter/grouping. The customer account being reviewed."
+                ],
+                [
+                  "Type",
+                  "Transaction classification: Invoice Type (Storage, THC, Freight, etc.), Credit Note, or Refund."
+                ],
+                [
+                  "Ref / Invoice No",
+                  "The unique invoice number, credit note number (CNINV...), or refund receipt number."
+                ],
+                [
+                  "Date",
+                  "Invoice issue date or transaction creation date."
+                ],
+                [
+                  "Amount (USD / EGP)",
+                  "Gross invoiced amount including 14% VAT (where applicable) in USD or EGP based on invoice currency."
+                ],
+                [
+                  "BL NO",
+                  "Import booking reference or Export B/L reference linked to the invoice (\"Customize\" if no B/L)."
+                ],
+                [
+                  "Receipt Date & Receipt No",
+                  "Receipt numbers and payment dates applied against the invoice."
+                ],
+                [
+                  "Receipt Amount (USD / EGP)",
+                  "Total payment collected against the invoice."
+                ],
+                [
+                  "Tax Hold (USD / EGP)",
+                  "Tax discount withheld by the customer under local tax regulations (calculated from tax_discount %)."
+                ],
+                [
+                  "Balance (USD / EGP)",
+                  "Remaining open balance = Invoiced Amount - (Receipt Amount + Tax Hold). Shown as negative if overpaid."
+                ],
+                [
+                  "MATCHING",
+                  "Indicates whether the payment has been matched and reconciled (Yes / No)."
+                ],
+                [
+                  "Vessel / Voyage",
+                  "Outbound/inbound vessel name and voyage number linked to the shipment."
+                ],
+                [
+                  "Invoice Status",
+                  "Status of the invoice (Draft, Confirmed, Void)."
+                ],
+                [
+                  "Payment Status",
+                  "Paid / Partially Paid / UnPaid."
+                ]
+              ]
+            },
+            {
+              "heading": "Financial calculations & currency handling",
+              "type": "rules",
+              "items": [
+                "INVOICE TOTAL CALCULATION: For each charge line on an invoice: Line Gross = Charge Amount + (14% VAT if add_vat = 1) Invoice Total (USD/EGP) = SUM(Line Gross) rounded to 2 decimal places.",
+                "TAX HOLD (WITHHOLDING TAX): If invoice currency is Foreign (USD): tax_hold_usd = Total USD * (tax_discount / 100) If invoice currency is Base (EGP): tax_hold_egp = Total EGP * (tax_discount / 100)",
+                "OUTSTANDING BALANCE FORMULA: Balance USD = Total USD - (Total Receipts USD + Tax Hold USD) Balance EGP = Total EGP - (Total Receipts EGP + Tax Hold EGP)",
+                "REFUNDS & CREDIT NOTES: Credit Notes (type C) and Customer Refunds (refund_usd / refund_egp) are itemized as separate ledger rows and adjust the net customer balance.",
+                "STATEMENT TOTALS: At the bottom of each customer ledger, the system sums:",
+                "Cumulative Invoiced Amount (USD & EGP)",
+                "Cumulative Receipts (USD & EGP)",
+                "Cumulative Tax Hold (USD & EGP)",
+                "Net Outstanding Balance (USD & EGP)"
+              ]
+            },
+            {
+              "heading": "Listing, search & export",
+              "type": "rules",
+              "items": [
+                "LISTING:",
+                "Paginated 30 customer ledger groups per page, ordered by customer ID desc.",
+                "Groups invoices, credit notes, and refunds under each customer row.",
+                "FILTERS: Customer (id) Autocomplete customer search dropdown. BL Draft (bldraft_id) Filter transactions linked to a specific B/L. Invoice No (invoice_no) Filter by specific invoice serial. Voyage (voyage_id) Filter by vessel voyage.",
+                "BACKGROUND EXCEL EXPORT:",
+                "Clicking \"Export\" triggers an asynchronous background command: statements:generate-export via CustomerStatementExportController.",
+                "Front-end displays a live progress card (using PrintAllPdf JS helper).",
+                "Generates CustomerStatements_YYYY-MM-DD_His.xlsx for download."
+              ]
+            },
+            {
+              "heading": "How this feeds other modules",
+              "type": "rules",
+              "items": [
+                "RECEIPTS & PAYMENT MATCHING Displays live receipt allocations and matching statuses generated from ReceiptController.",
+                "INVOICING & CREDIT CONTROL Consolidates data from InvoiceController and CreditNoteController to assist accounts teams in chasing outstanding customer receivables.",
+                "QUICKBOOKS SYNC Matches transaction references against synced QuickBooks records."
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Without Customer Statement, verifying whether a customer has settled their account, how much tax was withheld, or which receipts match specific invoices requires manual cross-referencing across multiple screens. Customer Statement provides an instant 360-degree view of all customer debits, credits, tax holds, and net open exposure, ensuring accurate reconciliation and preventing financial discrepancies."
             }
           ]
         },
