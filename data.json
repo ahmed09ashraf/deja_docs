@@ -10371,6 +10371,1180 @@
       "icon": "file-text",
       "modules": [
         {
+          "id": "invoice-list",
+          "title": "Invoice List",
+          "icon": "file-text",
+          "summary": "This is the working list of customer invoices and Debit notes for the logged-in company.",
+          "sections": [
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Accounting -> Invoice List"
+                ],
+                [
+                  "Route",
+                  "invoice.index"
+                ],
+                [
+                  "Note",
+                  "Only visible if the \"accounting\". A yard company sees Yard List on this · same menu item instead of this screen."
+                ]
+              ]
+            },
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "This is the working list of customer invoices and Debit notes for the logged-in company. Credit notes are never shown here. From this screen a user filters the list, prints one invoice or every invoice that matches the filter, exports Excel, and opens the builders that create a single invoice, a Debit note, or a whole voyage at once. Voyage creation is documented in voyage_invoice.txt. The Owner Account split that Voyage Invoices can apply is documented in pod_Collection.txt and is not repeated here."
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Filter the list",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Read status, payment, and totals",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3",
+                  "title": "Draft, replace the number with a custom one and confirm it",
+                  "icon": "hash"
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Assign the customer on one BL, or toggle VAT on ticked draft and",
+                  "icon": "clipboard",
+                  "desc": "ready-to-confirm invoices",
+                  "tone": "decision"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "Print one PDF or Print All",
+                  "icon": "activity",
+                  "tone": "system"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Export All Details or Inv. Breakdown → Add a single Debit or Invoice, or open",
+                  "icon": "info",
+                  "desc": "Voyage Invs → Change status only while the booking allows it → Delete only a draft that is still unpaid",
+                  "tone": "result"
+                }
+              ]
+            },
+            {
+              "heading": "What the List Shows",
+              "type": "text",
+              "content": "Each row is one invoice. The list is 30 rows per page, newest date first, then newest id."
+            },
+            {
+              "heading": "",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Invoice No",
+                  "The document number. On a draft an Edit button sits beside the number. That button is the custom invoice number. The full cycle is in section 7."
+                ],
+                [
+                  "Customer",
+                  "The invoice customer. The name is shown in red when that customer is blocked."
+                ],
+                [
+                  "Tax NO",
+                  "The customer's tax number."
+                ],
+                [
+                  "Bl No",
+                  "The export BL number when the invoice is linked to a BL. Otherwise the import booking number."
+                ],
+                [
+                  "Voyage / Vessel",
+                  "The booking voyage, or the BL voyage when there is no booking. A transhipment that is set to use the second voyage shows that second voyage and vessel instead."
+                ],
+                [
+                  "Date",
+                  "The invoice date."
+                ],
+                [
+                  "Type",
+                  "Invoice or Debit, then a badge when one applies:"
+                ],
+                [
+                  "Customized",
+                  "a no-BL invoice, or a BL marked Customize."
+                ],
+                [
+                  "Transit",
+                  "an MLH transhipment. This badge replaces the category badge."
+                ],
+                [
+                  "Category",
+                  "the invoice category, when it has one and it is not the Transit case above. Storage, Detention, or Power, with (ext) on an extension."
+                ],
+                [
+                  "Bl Payment",
+                  "Prepaid or Collect, taken from the linked booking."
+                ],
+                [
+                  "Amounts",
+                  "One column per extra active currency, then USD, then the company base currency (EGP on this line). A freight invoice shows the amount after VAT. A Debit note shows the amount before VAT. Fully credited rows are shown in red and are left out of the page totals."
+                ],
+                [
+                  "Exchange rate",
+                  "Shown only when the invoice is not in the base currency."
+                ],
+                [
+                  "Discount",
+                  "A percent badge, a fixed amount, or a dash."
+                ],
+                [
+                  "VAT",
+                  "A tick when the header VAT is above zero or any charge line has VAT. A cross otherwise."
+                ],
+                [
+                  "Created by",
+                  "The user who created the invoice."
+                ],
+                [
+                  "Status",
+                  "Draft, Ready To Confirm, Confirm, or Void. A fully credited invoice shows Credit instead, and its status cannot be changed from here. A plus appears next to Credit when the invoice can be recreated. The question is \"Recreate Invoice?\" and the text is \"This invoice is fully credited.\" Yes opens a new invoice for the same BL. The plus is hidden for a no-BL invoice, and for Storage, Detention, and Power (including extensions). A no-BL credit row says \"Fully credited — recreate from No-BL Invoice page\"."
+                ],
+                [
+                  "Payment",
+                  "Paid, Partially Paid (a valid receipt exists but the invoice is not marked paid), or UnPaid. Paid can show who marked it. UnPaid on a credit customer can be clicked to mark the invoice paid. Anyone else stays UnPaid and cannot be marked paid from the list. \"This customer is not a credit customer\" \"Invoice is already marked as paid\""
+                ],
+                [
+                  "Split",
+                  "Splited when the invoice was split off a parent. Not Splited otherwise."
+                ],
+                [
+                  "Receipts",
+                  "Receipt numbers that still count as valid."
+                ],
+                [
+                  "Notes / attachment",
+                  "Shown only when the booking has notes, or the invoice has a file."
+                ]
+              ]
+            },
+            {
+              "heading": "Listing and Filters",
+              "type": "text",
+              "content": "The list is always the logged-in company, and credit notes (type C) are always removed before any filter runs. If Invoice From is filled and Invoice To is empty, Invoice To becomes today. If ETA From is filled and ETA To is empty, ETA To becomes today plus one year. If the user can see only export invoices, the list opens already filtered to Export. If the user can see only import invoices, it opens on Import plus transhipment. Choosing a shipment type the user cannot see is ignored."
+            },
+            {
+              "heading": "",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Invoice No",
+                  "One invoice number."
+                ],
+                [
+                  "Invoice Type",
+                  "Multi-select. The options already used on this company are listed, plus Storage, Detention, Power, Customized Invoice, Customized Debit, and Transit."
+                ],
+                [
+                  "Invoice Status",
+                  "Draft, Ready To Confirm, Confirm, Void."
+                ],
+                [
+                  "Payment Status",
+                  "Paid or UnPaid. The field is stored under the name paymentstauts."
+                ],
+                [
+                  "Customer",
+                  "One customer."
+                ],
+                [
+                  "Bl Payment",
+                  "Prepaid or Collect on the linked booking."
+                ],
+                [
+                  "Voyages",
+                  "One voyage.A Cross switch appears beside it. Cross does nothing until a voyage is chosen. With Cross on, the list includes invoices from every company that shares this line code and has the same voyage number and serial."
+                ],
+                [
+                  "Bl Number",
+                  "One or more BL numbers. The choices are import booking refs and export BL refs. Choosing a voyage limits the choices to that voyage (and the second voyage on import). Cross widens the choices the same way as the invoice list. The NoBL switch limits the choices to BLs that already have a no-BL invoice."
+                ],
+                [
+                  "Shipment Type",
+                  "Import, Transhipment, or Export. Export is offered only when the user works export invoices. Import and Transhipment are offered only when the user works import invoices."
+                ],
+                [
+                  "POL",
+                  "Port of loading."
+                ],
+                [
+                  "Invoices From / To",
+                  "Invoice date range."
+                ],
+                [
+                  "Currency",
+                  "One active currency."
+                ],
+                [
+                  "ETA From / To",
+                  "Voyage ETA range."
+                ],
+                [
+                  "QB Sync Status",
+                  "Shown only when QuickBooks is turned on. Synced, Failed, or Not Synced."
+                ],
+                [
+                  "Created by",
+                  "Users who have created at least one non-credit invoice for this company."
+                ]
+              ]
+            },
+            {
+              "heading": "",
+              "type": "text",
+              "content": "Totals under the filter are the sum of every matching invoice, not just the current page. Fully credited invoices are skipped in that sum. A freight invoice adds the after-VAT amount. A Debit note adds the before-VAT amount. Base currency goes to the base total. USD goes to the USD total. Any other known active currency gets its own total. An unknown currency is added to the USD total."
+            },
+            {
+              "heading": "How An Invoice Gets on This List",
+              "type": "text",
+              "content": "Three builders feed this list. Each one saves a draft."
+            },
+            {
+              "heading": "Single invoice or Debit",
+              "type": "text",
+              "content": "Add New -> Debit, or Add New -> Invoice. The user picks one confirmed import booking (transhipment cargo that discharges in Egypt is offered in its own list), or one export BL. The invoice is built from that BL's tariff and quotation. A second standard freight invoice in a currency that already has a live standard invoice is treated as extra charges, not as another standard invoice. Void invoices do not hold that slot."
+            },
+            {
+              "heading": "Voyage Invoices",
+              "type": "text",
+              "content": "The Voyage Invs button. Full rules, including which BLs can be ticked and which tariff errors stop a save, are in voyage_invoice.txt. When that builder uses Owner Account, the money split is the one in pod_Collection.txt."
+            },
+            {
+              "heading": "Storage, Detention, Power",
+              "type": "text",
+              "content": "The Calculate menu opens those calculators in a new tab. They create Storage, Detention, and Power invoices (and their extension types). Those invoices then appear on this list and can be filtered by those type names."
+            },
+            {
+              "heading": "Status, Delete, and Split",
+              "type": "text",
+              "content": "Status can be changed from the badge while the invoice is not fully credited, the invoice serial is not locked by an admin, and the booking is not blocking confirm. Confirm is refused, and the badge is locked, when either of these is true: The linked booking is on DO hold. The invoice is import and not every container on that booking is discharged. A booking with no containers counts as discharged. Sobek skips the discharge check. The message in both cases is: Cannot confirm this invoice. Export bookings are not blocked by discharge. Confirming an invoice gives it the confirmed number, sets the date to today, and records the reviewer. The exchange rate is refreshed onto the charge lines when a rate exists. A confirmed invoice can be moved to Void only when it is unpaid and has no valid receipt. Draft and Ready To Confirm can move forward. A void or confirmed invoice that cannot be voided does not open the status window. Delete is shown only when the invoice is unpaid and the status is Draft or Ready To Confirm. A bulk delete skips the rest and says: N invoice(s) were skipped because they are confirmed or already paid. Split is offered only when the invoice has more than one charge line and no valid receipt. The row checkbox appears only when the invoice is unpaid and the status is Draft or Ready To Confirm. Ticking rows, or selecting every page of the current filter, opens bulk delete and bulk status on the Actions header. Bulk delete asks \"Selected invoices will be permanently deleted!\" Confirmed and paid invoices are skipped: N invoice(s) were skipped because they are confirmed or already paid. Bulk status moves the ticked drafts. When the selection is only Ready To Confirm, the only move is Confirm. When drafts are in the selection, the user who can confirm is asked \"Where do you want to move them?\" with Ready to Confirm or Confirm Directly. Anyone else can move drafts only as far as Ready To Confirm. \"All selected invoices are already confirmed.\" stops a set that is already Confirm. Before Confirm, three checks can hold invoices back. The rest of the set can still continue. Missing tax number. \"The following invoice(s) do not have customer tax numbers.\" Continuing leaves those out. If every selected invoice is missing a tax number: \"All selected invoices require tax numbers. Please add tax numbers individually before changing status.\" A Primary customer that is not validated, and only when the target is Confirm: \"The following invoice(s) require customer validation before confirming.\" Those must be validated from the invoice edit page. The validation asks for a tax number of exactly 9 digits. DO hold or import not discharged. The message is \"Cannot Confirm\" plus the invoice numbers. If every selected invoice is blocked, nothing is confirmed. A normal Confirm still replaces the draft number with the confirmed serial, sets the date to today, and records the reviewer. The custom number in section 7 does not do that. QuickBooks sync is offered only when QuickBooks is turned on and the invoice is Confirm. A failed sync shows Resync. A synced invoice shows QB Synced."
+            },
+            {
+              "heading": "Custom Invoice Number",
+              "type": "text",
+              "content": "Each Draft row has an Edit button beside the invoice number. Ready To Confirm, Confirm, Void, and Credit do not show it. Any agency that is not MLH does not show it. Edit -> Set Custom Invoice Number -> type the new number -> Submit. The draft number is replaced, and the invoice becomes Confirm in the same step. It does not pass through Ready To Confirm. The field is Custom Invoice Number. The note under it says the current number will be replaced, and the invoice is not pushed to the portal. The screen refuses the submit when: The number is empty. Please enter a custom invoice number The number has no dash. Invoice number must contain at least one dash \"-\" The save then applies these rules: The invoice must still be Draft. Anything else returns Only draft invoices can have custom Invoice numbers The typed number must not already be used on any invoice, in this company or another. Invoice number '...' already exists in the system On success the popup says \"Invoice number updated successfully\". What is stored: The typed text becomes the invoice number. The usual confirmed serial is not generated. Status becomes Confirm. The portal status is stored as Valid. The portal feed only collects confirmed invoices whose portal status is empty or any value other than Valid, so this invoice is left out of that feed. That is what \"not pushed to the portal\" means. The user and the time of the submit are stored. The list does not show them. The invoice date stays as it was. The reviewer is not set. The exchange rate is not refreshed. This path does not use the Confirm stops in section 6. DO hold, containers not discharged, a missing tax number, an unvalidated Primary customer, and the admin serial lock do not hide Edit and do not stop the save. The status badge can be locked while Edit is still available. The dash is checked on the screen only. A number that already exists, or an invoice that is no longer Draft, is what the save itself rejects."
+            },
+            {
+              "heading": "Assign Customer and VAT Toggle",
+              "type": "text",
+              "content": "Both sit in the column headers of this list. They are not the same cycle. Assign Customer follows one BL and ignores invoice status. VAT Toggle follows the ticked rows and refuses anything that is not Draft or Ready To Confirm."
+            },
+            {
+              "heading": "ASSIGN CUSTOMER",
+              "type": "text",
+              "content": "Filter Bl Number to exactly one ref -> the Customer header becomes Assign -> open Assign Customer -> turn the switch on -> pick the new party -> Apply Changes -> unpaid invoices on that BL take the new customer. The list reloads. The Assign button is hidden until that one-ref filter is on and the ref still has at least one unpaid invoice. Two BL numbers, or a ref whose invoices are all paid, leaves the header as Customer. The ref is matched in this order:"
+            },
+            {
+              "heading": "",
+              "type": "rules",
+              "items": [
+                "An export BL with that number. Invoices on that BL only. The modal title line reads Export BL.",
+                "Else an export booking with that number. Invoices on every BL of that booking. Same Export BL modal.",
+                "Else an import booking with that number. Invoices stored against that booking. The modal title line reads Import Booking."
+              ]
+            },
+            {
+              "heading": "",
+              "type": "text",
+              "content": "Credit notes are ignored. The modal shows two counts:"
+            },
+            {
+              "heading": "",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Unpaid",
+                  "Not marked Paid, and no valid receipt (a single receipt or a bulk receipt). Paid (skip) Marked Paid, or any valid receipt exists. Partially paid invoices are in this count. They are not changed."
+                ]
+              ]
+            },
+            {
+              "heading": "Import Booking",
+              "type": "text",
+              "content": "The card shows the booking consignee, and the receiver already stored on the booking when there is one. Switch to new receiver opens a search. The choices are consignee customers that have a tax number. The search is not limited to customers already used on this company's invoices. Apply stays off until one name is picked. \"Please select a receiver customer before applying.\" \"The selected receiver must be a consignee customer.\" \"The selected receiver must be a consignee with a tax number before it can be assigned.\" Apply does two things, in order: The booking receiver is changed to that customer. That change is kept in the booking history used by the Bayan PDF (consignee to receiver). Every unpaid invoice on that booking, on every page and outside the other filters on screen, gets that customer name and id. Success: Assigned new receiver to N unpaid invoice(s). Later invoices built for this booking use the new receiver first (receiver, then consignee, then notify, then forwarder). Paid invoices keep the old customer."
+            },
+            {
+              "heading": "Export BL",
+              "type": "text",
+              "content": "The card shows the shipper. The switch is Switch from shipper, then one choice: the booking forwarder, or the notify party. Each party is offered only when that customer has the matching role (forwarder role, or notify role). Apply stays off until the switch is on and one party is chosen. \"Please choose forwarder or notify as the new customer.\" The switch is locked, and nothing is saved, unless every unpaid invoice on that ref is already on the shipper. No shipper is assigned on this export booking. Bulk switch is only available when all unpaid invoices are on the shipper. Bulk switch is only available when all unpaid invoices are assigned to the shipper. No forwarder or notify party with the correct customer role on this booking. Add a valid forwarder or notify on the booking/BL before switching from shipper. No forwarder with forwarder role is assigned on this export booking. No notify party with notify role is assigned on this export booking. The booking shipper is not changed. Only invoice rows whose customer is still the shipper, and that are unpaid, are moved. A mixed set (some unpaid invoices already on another customer) blocks the whole switch. The modal says: Mixed on unpaid invoices: <names> Success: Changed shipper to forwarder on N unpaid invoice(s). Changed shipper to notify party on N unpaid invoice(s)."
+            },
+            {
+              "heading": "Other stops, both sides:",
+              "type": "text",
+              "content": "BL or booking not found for the selected reference. Assignment mode does not match the shipment type for this reference. No unpaid invoices found for this reference. Failed to assign customer. Please try again."
+            },
+            {
+              "heading": "VAT TOGGLE",
+              "type": "text",
+              "content": "Filter by a BL, a voyage, or a customer -> the VAT header becomes Toggle -> tick the invoices (this page, or every page of the current filter) -> Toggle VAT -> confirm the remove list and the add list -> the list reloads. The Toggle button is hidden until one of those three filters is filled. Opening it with nothing ticked says: Please select at least one invoice to toggle VAT. The modal is titled Toggle VAT. It splits the ticked invoices. An invoice that already has VAT (header VAT above zero, or any charge line marked to add VAT) goes to Remove VAT. An invoice with no VAT goes to Add VAT. One invoice is never in both lists. Remove clears every line. It does not leave VAT on some charges. Skipped rows are counted and named, and they are not changed:"
+            },
+            {
+              "heading": "",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "paid",
+                  "Payment is not UnPaid. A valid receipt is not checked here, so a draft that is only partially paid can still be toggled. not editable Status is Confirm or Void. Ready To Confirm is still editable. Draft is editable."
+                ],
+                [
+                  "Debit",
+                  "Debit notes. VAT is not toggled on them. Skipped: N paid, N not editable, N Debit."
+                ]
+              ]
+            },
+            {
+              "heading": "",
+              "type": "text",
+              "content": "If nothing is left to change: No eligible invoices selected to toggle VAT. No eligible invoices selected to toggle VAT (N paid, N not editable, N Debit). No matching invoices found for this company."
+            },
+            {
+              "heading": "Remove VAT",
+              "type": "text",
+              "content": "Shows the invoice number, the total now, and the total after removal (the amount before VAT). Confirm sets the invoice VAT to 0 and the tax discount to 0. Each charge line drops the VAT flag, and the after-VAT amount becomes the before-VAT amount in both the invoice currency and the base currency."
+            },
+            {
+              "heading": "Add VAT",
+              "type": "text",
+              "content": "VAT % starts at 14 and must be above zero. Please enter a VAT % to add. VAT % required. Please enter a VAT % to add. Every charge line starts ticked. Untick a line to leave it without VAT. The After adding figure follows the percent and the ticked lines. Confirm writes that percent on the invoice. Ticked lines get VAT. Unticked lines are stored without VAT. Success is one or both of: VAT removed from N invoices. VAT added to N invoices. Failed to toggle VAT. Please try again. VAT Toggle does not change the customer. Assign Customer does not change VAT."
+            },
+            {
+              "heading": "What Stops a Print",
+              "type": "text",
+              "content": "These are the only stops. Status, payment, DO hold, and discharge do not hide the print button and do not stop a single PDF, except the BL-hold rule below."
+            },
+            {
+              "heading": "",
+              "type": "rules",
+              "items": [
+                "Nothing matches the filter Print All refuses to start and says:"
+              ]
+            },
+            {
+              "heading": "",
+              "type": "text",
+              "content": "No invoices found to print. Please adjust your filters or select invoices. Credit notes are never in the list, so they are never in Print All."
+            },
+            {
+              "heading": "",
+              "type": "rules",
+              "items": [
+                "The export BL is on hold The row Print button still shows. Opening that one PDF is refused with:"
+              ]
+            },
+            {
+              "heading": "",
+              "type": "text",
+              "content": "Cannot print invoice PDF: BL is on hold. This applies when the invoice is linked to an export BL whose BL status is hold (status 2). Import invoices have no BL-draft hold check on this button. Print All does not use this check. A held export BL is still included in the Print All file."
+            },
+            {
+              "heading": "",
+              "type": "rules",
+              "items": [
+                "Copies are not printed unless the invoice is confirmed On an MLH agency, Print All asks With copies or Without copies. With copies prints labeled pages only when that invoice is Confirm: Import, no-BL, or customized: 1 ORIGINAL and 2 COPY Export (BL draft, no booking ref): 1 ORIGINAL and 3 COPY Draft, Ready To Confirm, and Void stay a single page with no ORIGINAL / COPY label, even when With copies was chosen. Without copies is always one page. Any agency that is not MLH has one Print All button and always prints one page per invoice. There is no copy set."
+              ]
+            },
+            {
+              "heading": "",
+              "type": "text",
+              "content": "The row Print button opens one PDF in a new tab. It does not ask about copies. Print All builds a file of every invoice that matches the current filters, including invoices on other pages."
+            },
+            {
+              "heading": "Export Button",
+              "type": "text",
+              "content": "Export uses the same filters as the list on screen, including Cross when it is on. Credit notes are not in the file. The file is built in the background. Already Generating A file for this user is still being built. A second export does not start. Export Already Ready A finished file is waiting to be downloaded. Start a new export only after that one is taken. Failed to start Excel export. The job did not start."
+            },
+            {
+              "heading": "All Details (one row per invoice)",
+              "type": "text",
+              "content": "Invoice No, Customer, TAX NO, Quotation NO, BL NO, Voyage, Vessel, ETA, ETD, Date Creation, INVOICE TYPE, Invoice Category, POL, POD, COLLECT/PREPAID, QTY, Total Before VAT, Total VAT, Total After VAT, Exchange Rate, Discount Type, Discount Value, Total Discount Amount, Total After Discount, Curency, STATUS, EQUIPMENT Type, Booking Type, ShipmentType, Port Tariff, PaymentSTATUS, receipts."
+            },
+            {
+              "heading": "Inv. Breakdown (one row per charge line)",
+              "type": "text",
+              "content": "The invoice header is repeated on every charge row, then the line: Charge Description, Charge Category, Port Tariff, Payment Location, EQUIPMENT TYPE, Quantity, and the amount, VAT, and after-VAT figures in the invoice currency and in the company base currency. Invoice-level discount and final totals are repeated on each line so a charge can be read on its own. Currency column headings use the real currency codes (EGP, USD, or whatever currency that invoice uses)."
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Print All and both Excel files are the filtered list, not a hand-picked set. A wrong voyage, a Cross switch left on, or a status filter left on Confirm will print and export a different set than the user thinks they selected. The one hard stop on a single PDF is an export BL on hold. DO hold and \"not discharged\" stop Confirm, not the print. Leaving those invoices in Draft means an MLH Print All with copies will still output them, but only as a single unlabeled page. Assign Customer follows the BL, not the rows on screen. A status filter left on Draft still rewrites every unpaid invoice on that BL, including Confirm. VAT Toggle is the one that stays inside Draft and Ready To Confirm, and only on the ticked invoices. The custom number is a second way to reach Confirm. It keeps the typed number, skips the confirmed serial, and marks the invoice so the portal feed will not pick it up. Using it on a draft that is on DO hold, or not yet discharged, still confirms it."
+            }
+          ]
+        },
+        {
+          "id": "voyage-invoices",
+          "title": "Voyage Invoices",
+          "icon": "anchor",
+          "summary": "Voyage Invoices builds a draft invoice, or a draft Debit note, for many BLs on one voyage in one save.",
+          "sections": [
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Accounting -> Invoice List -> Voyage Invs"
+                ],
+                [
+                  "Screen title",
+                  "Create Voyages Invoices."
+                ],
+                [
+                  "Route",
+                  "invoice.selectPluckInvoice"
+                ]
+              ]
+            },
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "Voyage Invoices builds a draft invoice, or a draft Debit note, for many BLs on one voyage in one save. Each selected BL becomes its own document. The screen does not merge them into one invoice. Import invoices are built from the port tariff (customer tariff first, then the standard tariff). Export invoices are built only from BLs whose quotation already has a tariff. Debit notes are export ocean freight, and only for prepaid BLs. When the company uses Owner Account and the booking has a POD Collection amount, Type Invoice replaces the owner share of the local charges. That calculation is written in full in pod_Collection.txt. This file only says when that split runs. Type Debit never runs it."
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Pick Vessel / Voyage",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Choose Invoice or Debit",
+                  "icon": "search",
+                  "tone": "decision"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3",
+                  "title": "Choose currency (Invoice only)",
+                  "icon": "hash"
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Show Import BLs or Export BLs when the voyage leg is All",
+                  "icon": "clipboard",
+                  "tone": "decision"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "Tick the BLs that are still free for that currency",
+                  "icon": "activity",
+                  "tone": "system"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Create → Read the tariff errors → Drafts appear on Invoice List",
+                  "icon": "info",
+                  "tone": "result"
+                }
+              ]
+            },
+            {
+              "heading": "What the User Fills in",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Vessel / Voyage",
+                  "Required. The list only contains voyages that still have at least one BL this screen can bill (see section 4). Voyages are grouped so the same vessel, leg, and voyage number is not listed twice. Import, Export, and All legs are all offered."
+                ],
+                [
+                  "Currency",
+                  "Required for Type Invoice. Multi-select, or All. All means USD and the base currency (EGP). On the company checked live, the choices are All, USD, EGP, and EUR. Each chosen currency creates its own invoice per BL, when that BL's tariff has lines in that currency. Hidden for Type Debit on an export voyage. The base currency option is turned off for Debit. Debit is always the foreign-currency freight amount. All is turned off once any BL on the voyage already has a USD-slot or EGP-slot invoice."
+                ],
+                [
+                  "Type",
+                  "Invoice or Debit. The radio is labeled Debit. The saved type is Debit. Debit is offered only when the user works export invoices. Import voyages, and Show Import BLs, hide Debit and force Invoice. Choosing Debit hides the Import / Export filter and loads export prepaid BLs only."
+                ],
+                [
+                  "Show",
+                  "Visible only when the voyage leg is All and the type is Invoice. Import BLs, or Export BLs. If the user works only one side, that side is already selected."
+                ],
+                [
+                  "Search",
+                  "Filters the BL list by ref number. It does not change what can be created."
+                ],
+                [
+                  "Select All",
+                  "Current page, or every page. A BL that is locked for the chosen currency is not ticked."
+                ],
+                [
+                  "Create",
+                  "Stays off until at least one BL is ticked."
+                ]
+              ]
+            },
+            {
+              "heading": "Import (Type Invoice only)",
+              "type": "text",
+              "content": "Import bookings on the selected voyage or on its second voyage. Cancelled bookings and merged-child bookings are left out. A transhipment booking is included only when its discharge port is in Egypt. Any other transhipment is left out. The customer on the invoice is the first name found among receiver, consignee, notify, forwarder."
+            },
+            {
+              "heading": "Export",
+              "type": "text",
+              "content": "Export BLs on that voyage whose quotation has a tariff. An export BL with no tariff on the quotation is not listed."
+            },
+            {
+              "heading": "Debit (export only)",
+              "type": "text",
+              "content": "Same export list, then two more cuts: Payment must be Prepaid. The quotation ocean-freight total must be above zero. A collect BL, or a prepaid BL with no ocean freight, is not listed. Import bookings are not listed for Debit."
+            },
+            {
+              "heading": "What Stops a BL Being Ticked",
+              "type": "text",
+              "content": "The screen keeps two slots per BL, not one slot per real currency:"
+            },
+            {
+              "heading": "",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "USD slot",
+                  "Any invoice that is not in the base currency. USD, EUR, and any other foreign currency all fill this same slot."
+                ],
+                [
+                  "EGP slot",
+                  "An invoice in the company base currency."
+                ]
+              ]
+            },
+            {
+              "heading": "",
+              "type": "text",
+              "content": "The count only includes invoices and pluck invoices when the type is Invoice, or Debit notes and pluck Debit s when the type is Debit. Void invoices still count. A void does not free the slot."
+            },
+            {
+              "heading": "",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "USD chosen, USD slot already used",
+                  "checkbox locked"
+                ],
+                [
+                  "EGP chosen, EGP slot already used",
+                  "checkbox locked Both USD and EGP chosen, either slot already used checkbox locked"
+                ],
+                [
+                  "Both slots already used",
+                  "checkbox locked for every currency, including a third currency Only the USD slot used, and the user picks a foreign currency that is not"
+                ],
+                [
+                  "USD or EGP",
+                  "checkbox stays open"
+                ]
+              ]
+            },
+            {
+              "heading": "",
+              "type": "text",
+              "content": "A locked row still has a View button that lists the invoices already on that BL. The title on that button is \"This item already has invoice(s) for selected currency\"."
+            },
+            {
+              "heading": "What Stops the Save",
+              "type": "text",
+              "content": "No currency, and the type is Invoice: No Currency Selected No BL ticked (or the browser sent an empty selection): No bls found with valid tariff configuration for the selected voyage. A chosen currency has no exchange rate valid through today: Please enter valid exchange rates for <currency> until today (<date>). No exchange rate(s) currently available."
+            },
+            {
+              "heading": "No chosen currency has a rate:",
+              "type": "text",
+              "content": "No valid exchange rates found for selected currencies. Type Invoice, import BL, no matching tariff for that currency. The BL is skipped and named in the error list. The tariff search order is:"
+            },
+            {
+              "heading": "",
+              "type": "rules",
+              "items": [
+                "Receiver's customer tariff for this discharge port and terminal, import, standard-or-customised flag, this currency, and a matching equipment type (or the \"all equipment\" type).",
+                "Consignee's customer tariff, same rules.",
+                "The standard tariff, but only when neither the receiver nor the consignee has any customer tariff on that port. If they have a customer tariff that simply lacks this currency, the standard tariff is not used. That stop is deliberate: a customer tariff must not be topped up with standard lines such as Cleaning."
+              ]
+            },
+            {
+              "heading": "",
+              "type": "text",
+              "content": "Type Invoice, tariff found but it has no price lines in that currency: No Invoice lines found with currency:<currency> for booking: <BL ref> Those failures are shown together as: Error! No Valid Tariff Configuration Failed to create invoices for the following N booking(s):... Please configure the tariff for these bookings and try again. If some BLs succeeded and some failed, the successes are kept and the same error box is shown with: (N)Invoices created successfully If every selected BL failed, nothing is created and only the error box is shown. A currency that throws an unexpected error adds: Error creating booking invoices for <currency> Error creating BL invoices for <currency> On full success the user returns to Invoice List with: (N)Invoices created successfully"
+            },
+            {
+              "heading": "What Gets Created",
+              "type": "text",
+              "content": "One draft per BL per currency. Status is Draft. VAT is 14 percent and VAT is on. The invoice date is today. The exchange rate is today's rate for that currency. The port tariff used is stored on the invoice."
+            },
+            {
+              "heading": "Type Invoice",
+              "type": "text",
+              "content": "Charge lines come from the tariff price rows for the BL's equipment. Qty is the number of containers of that type. main type is \"Pluck invoice\". Owner Account (do not recalculate it here — see pod_Collection.txt): Runs only when the booking's POD Collection is above zero and this company has an Owner Account charge code. Tariff lines that belong to Owner Account are not copied as themselves. They are replaced by the calculated owner line: POD Collection minus the THC cost (OWNERTHC). THC-category lines that are not OWNERTHC stay on the invoice and are not subtracted. Prepaid drops every THC-category line, so there is no Owner Account Debit in that case. If POD Collection minus THC cost is zero or negative, that owner line is skipped. Type Debit does not run this split. Debit bills ocean freight only. A tariff line whose regular, IMO, and OOG selling prices are all zero is left off the invoice."
+            },
+            {
+              "heading": "Type Debit",
+              "type": "text",
+              "content": "One ocean-freight line per equipment group (container type, IMO, OOG). Qty and the freight amount come from the quotation when the booking has one, otherwise from the container rows on the booking. A missing freight amount is stored as zero, which still creates the draft. main type is \"Pluck Debit \". The customer is the same receiver / consignee / notify / forwarder chain as an invoice. Created drafts are confirmed, printed, and exported from Invoice List. Nothing on this screen prints a PDF."
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "A BL disappears from the tick list for a currency as soon as any non-void invoice occupies that slot, and the USD slot is really \"any currency that is not EGP\". Creating a EUR invoice locks USD as well. Creating both an EGP invoice and any foreign invoice locks the BL completely, even for a new currency. The other silent stop is the tariff fallback. If the consignee has a customer tariff that does not contain the currency the user picked, the standard tariff is not used and the BL is reported as having no valid tariff. Adding the currency onto that customer tariff is what unblocks it. The Owner Account figures, when they apply, must be read from pod_Collection.txt so the THC cost is not mistaken for a second ocean-freight charge."
+            }
+          ]
+        },
+        {
+          "id": "pod-collection",
+          "title": "POD Collection",
+          "icon": "calculator",
+          "summary": "POD Collection is the amount (without VAT) collected at the discharge port for one import booking.",
+          "sections": [
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Note",
+                  "The Owner Account Debit is not created from its own screen. It is created when Voyage Invoices are run for a booking · that has a POD Collection amount."
+                ],
+                [
+                  "Menu path",
+                  "Accounting → Invoice List → Voyage Invs"
+                ],
+                [
+                  "Note",
+                  "Setup screens used before Voyage Invs: · Master Data → Charge Codes · Tariffs → Local Port Tariff · Import booking, field POD Collection"
+                ]
+              ]
+            },
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "POD Collection is the amount (without VAT) collected at the discharge port for one import booking. Voyage Invoices then splits that booking into one document per charge category: - one invoice for each category that has tariff lines (THC, Cleaning, Admin, and so on) - one Debit, category Owner Account, for the remainder of the POD Collection after THC cost The Owner Account amount is: Owner Account = POD Collection − THC cost THC cost is thc_cost × container qty on the tariff row of the charge whose static code is OWNERTHC. That same charge's selling line is then rewritten. VAT in this calculation is fixed at 14%. A charge whose category is THC stays on the THC invoice. A blank category is treated as THC, so it stays there too. Those lines keep their tariff selling price, and they are not subtracted when the OWNERTHC line is rewritten. Only a category other than THC (Admin, Cleaning, and so on) is subtracted."
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Set the Owner Account and OWNERTHC charge codes",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Put THC cost on the Local Port Tariff",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3",
+                  "title": "Enter POD Collection on the import booking",
+                  "icon": "hash"
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Open Invoice List, Voyage Invs, type Invoice",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "The save splits one invoice per category and an Owner Account debit",
+                  "icon": "activity",
+                  "tone": "system"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Drafts appear on Invoice List",
+                  "icon": "info",
+                  "tone": "result"
+                }
+              ]
+            },
+            {
+              "heading": "Worked Example — BL Oslmunsok6372326",
+              "type": "text",
+              "content": "Invoice List, BL Number OSLMUNSOK6372326, shows three USD documents. The booking:"
+            },
+            {
+              "heading": "",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "BL / ref no",
+                  "OSLMUNSOK6372326"
+                ],
+                [
+                  "Shipment",
+                  "Import, 1 × 20 DV, not IMO, not OOG"
+                ],
+                [
+                  "Payment kind",
+                  "Collect Prepaid would drop every THC-category charge, and then no Owner Account Debit is created."
+                ],
+                [
+                  "Quotation",
+                  "none"
+                ],
+                [
+                  "POD Collection",
+                  "750.00 USD (without VAT)"
+                ],
+                [
+                  "Exchange rate",
+                  "52.38 on the USD documents"
+                ],
+                [
+                  "Tariff used",
+                  "EGSOK-DPW SOKHNA-EL TAWHEED COMMERCIAL AGENCY-31-08-2026.To.31-12-2026 Customer card for this consignee."
+                ]
+              ]
+            },
+            {
+              "heading": "",
+              "type": "text",
+              "content": "What the three documents contain (list totals are the VAT-inclusive amounts; the Debit has no VAT, so its list total is the net amount):"
+            },
+            {
+              "heading": "",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "DRAFTV26000467",
+                  "Invoice, category THC"
+                ],
+                [
+                  "Destination Discharge Fee",
+                  "316.58 with VAT 360.90"
+                ],
+                [
+                  "Delivery Order",
+                  "20.00 with VAT 22.80"
+                ],
+                [
+                  "List total",
+                  "383.70 USD"
+                ],
+                [
+                  "DRAFTV26000468",
+                  "Invoice, category Admin"
+                ],
+                [
+                  "Energy Surcharge",
+                  "15.00 with VAT 17.10"
+                ],
+                [
+                  "List total",
+                  "17.10 USD"
+                ],
+                [
+                  "DRAFTD26000093",
+                  "Debit, category Owner Account, VAT 0 Fund Expenses Collected for other 477.00"
+                ]
+              ]
+            },
+            {
+              "heading": "How These Three Amounts Were Calculated",
+              "type": "text",
+              "content": "Tariff for EL TAWHEED, import, standard rows, currency USD, equipment 20 DV (and All, type 100, where the row says All). DESTINATION DISCHARGE FEE static code OWNERTHC, category THC THC cost 273, per 20 DV. Delivery Order category THC, document, selling price 20 Stays on the THC invoice. Not rewritten. Energy Surcharge category Admin, selling price 15, per container Own invoice. This amount is subtracted below."
+            },
+            {
+              "heading": "Step A — THC cost and the Debit (Owner Account)",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "THC cost",
+                  "= ( THC cost * per CNTRTYPE ) = 273 × 1 = 273 Owner Account = ( POD Collection - THC cost ) =750 − 273 = 477 This is DRAFTD26000093. VAT on that Debit is 0."
+                ]
+              ]
+            },
+            {
+              "heading": "Step B — calculate not THC invoice",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Admin total",
+                  "= 15 Energy Surcharge is the only USD category that is not the THC group, so it is subtracted. This is DRAFTV26000468 15.00 (with VAT 17.10) was subtracted."
+                ]
+              ]
+            },
+            {
+              "heading": "Step C — rewrite the OWNERTHC selling line",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "THC amount",
+                  "= (POD Collection with Vat - Owner Account) /VAT =( 750 * 1.14 − 477) / 1.14 = 331.5789"
+                ],
+                [
+                  "Admin total",
+                  "= 15 Energy Surcharge is the only USD category that is not the THC group, so it is subtracted (step B). New THC amount = 331.5789 − 15 = 316.5789 DESTINATION DISCHARGE FEE is stored as 316.5789 (the invoice total column shows 316.58). VAT on it is 316.5789 × 1.14 = 360.899946. Quantity is 1. Delivery Order is category THC, and its is not OwerTHC, so it is not rewritten and it is not subtracted. It stays 20.00, with VAT 22.80."
+                ]
+              ]
+            },
+            {
+              "heading": "",
+              "type": "text",
+              "content": "Step D — what the customer is billed in USD"
+            },
+            {
+              "heading": "",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "THC invoice with VAT",
+                  "383.70"
+                ],
+                [
+                  "Admin invoice with VAT",
+                  "17.10"
+                ],
+                [
+                  "Owner Account, no VAT",
+                  "477.00"
+                ],
+                [
+                  "USD together",
+                  "877.80"
+                ],
+                [
+                  "POD Collection × 1.14",
+                  "855.00"
+                ],
+                [
+                  "Difference",
+                  "22.80 22.80 is the Delivery Order including 14% VAT. It is extra because a THC-category charge that is not OWNERTHC stays on the THC invoice and is not taken out of the POD pool. Energy Surcharge was taken out, so it is inside the 855.00."
+                ]
+              ]
+            },
+            {
+              "heading": "Check that matches POD × 1.14 exactly:",
+              "type": "text",
+              "content": "Owner Account 477 + (316.5789 + 15) × 1.14 = 855.00 Giving Delivery Order a category other than THC (Admin, for example) would have subtracted it in step B and kept it inside that total."
+            },
+            {
+              "heading": "Order of Setup",
+              "type": "text",
+              "content": "Do these in this order. Voyage Invs only reads what the earlier steps saved."
+            },
+            {
+              "heading": "",
+              "type": "rules",
+              "items": [
+                "Charge Codes",
+                "Local Port Tariff",
+                "Booking POD Collection",
+                "Voyage Invs, type Invoice"
+              ]
+            },
+            {
+              "heading": "Step 1 — Charge Codes",
+              "type": "text",
+              "content": "Sidebar → Master Data → Charge Codes. Each company has its own list. This example uses these rows."
+            },
+            {
+              "heading": "",
+              "type": "rules",
+              "items": [
+                "Owner Account charge (the Debit line)"
+              ]
+            },
+            {
+              "heading": "",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Type",
+                  "Debit (the form spells this \"Debit\") Category Owner Account This option is shown only when Type is Debit."
+                ],
+                [
+                  "Name",
+                  "Whatever should be printed. In the example the name is \"Fund Expenses Collected for other\"."
+                ]
+              ]
+            },
+            {
+              "heading": "",
+              "type": "rules",
+              "items": [
+                "The THC charge that POD rewrites (OWNERTHC)"
+              ]
+            },
+            {
+              "heading": "",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Type",
+                  "Invoice Static code OWNERTHC Not on the Charge Codes form. The invoice finds the charge by this code, not by name. In the example the name is \"DESTINATION DISCHARGE FEE\"."
+                ],
+                [
+                  "Category",
+                  "THC. A blank category is also grouped as THC. Category must be THC for the tariff screen to keep the THC Cost box open. This example charge is THC, and the 20 DV row holds THC cost 273. A THC-category charge that does not have static code OWNERTHC keeps its selling price. In this example that is Delivery Order, which stayed at 20.00 on DRAFTV26000467."
+                ]
+              ]
+            },
+            {
+              "heading": "",
+              "type": "rules",
+              "items": [
+                "Every other charge that must be billed Give it a real category other than THC when it should be its own invoice and should be subtracted from the rewritten THC line. Energy Surcharge is Admin, so it is alone on DRAFTV26000468, and its 15.00 was subtracted in section 3. Charges that share a category share one invoice."
+              ]
+            },
+            {
+              "heading": "Step 2 — Local Port Tariff",
+              "type": "text",
+              "content": "Sidebar → Tariffs → Local Port Tariff. The header chooses the rate card. The rows choose the prices. For a booking with no quotation the card must match the discharge port and terminal, the company, and a validity window that covers today. A customer card for the receiver is tried first, then the consignee. The standard card is used only when neither customer has a tariff for that port and terminal. This BL has no quotation and no receiver. The consignee has a customer card, and the invoices point at EGSOK-DPW SOKHNA-EL TAWHEED COMMERCIAL AGENCY- 31-08-2026.To.31-12-2026. A booking that has a quotation uses that quotation's tariff and only the quotation charges paid at POD. Rows the invoice will read, as on this BL:"
+            },
+            {
+              "heading": "",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Charge",
+                  "The charge from step 1."
+                ],
+                [
+                  "Equipment",
+                  "The booking's container type, or All (type 100). A specific type is used before All. This BL used the 20 DV row for the discharge fee."
+                ],
+                [
+                  "Unit",
+                  "Container, or Document for one fixed line (Delivery Order)."
+                ],
+                [
+                  "Currency",
+                  "USD or EGP. Each currency becomes its own pass. The Owner Account Debit is created only on the pass that contains the OWNERTHC lines. Here that is USD."
+                ],
+                [
+                  "Shipment",
+                  "Import."
+                ],
+                [
+                  "Standard",
+                  "Standard row. A Customized row is not loaded for this automatic invoice unless a quotation selected it."
+                ],
+                [
+                  "Selling price",
+                  "What is billed before the POD rewrite. IMO and OOG prices are used only when the container is IMO or OOG and that price is above zero. This BL used the normal selling price."
+                ],
+                [
+                  "THC cost",
+                  "Cost per container. Used only on the OWNERTHC charge. 273 on the 20 DV row. IMO Cost and OOG Cost are not used here. The cost boxes on the tariff form open only when the charge category is THC."
+                ]
+              ]
+            },
+            {
+              "heading": "Step 3 — Booking",
+              "type": "text",
+              "content": "On the import booking, POD Collection must be greater than zero and without VAT. This BL is 750.00."
+            },
+            {
+              "heading": "Also required, as on this BL:",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Shipment type",
+                  "Import"
+                ],
+                [
+                  "Payment kind",
+                  "Collect. Prepaid drops every charge whose category is exactly THC, and then no Owner Account Debit is created."
+                ],
+                [
+                  "Containers",
+                  "Types that match the tariff. Quantity is the container count. Here, 1 × 20 DV."
+                ],
+                [
+                  "Customer",
+                  "Receiver, otherwise consignee. The invoice customer is that party. Here, the consignee EL TAWHEED COMMERCIAL AGENCY."
+                ]
+              ]
+            },
+            {
+              "heading": "Step 4 — Voyage Invs",
+              "type": "text",
+              "content": "Sidebar → Accounting → Invoice List → Voyage Invs."
+            },
+            {
+              "heading": "",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Vessel / Voyage",
+                  "The import voyage. Here WAN HAI 501 / 264."
+                ],
+                [
+                  "Currency",
+                  "USD for this example. EGP, or All, would also bill the EGP rows on the same tariff. Those were not selected on this run."
+                ],
+                [
+                  "Type",
+                  "Invoice. Debit on this screen bills ocean freight and does not run this split."
+                ],
+                [
+                  "Show",
+                  "Import BLs"
+                ],
+                [
+                  "Select",
+                  "The BL, then save."
+                ]
+              ]
+            },
+            {
+              "heading": "When No Owner Account Debit Is Created",
+              "type": "rules",
+              "items": [
+                "POD Collection is blank, zero, or POD Collection minus THC cost is zero or negative",
+                "the company has no Owner Account category and no OWNERTHC charge",
+                "Voyage Invs was run as Debit instead of Invoice",
+                "payment kind is Prepaid, so the THC lines were dropped",
+                "no matching tariff, or the tariff has no rows in that currency",
+                "the booking is export"
+              ]
+            },
+            {
+              "heading": "Related Documents",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Charge Codes",
+                  "2-Master Data/01-charge-codes.txt"
+                ],
+                [
+                  "Local Port Tariff",
+                  "4-Tariff/01-local-port-tariff.txt THC Cost on that tariff is used by this calculation. On this BL, 273 × 1 container is the 273 taken out of 750."
+                ],
+                [
+                  "Manifest column BB",
+                  "9-Documentation/import/03-edi-manifest-import.txt"
+                ],
+                [
+                  "QuickBooks",
+                  "14-Integertaion/02-QuickBooks.txt"
+                ]
+              ]
+            }
+          ]
+        },
+        {
           "id": "invoice-period",
           "title": "Invoice Period",
           "icon": "calculator",
@@ -11495,6 +12669,391 @@
               "type": "callout",
               "style": "info",
               "content": "Cost is the payable side of the same shipment the Invoice List bills the customer for. Set Supplier, Invoice Type and Operation Date before touching the charge list. If the charge is per box or per storage day, put the rate on the containers — do not trust the Qty × Rate box at the top of Create. Payment Status is a flag you own: the list will let anyone mark Paid, and nothing here talks to the bank or to QuickBooks. The bill number is yours to keep unique. The total is calculated — if it disagrees with the supplier PDF, look at the allocation on the charge lines."
+            }
+          ]
+        },
+        {
+          "id": "qb-sync-monitor",
+          "title": "QB Sync Monitor",
+          "icon": "activity",
+          "summary": "This is the queue and the history of QuickBooks Desktop sync for invoices and receipts.",
+          "sections": [
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Accounting → QB Sync Monitor"
+                ],
+                [
+                  "Route",
+                  "qb.monitor"
+                ],
+                [
+                  "URL",
+                  "/quickbooks/monitor"
+                ],
+                [
+                  "Note",
+                  "This screen does not send anything to QuickBooks. Pressing Sync · on an invoice or a receipt only queues the record. QuickBooks · Web Connector, on the accounts PC, pulls that queue. The full · sync ladder is in 14-Integertaion/02-QuickBooks.txt. The account · names it uses are in 08-qb-accounts.txt."
+                ]
+              ]
+            },
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "This is the queue and the history of QuickBooks Desktop sync for invoices and receipts. Use it when a badge stays Pending or turns Failed: it shows which company file, which step, and the error QuickBooks returned, and it can put a failed row back to Pending so the Web Connector will try again."
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Pick the company code",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "Read Pending and Failed",
+                  "icon": "search"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3",
+                  "title": "Open Sync Queue, filter to Failed",
+                  "icon": "hash"
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4",
+                  "title": "Read the step and the error",
+                  "icon": "clipboard"
+                },
+                {
+                  "step": 5,
+                  "badge": "STEP 5 · SYSTEM CHECK",
+                  "title": "Fix the invoice, receipt, charge account or QuickBooks file",
+                  "icon": "activity",
+                  "tone": "system"
+                },
+                {
+                  "step": 6,
+                  "badge": "RESULT",
+                  "title": "Retry → run Web Connector → the row moves to Completed",
+                  "icon": "info",
+                  "tone": "result"
+                }
+              ]
+            },
+            {
+              "heading": "What the Screen Shows",
+              "type": "text",
+              "content": "The company buttons at the top are every company code that already has queue rows, in alphabetical order. The first company on file (lowest id) is always one of those buttons. When that company's code is empty, the button shows the company name, and every queue row or mapping that also has no company code is counted under it. When no company code is chosen, the page opens on that first company. Overview, queue and mappings follow it. Logs do not: they stay all companies."
+            },
+            {
+              "heading": "Cards:",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Invoices Synced",
+                  "how many invoice mappings exist for the selected company"
+                ],
+                [
+                  "Payments Synced",
+                  "how many payment mappings exist"
+                ],
+                [
+                  "Queue Pending",
+                  "pending plus processing"
+                ],
+                [
+                  "Failed",
+                  "failed queue rows for this company"
+                ]
+              ]
+            },
+            {
+              "heading": "Queue statuses:",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Pending",
+                  "waiting for Web Connector"
+                ],
+                [
+                  "Processing",
+                  "a session has the row now"
+                ],
+                [
+                  "Completed",
+                  "QuickBooks accepted it"
+                ],
+                [
+                  "Failed",
+                  "QuickBooks or our side returned an error"
+                ]
+              ]
+            },
+            {
+              "heading": "OVERVIEW",
+              "type": "text",
+              "content": "Last 10 queue rows for the selected company: type (Invoice or anything else is shown as Receipt), reference, status, current step, who pressed Sync, and time. The side panel repeats customer / invoice / payment mapping counts, the four queue statuses, and today's log count plus today's errors. Today's log numbers are not limited to the selected company."
+            },
+            {
+              "heading": "SYNC QUEUE",
+              "type": "text",
+              "content": "20 per page, newest first, selected company only. A row with no company code of its own is included when its invoice belongs to a company with that code. If the invoice's company also has no code, the row is included under the first company. Filters: Entity Type (Invoice / Receipt), Status (Pending / Processing / Completed / Failed), From date, To date. Columns: id, type, reference, status, step, synced by, attempts, error, created. Row actions: view details, Retry, Delete. Clear All Failed appears when this company has at least one failed row, and the number on the button is this company's count. The delete itself removes EVERY failed queue row in the system, not only this company. Confirm: \"Are you sure you want to clear ALL failed queue items? This cannot be undone.\" Result: \"Cleared {n} failed queue items.\""
+            },
+            {
+              "heading": "MAPPINGS",
+              "type": "text",
+              "content": "What we have already stored from QuickBooks for this company: customer, invoice, payment, item. 20 per page. Search matches the name, the QuickBooks id, or our id. Export CSV downloads mappings. The file is NOT limited to the company button you have selected. It only honours the entity-type filter. Columns: ID, Entity Type, Model ID, QuickBooks ID, Name, Active, Created At."
+            },
+            {
+              "heading": "LOGS",
+              "type": "text",
+              "content": "Raw session log, all companies, newest first. Search matches session ticket, method, or error text. From / To date filter the log date. A ticket link opens every log line for that Web Connector session, oldest first. The red badge on the tab is today's error count."
+            },
+            {
+              "heading": "Retry and Delete",
+              "type": "text",
+              "content": "Retry asks: \"Are you sure you want to retry this sync? You will need to run QB Web Connector after.\" An invoice is put back to Pending at the first step (customer). Old sync scratch data is dropped. Only the invoice id, invoice number, customer id and date are kept. The invoice badge is set back to queued. A receipt is put back to Pending at the payment-method step. Its payload is kept. The receipt badge is set back to queued when the payload still has a receipt id. Attempts are zeroed and the previous error is cleared. Success: \"Sync queued for retry. Run QB Web Connector to process.\" Missing row: \"Queue item not found\". Nothing is sent by Retry. The Web Connector still has to run. Delete removes that queue row only. Confirm: \"Are you sure you want to delete this queue item?\" Success: \"Queue item deleted.\" It does not change the invoice or receipt badge, and it does not remove the QuickBooks transaction if one was already created."
+            },
+            {
+              "heading": "How This Relates to Invoices, Receipts and Accounts",
+              "type": "rules",
+              "items": [
+                "Invoice / credit note / yard invoice Sync on those screens inserts a queue row. This monitor is where that row's step and error are read. A failed invoice usually stops on customer, item, or account. An account error means the charge's Related Account (QB) is missing, inactive, named differently from QuickBooks, or typed as something QuickBooks will not create (see 08-qb-accounts.txt).",
+                "Receipt Sync inserts a receipt queue row, and receipts are pulled after invoices, because a payment cannot be applied before its invoice exists in QuickBooks. A deposit error means Deposit To is empty (QuickBooks is then given Undeposited Funds) or the account name does not exist and could not be created as a bank.",
+                "QB Accounts This monitor does not edit account names. It only shows the failure after a sync tried to use one."
+              ]
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "Pending does not mean QuickBooks has the invoice. It means the Web Connector has not pulled the queue yet. Failed means it tried and stopped; Retry without fixing the error, or without running the Connector, changes nothing. The easy mistake on this screen is Clear All Failed: the count is for the company you are looking at, but the delete removes failed rows for every company."
+            }
+          ]
+        },
+        {
+          "id": "qb-accounts",
+          "title": "QB Accounts",
+          "icon": "database",
+          "summary": "This is the company's own list of QuickBooks chart-of-accounts names.",
+          "sections": [
+            {
+              "heading": "Access",
+              "type": "table",
+              "columns": [
+                "Item",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Menu path",
+                  "Accounting → QB Accounts"
+                ],
+                [
+                  "Route",
+                  "qb-accounts.index"
+                ],
+                [
+                  "URL",
+                  "/master/qb-accounts"
+                ],
+                [
+                  "Note",
+                  "How an invoice or a receipt is actually copied into QuickBooks · is documented in 14-Integertaion/02-QuickBooks.txt. This screen · is only the list of account names that copy uses."
+                ]
+              ]
+            },
+            {
+              "heading": "What is this screen?",
+              "type": "text",
+              "content": "This is the company's own list of QuickBooks chart-of-accounts names. Nothing on an invoice or a receipt is typed as a free QuickBooks account. A charge points at one of these rows, and a receipt points at one of these rows as \"Deposit To\". When QuickBooks does not already have that account, the sync creates it, using the Account Type stored here. The name on this screen must match the name in the QuickBooks company file exactly, including spaces and the middle dot in names such as \"4100 · Revenue\"."
+            },
+            {
+              "heading": "User flow",
+              "type": "flow",
+              "steps": [
+                {
+                  "step": 1,
+                  "badge": "STEP 1",
+                  "title": "Add the account with the exact QuickBooks name, a use (Items / Receipts /",
+                  "icon": "clipboard",
+                  "desc": "All) and a QuickBooks account type"
+                },
+                {
+                  "step": 2,
+                  "badge": "STEP 2",
+                  "title": "For a receipt account, set the currency or leave it as any currency",
+                  "icon": "search",
+                  "tone": "decision"
+                },
+                {
+                  "step": 3,
+                  "badge": "STEP 3",
+                  "title": "Link Items accounts on Charge Codes",
+                  "icon": "hash"
+                },
+                {
+                  "step": 4,
+                  "badge": "STEP 4 · SYSTEM CHECK",
+                  "title": "Pick Receipts accounts as Deposit To on a receipt",
+                  "icon": "clipboard",
+                  "tone": "system"
+                },
+                {
+                  "step": 5,
+                  "badge": "RESULT",
+                  "title": "Sync the invoice or receipt",
+                  "icon": "info",
+                  "tone": "result"
+                }
+              ]
+            },
+            {
+              "heading": "What Information Is Stored",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Account Name",
+                  "Required. Unique inside this company. This is the FullName sent to QuickBooks. Max 255 characters here, but QuickBooks itself only accepts 31, so a longer name is cut when the account is created there. Example placeholder: \"4100 · Revenue\"."
+                ],
+                [
+                  "Type",
+                  "Where the account is offered:"
+                ],
+                [
+                  "Items (i)",
+                  "— Charge Codes only Receipts (r) — receipt Deposit To only"
+                ],
+                [
+                  "All",
+                  "— both Default on create is Items."
+                ],
+                [
+                  "QB Account Type",
+                  "The QuickBooks account kind used when the account has to be created in QuickBooks. Default is Income. The choices are: Bank, Accounts Receivable, Other Current Asset, Fixed Asset, Other Asset, Accounts Payable, Credit Card, Other Current Liability, Long Term Liability, Equity, Income, Cost of Goods Sold, Expense, Other Income, Other Expense. A receipt deposit account should be Bank (or another type QuickBooks accepts as a deposit). An invoice income account should be Income. The label on the form is \"Account Type\"."
+                ],
+                [
+                  "Currency",
+                  "Shown only when Type is Receipts or All. \"Any Currency\" (blank) means the account can be picked on a receipt in every currency. A chosen currency means it only appears for invoices in that currency. Switching Type back to Items clears the currency and it is not saved."
+                ],
+                [
+                  "Active",
+                  "On the edit form only. A new account is active. Inactive accounts stay on this list but disappear from Charge Codes and from the receipt Deposit To list."
+                ]
+              ]
+            },
+            {
+              "heading": "Listing & Search",
+              "type": "text",
+              "content": "30 per page, this company only, ordered by name."
+            },
+            {
+              "heading": "Filters in the header (can be combined):",
+              "type": "table",
+              "columns": [
+                "Field",
+                "Meaning"
+              ],
+              "rows": [
+                [
+                  "Account Name",
+                  "free text"
+                ],
+                [
+                  "Type",
+                  "Items / Receipts / All QB Account Type one of the kinds above"
+                ],
+                [
+                  "Active",
+                  "Active or Inactive"
+                ]
+              ]
+            },
+            {
+              "heading": "",
+              "type": "text",
+              "content": "Each row shows the name, a Type badge, the QuickBooks account type, and Active or Inactive. The row actions are Edit, Sync to Companies, and Delete. Delete can be clicked only when no charge code and no receipt still points at the account. When one does, the button stays visible but cannot be clicked, and its tooltip says why. Sync to Companies copies the name, type, QuickBooks account type, active flag and currency to the chosen company. A target company already has the account when the name AND the currency are the same; a same name with a different currency is treated as a different account. Bulk sync is available from the header checkbox once sync mode is on."
+            },
+            {
+              "heading": "Creating & Editing",
+              "type": "text",
+              "content": "Name is the only field the server rejects when empty or longer than 255 characters. Type and Account Type are required on the form; if they are left off the request, Type becomes Items and Account Type becomes Income."
+            },
+            {
+              "heading": "Duplicate name in the same company:",
+              "type": "text",
+              "content": "\"An account with this name already exists.\""
+            },
+            {
+              "heading": "Success:",
+              "type": "text",
+              "content": "\"QB Account created successfully.\" \"QB Account updated successfully.\" Currency is stored only for Receipts and All. Items accounts always have no currency."
+            },
+            {
+              "heading": "Deleting",
+              "type": "text",
+              "content": "Delete asks \"Are you sure you want to delete this QB Account?\" and then deletes the row only when nothing still points at it. The account cannot be deleted when a charge code stores it as Related Account, or when a receipt stores it as Deposit To. The list leaves Delete visible in that case but the button cannot be clicked. The tooltip, and the error if a delete is still sent, is one of: \"This QB Account cannot be deleted because it is used on a charge code.\" \"This QB Account cannot be deleted because it is used on a receipt.\" \"This QB Account cannot be deleted because it is used on a charge code and a receipt.\" An unused account deletes and shows \"QB Account deleted successfully.\" To stop offering an account that is still linked, mark it Inactive on the edit form instead. Inactive accounts stay on this list but disappear from Charge Codes and from the receipt Deposit To list. The existing links stay, so a later sync still uses that account."
+            },
+            {
+              "heading": "CHARGE CODES",
+              "type": "text",
+              "content": "On Charge Code create and edit, \"Related Account (QB)\" is shown only when QuickBooks is switched on. The list is this company's ACTIVE accounts whose Type is Items or All. Receipts-only accounts are not offered. The choice is stored on the charge as related_account_id. \"QB Item Name\" on the same form is a different field: it renames the QuickBooks ITEM, not the account."
+            },
+            {
+              "heading": "INVOICE SYNC",
+              "type": "text",
+              "content": "Priority for the income account of a charge line:"
+            },
+            {
+              "heading": "How This Feeds Charge Codes, Invoices and Receipts",
+              "type": "rules",
+              "items": [
+                "The QB Account linked on that charge, when it belongs to the SAME company as the invoice. The name is sent as the item's income account.",
+                "If the linked account belongs to another company, it is ignored and the charge's old free-text related account is used instead.",
+                "If the charge has no QB Account, that same free-text related account is used.",
+                "If that is also empty, the default income account from configuration (Sales Income) is added so the item still has somewhere to post."
+              ]
+            },
+            {
+              "heading": "",
+              "type": "text",
+              "content": "Before a missing item is created, QuickBooks is asked whether that account already exists. If it does not, it is created with the QB Account Type stored on this screen. If this screen has no row with that exact name, the created account is typed as Income. Income accounts are always created in the home currency. QuickBooks rejects an Income account in a foreign currency. A USD invoice is handled by a separate receivable account, not by changing this income account. An item whose QB Item Name is a full path (it contains \":\") is never created. Its account is not created for it either. The item must already exist in QuickBooks under that exact name."
+            },
+            {
+              "heading": "RECEIPT SYNC",
+              "type": "text",
+              "content": "\"QB Deposit To Account\" on a receipt (and on bulk receipt) lists this company's ACTIVE accounts whose Type is Receipts or All, and whose currency is blank or equal to the invoice currency. Items-only accounts are not offered. Changing the invoice currency reloads this list. The same list is used by \"Set QB Deposit Account\" on an existing receipt. On sync, that account is the Deposit To account: If QuickBooks already returned an id for it, that id is used. Otherwise the account NAME is sent (cut to 31 characters). If the receipt has no deposit account, QuickBooks receives \"Undeposited Funds\". If the deposit account does not exist in QuickBooks, it is created with the QB Account Type from this screen (Bank when none is stored). The currency sent on that create is EGP. The Currency chosen on this screen is used only to decide which receipts may pick the account; it is not the currency written onto the new QuickBooks bank account."
+            },
+            {
+              "heading": "Why it matters",
+              "type": "callout",
+              "style": "info",
+              "content": "A charge with no Related Account, or a name that does not match QuickBooks, posts the invoice line to Sales Income or fails the item step. A receipt with no Deposit To account lands in Undeposited Funds. The most common mistake is typing a near-match (\"4100 - Revenue\" instead of \"4100 · Revenue\"): QuickBooks treats that as a different account and the sync creates a second one."
             }
           ]
         }
